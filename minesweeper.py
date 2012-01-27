@@ -128,12 +128,7 @@ class Game( list ):
         self.toDiscover = nrows * ncols - nmines
         
         # Create all the cells
-        for i in range( nrows ):
-            row = []
-            for j in range( ncols ):
-                row.append( Cell( i, j ) )
-                
-            self.cells.append( row )
+        self.CreateCells( nrows, ncols )
         
         # Now I have to put nmines randomly in the cells
         mines = []
@@ -187,21 +182,22 @@ class Game( list ):
         
     def Uncover( self, i, j ):
         """Uncover the cell (i, j). Return True if there is a mine, False otherwise."""
-        self[ i ][ j ].SetStatus( Cell.REVEALED )
+        cell = self[ i ][ j ]
+        cell.SetStatus( Cell.REVEALED )
         self.toDiscover -= 1
-        if self[ i ][ j ].HasMine():
+        if cell.HasMine():
             return True
             
         # Undiscover the neighbords also, but only if this cell have non close mines
-        if not self[ i ][ j ].GetNeighborMinesNum():
-            self.AutomaticUncover( i, j )
+        if cell.GetNeighborMinesNum():
+            self.AutomaticUncover( cell )
                 
         return False
         
-    def AutomaticUncover( self, i, j ):
+    def AutomaticUncover( self, cell ):
         """Uncover a chain of cells by neighboroad relation."""
-        for cell in self.GetAutoUncoverList( self[ i ][ j ] ):
-            cell.SetStatus( Cell.REVEALED )
+        for myCell in self.GetAutoUncoverList( cell ):
+            myCell.SetStatus( Cell.REVEALED )
             self.toDiscover -= 1
             
     def GetAutoUncoverList( self, cell ):
@@ -263,17 +259,23 @@ class Game( list ):
         nrows = len( self )
         ncols = len( self[ 0 ] )
         
-        self.cells = []
-        while len( self.cells ) < nrows:
-            i = len( self.cells )
-            row = []
-            while len( row ) < ncols:
-                j = len( row )
-                row.append( Cell( i, j ) )
-            self.cells.append( row )
-            
+        # Recreate the cells matrix
+        self.CreateCells( nrows, ncols )
+        
         self.SetMines( mines )
         self.toDiscover = nrows * ncols - len( mines )
+        
+    def CreateCells( self, nrows, ncols ):
+        """(Re)create the cells matrix, erasing the possible exiting one."""
+        
+        self.cells = []
+        for i in range( nrows ):
+            row = []
+            for j in range( ncols ):
+                row.append( Cell( i, j ) )
+                
+            self.cells.append( row )
+    
             
     
 def PrintGame( game, unveil = False ):
