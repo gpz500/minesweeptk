@@ -182,7 +182,7 @@ class Game( list ):
             return True
             
         # Undiscover the neighbords also, but only if this cell have non close mines
-        if cell.GetNeighborMinesNum():
+        if not cell.GetNeighborMinesNum():
             self.AutomaticUncover( cell )
                 
         return False
@@ -211,12 +211,12 @@ class Game( list ):
         
     def Flag( self, i, j, reset = False ):
         """Set/Reset a flag."""
-        newstatus = reset and Cell.COVERED or Cell.FLAG
+        newstatus = Cell.COVERED if reset else Cell.FLAG
         self[ i ][ j ].SetStatus( newstatus )
         
     def QMark( self, i, j, reset = False ):
         """Set/Reset a flag."""
-        newstatus = reset and Cell.COVERED or Cell.Q_MARK
+        newstatus = Cell.COVERED if reset else Cell.Q_MARK
         self[ i ][ j ].SetStatus( newstatus )
         
     def GetToDiscover( self ):
@@ -338,60 +338,57 @@ def PrintGame( game, unveil = False ):
 if __name__ == '__main__':
     # Do a game on terminal
     import sys
+    import readline
     import re
     myGame = Game( 9, 9, 10 )
     
     while True:
         PrintGame( myGame )
-        print "[Q|B i j|? i j|R i j] > ",
-        command = sys.stdin.readline()
-        print
+        command = raw_input( "[Q|B i j|? i j|R i j] > " )
         
-        myResult = re.search( '\s?[qQ]\s', command )
+        myResult = re.search( '^\s*[qQ]\s*$', command )
         if myResult:
             # Q: quit
             exit()
             
-        myResult = re.search( '\s?([bB\?rR])\s([A-Za-z])\s(\d+)\s', command )
+        myResult = re.search( '^\s*([bB\?rR])\s+([A-Za-z])\s+(\d+)\s*$', command )
         if myResult:
             command = myResult.group( 1 ).upper()
             i = ord( myResult.group( 2 ).upper() ) - ord( 'A' )
             j = int( myResult.group( 3 ) ) - 1
             
-            # Check if i, j are OK
-            if ( not 0 <= i < len( myGame ) ) or ( not 0 <= j < len( myGame[ 0 ] )):
-                print "Coordinates are out of range!"
-                continue
-                
-            if command == 'B':
-                # Sign a bomb
-                if myGame[ i ][ j ].GetStatus() == Cell.FLAG:
-                    myGame.Flag( i, j, True )
-                else:
-                    myGame.Flag( i, j )
-            elif command == '?':
-                # Question mark on a cell
-                if myGame[ i ][ j ].GetStatus() == Cell.Q_MARK:
-                    myGame.QMark( i, j, True )
-                else:
-                    myGame.QMark( i, j )
-            elif command == 'R':
-                # Reveal a cell
-                try:
-                    mine = myGame.Uncover( i, j )
-                except MinesweeperStatusError:
-                    mine = False
-                if mine:
-                    print "Bomb!"
-                    PrintGame( myGame, True )
-                    print "Do you want to replay? [y|N]> "
-                    command = sys.stdin.readline()
-                    if command.lstrip().upper()[ 0 ] != 'Y':
-                        exit()
+            try:
+                if command == 'B':
+                    # Sign a bomb
+                    if myGame[ i ][ j ].GetStatus() == Cell.FLAG:
+                        myGame.Flag( i, j, True )
                     else:
-                        myGame.Restart()
-                elif myGame.GetToDiscover() == 0:
-                    print "You won!"
-                    PrintGame( myGame )
-                    exit()
+                        myGame.Flag( i, j )
+                elif command == '?':
+                    # Question mark on a cell
+                    if myGame[ i ][ j ].GetStatus() == Cell.Q_MARK:
+                        myGame.QMark( i, j, True )
+                    else:
+                        myGame.QMark( i, j )
+                elif command == 'R':
+                    # Reveal a cell
+                    try:
+                        mine = myGame.Uncover( i, j )
+                    except MinesweeperStatusError:
+                        mine = False
+                    if mine:
+                        print "Bomb!"
+                        PrintGame( myGame, True )
+                        command = raw_input( "Do you want to replay? [y|N]> " )
+                        if command.lstrip().upper()[ 0 ] != 'Y':
+                            exit()
+                        else:
+                            myGame.Restart()
+                    elif myGame.GetToDiscover() == 0:
+                        print "You won!"
+                        PrintGame( myGame )
+                        exit()
+
+            except IndexError:
+                print "Position out of range!"
             
