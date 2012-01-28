@@ -51,7 +51,7 @@ class Cell:
         x, y:     the coordinates of the cell
         mine:     is there a mine (True or False)?"""
         if x < 0 or y < 0:
-            raise MinesweeperCellError, "Coordinates must be both >= 0"
+            raise MinesweeperCellError( "Coordinates must be both >= 0" )
     
         self.x = x
         self.y = y
@@ -96,11 +96,11 @@ class Cell:
     def SetStatus( self, newstatus ):
         """Set current status of the cell."""
         if newstatus == self.status:
-            raise MinesweeperStatusError, "Error: can't reassign the same status"
+            raise MinesweeperStatusError( "Error: can't reassign the same status" )
         if self.status == Cell.FLAG and newstatus == Cell.REVEALED:
-            raise MinesweeperStatusError, "Error: can't do the transition FLAG -> REVEALED"
+            raise MinesweeperStatusError( "Error: can't do the transition FLAG -> REVEALED" )
         if self.status == Cell.REVEALED:
-            raise MinesweeperStatusError, "Error: can't come back from REVEALED status"
+            raise MinesweeperStatusError( "Error: can't come back from REVEALED status" )
         self.status = newstatus
         
 class Game( list ):
@@ -111,7 +111,7 @@ class Game( list ):
         
         # Check for the acceptable mines number
         if nmines > nrows * ncols:
-            raise MinesweeperMinesCount, "Too much mines!"
+            raise MinesweeperMinesCount( "Too much mines!" )
         
         # I have to create nrows list ncols cells
         self.cells = []
@@ -196,7 +196,7 @@ class Game( list ):
     def GetAutoUncoverList( self, cell ):
         """Return the list of cells to uncover automatically, starting from the supplied cell."""
         if cell.GetNeighborMinesNum():
-            raise MinesweeperAutoUncoverError, "Error: can't automatic uncovers cells with some close mine!"
+            raise MinesweeperAutoUncoverError( "Error: can't automatic uncovers cells with some close mine!" )
         
         myFiltFunction = lambda x: x.GetStatus() != Cell.REVEALED
         toUncover = filter( myFiltFunction, self.GetNeighborsList( cell ) )
