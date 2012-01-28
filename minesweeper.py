@@ -102,13 +102,6 @@ class Cell:
         if self.status == Cell.REVEALED:
             raise MinesweeperStatusError, "Error: can't come back from REVEALED status"
         self.status = newstatus
-
-def GetRandomPos( nrows, ncols ):
-    """Static method to compute random pos between 0 - (nrows-1) and 0 - (ncols-1)."""
-    import random
-    i = random.randint( 0, nrows - 1 )
-    j = random.randint( 0, ncols - 1 )
-    return ( i, j )
         
 class Game( list ):
     """A class for a whole minesweeper game."""
@@ -134,9 +127,9 @@ class Game( list ):
         mines = []
         while len( mines ) < nmines:
             # Computes a random position for the mine. If it already exists, compute a new one
-            i, j = GetRandomPos( nrows, ncols )
+            i, j = self.GetRandomPos()
             while ( i, j ) in mines:
-                i, j = GetRandomPos( nrows, ncols )
+                i, j = self.GetRandomPos()
             mines.append( (i, j) )
             self[ i ][ j ].SetMine()
             
@@ -275,6 +268,14 @@ class Game( list ):
                 row.append( Cell( i, j ) )
                 
             self.cells.append( row )
+
+    def GetRandomPos( self ):
+        """Static method to compute random pos between 0 - (nrows-1) and 0 - (ncols-1)."""
+        import random
+        i = random.randint( 0, len( self ) - 1 )
+        j = random.randint( 0, len( self[ 0 ] ) - 1 )
+        return ( i, j )
+
     
             
     
