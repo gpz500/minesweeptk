@@ -257,6 +257,36 @@ class GameTest( unittest.TestCase ):
                 
         self.assertEqual( game.GetMines(), minesList )
         self.assertEqual( len( game ) * len( game[ 0 ] ) - len( minesList ), game.GetToDiscover() )
+
+    def testUncoverMine( self ):
+        """Game.Uncover() must return True when hit a mine."""
+        game = minesweeper.Game()
+        minesList = game.GetMines()
+        self.assertEqual( True, game.Uncover( minesList[ 0 ][ 0 ], minesList[ 0 ][ 1 ] ) )
+
+    def testOutOfRangeIndexs( self ):
+        """Game must raise IndexError exception when access inexistant cells."""
+        game = minesweeper.Game()
+        self.assertRaises( IndexError, lambda x: x[ 100 ][ 10 ], game )
+        self.assertRaises( IndexError, lambda x: x[ 10 ][ 100 ], game )
+
+    def testUnveils( self ):
+        """Game must rasie no execption when uncover cells."""
+        if len( self.knownMines ) <= 25:
+            nrows = 9
+            ncols = 9
+        elif 26 <= len( self.knownMines ) <= 76:
+            nrows = 16
+            ncols = 16
+        else:
+            nrows = 16
+            ncols = 30
+        game = minesweeper.Game( nrows, ncols, 0 )
+        
+        game.SetMines( self.knownMines )
+        game.Uncover( 8, 3 )
+        game.Uncover( 4, 0 )
+        game.Uncover( 2, 4 )
         
 if __name__ == '__main__':
     unittest.main()

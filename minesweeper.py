@@ -380,7 +380,8 @@ if __name__ == '__main__':
                         print "Bomb!"
                         PrintGame( myGame, True )
                         command = raw_input( "Do you want to replay? [y|N]> " )
-                        if command.lstrip().upper()[ 0 ] != 'Y':
+                        if not command or command.lstrip().upper()[ 0 ] != 'Y':
+                            print "Bye!"
                             exit()
                         else:
                             myGame.Restart()
@@ -391,4 +392,8 @@ if __name__ == '__main__':
 
             except IndexError:
                 print "Position out of range!"
+
+            except MinesweeperStatusError:
+		pass
+
             
