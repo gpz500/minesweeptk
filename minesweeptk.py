@@ -64,12 +64,6 @@ class CellButton( Tkinter.Label ):
         self.status = newStatus
         self[ 'image' ] = images[ self.status ]
         push = self.status <= 9 
-        #if push:
-        #    # Uncovered (pushed)
-        #    self.select()
-        #else:
-        #    # Covered (unpushed)
-        #    self.deselect()
                 
     def GetStatus( self ):
         """Return the current status."""
@@ -112,9 +106,15 @@ class MinesweeperTable( Tkinter.Frame ):
             for j in range( self.ncols ):
                 cell = CellButton( i, j, self )
                 cell.bind( '<ButtonRelease-1>', self.OnMouseRelease )
+                cell.bind( '<Control-Button-1>', self.OnRightClick )
+                cell.bind( '<Control-ButtonRelease-1>', self.Hole )
                 cell.bind( '<Button-3>', self.OnRightClick )
                 row.append( cell )
             self.cells.append( row )
+
+    def Hole( self, event ):
+        """Hole handler. Intercept events and do nothing!"""
+        pass
                 
     def OnMouseRelease( self, event ):
         """Handler for the mouse click."""
@@ -176,7 +176,7 @@ class MinesweeperTable( Tkinter.Frame ):
         for row in self.cells:
             for cell in row:
                 cell.Reveal()
-                cell[ 'state' ] = 'disabled'
+                # cell[ 'state' ] = 'disabled'
                 cell.unbind('<ButtonRelease-1>')
                 cell.unbind('<Button-3>')
                 
@@ -205,7 +205,7 @@ fileMenu = Tkinter.Menubutton()
 fileMenu[ 'text' ] = 'File'
 fileMenu.pack()
     
-table = MinesweeperTable( master = root, nrows = 16, ncols = 16, nmines = 40 )
+table = MinesweeperTable( master = root, nrows = 16, ncols = 30, nmines = 99 )
 table.pack()
 root.mainloop()
 
