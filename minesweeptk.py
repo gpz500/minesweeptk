@@ -12,18 +12,18 @@ import minesweeper  # For the minesweeper game
 imagesFilenames = ( 'zero.gif', 'one.gif', 'two.gif', 'three.gif',
                     'four.gif', 'five.gif', 'six.gif', 'seven.gif',
                     'eight.gif', 'bomb.gif', 'flag.gif', 'q_mark.gif',
-                    'zero.gif' )
+                    'covered.gif' )
 images = []
 
 
-class CellButton( Tkinter.Checkbutton ):
+class CellButton( Tkinter.Label ):
     """A class to implement a Minesweeper cell button."""
     
     def __init__( self, row, col, master = None ):
         """It define some cell attributes."""
-        Tkinter.Checkbutton.__init__( self, master )
+        Tkinter.Label.__init__( self, master )
         
-        self[ 'indicatoron' ] = 'false'
+        self[ 'bd' ] = 0
         self.row = row
         self.col = col
         self.grid( row = row, column = col )
@@ -64,12 +64,12 @@ class CellButton( Tkinter.Checkbutton ):
         self.status = newStatus
         self[ 'image' ] = images[ self.status ]
         push = self.status <= 9 
-        if push:
-            # Uncovered (pushed)
-            self.select()
-        else:
-            # Covered (unpushed)
-            self.deselect()
+        #if push:
+        #    # Uncovered (pushed)
+        #    self.select()
+        #else:
+        #    # Covered (unpushed)
+        #    self.deselect()
                 
     def GetStatus( self ):
         """Return the current status."""
@@ -83,23 +83,22 @@ class CellButton( Tkinter.Checkbutton ):
             
         
 
-class MinesweeperApp( Tkinter.Frame ):
+class MinesweeperTable( Tkinter.Frame ):
     """A class to implement a Minesweeper panel.
     
     Actually it is a matrix of CellButton instances."""
     
     
-    def __init__( self, nrows = 16, ncols = 30, master = None ):
+    def __init__( self, nrows = 16, ncols = 30, nmines = 99, master = None ):
         """Initialize an instance of game."""
         Tkinter.Frame.__init__( self, master )
         
         # Init the game
-        self.game = minesweeper.Game( nrows, ncols )
+        self.game = minesweeper.Game( nrows, ncols, nmines )
 
         # Init cell buttons
         self.nrows = nrows
         self.ncols = ncols
-        self.pack()
         self.create_cells()
         self.UpdateAllCells()
         
@@ -112,16 +111,11 @@ class MinesweeperApp( Tkinter.Frame ):
             row = []
             for j in range( self.ncols ):
                 cell = CellButton( i, j, self )
-                cell.bind_all( '<ButtonPress-1>', self.OnMousePress )
-                cell.bind_all( '<ButtonRelease-1>', self.OnMouseRelease )
+                cell.bind( '<ButtonRelease-1>', self.OnMouseRelease )
                 cell.bind( '<Button-3>', self.OnRightClick )
                 row.append( cell )
             self.cells.append( row )
                 
-    def OnMousePress( self, event ):
-        """Reset the status of the button because Windows toggles itself."""
-        event.widget.toggle()
-    
     def OnMouseRelease( self, event ):
         """Handler for the mouse click."""
         status = event.widget.GetStatus()
@@ -143,6 +137,7 @@ class MinesweeperApp( Tkinter.Frame ):
             # Check for victory
             elif self.game.GetToDiscover() == 0:
                 print "You won!!!"
+                self.EndWinning()
             
         else:
             event.widget.Update()
@@ -182,8 +177,16 @@ class MinesweeperApp( Tkinter.Frame ):
             for cell in row:
                 cell.Reveal()
                 cell[ 'state' ] = 'disabled'
-                cell.unbind_all('<ButtonPress-1>')
-                cell.unbind_all('<ButtonRelease-1>')
+                cell.unbind('<ButtonRelease-1>')
+                cell.unbind('<Button-3>')
+                
+                
+    def EndWinning( self ):
+        """Exit with success!"""
+        
+        for row in self.cells:
+            for cell in row:
+                cell.unbind('<ButtonRelease-1>')
                 cell.unbind('<Button-3>')
                 
         
@@ -197,6 +200,12 @@ for name in imagesFilenames:
     img[ 'file' ] = name
     images.append( img )
     
-app = MinesweeperApp( master = root )
-app.mainloop()
+# Insert File menu
+fileMenu = Tkinter.Menubutton()
+fileMenu[ 'text' ] = 'File'
+fileMenu.pack()
+    
+table = MinesweeperTable( master = root, nrows = 16, ncols = 16, nmines = 40 )
+table.pack()
+root.mainloop()
 
