@@ -4,7 +4,8 @@ It uses the module minesweeper.py which gives two classes:
 - Cell, for a single cell
 - Game, which is a matrix of Cells."""
 
-import Tkinter      # For GUI stuff
+from Tkinter import *      # For GUI stuff
+from ttk import *
 import minesweeper  # For the minesweeper game
 
 # The global list of Tkinter.Image objects to implement
@@ -24,14 +25,15 @@ options = ( { "nrows": 9, "ncols": 9, "nmines": 10 },
 #-------------------------------------------------------------------------------
 # A class to implement a single cell
 #-------------------------------------------------------------------------------
-class CellButton( Tkinter.Label ):
+class CellButton( Label ):
     """A class to implement a Minesweeper cell button."""
     
     def __init__( self, row, col, master = None ):
         """It define some cell attributes."""
-        Tkinter.Label.__init__( self, master )
+        Label.__init__( self, master )
         
-        self[ 'bd' ] = 0
+        self[ 'padding' ] = 0
+        self[ 'borderwidth' ] = 0
         self.row = row
         self.col = col
         self.grid( row = row, column = col )
@@ -87,7 +89,7 @@ class CellButton( Tkinter.Label ):
 #-------------------------------------------------------------------------------
 # A class to implement a minesweeper table as a matrix of CellButton istances
 #-------------------------------------------------------------------------------
-class MinesweeperTable( Tkinter.Frame ):
+class MinesweeperTable( Frame ):
     """A class to implement a Minesweeper panel.
     
     Actually it is a matrix of CellButton instances."""
@@ -95,7 +97,7 @@ class MinesweeperTable( Tkinter.Frame ):
     
     def __init__( self, nrows = 16, ncols = 30, nmines = 99, master = None ):
         """Initialize an instance of game."""
-        Tkinter.Frame.__init__( self, master )
+        Frame.__init__( self, master )
         
         # Init the game
         self.game = minesweeper.Game( nrows, ncols, nmines )
@@ -203,24 +205,24 @@ class MinesweeperTable( Tkinter.Frame ):
 #-------------------------------------------------------------------------------
 # My Options Window
 #-------------------------------------------------------------------------------
-class OptionWindow( Tkinter.Toplevel ):
+class OptionWindow( Toplevel ):
     """A class for the options window."""
     
     def __init__( self, master = None ):
         """Initialize the option window with parent window."""
-        Tkinter.Toplevel.__init__( self, master )
+        Toplevel.__init__( self, master )
 
         # Set tree radio button to choose an option
-        self.choice = Tkinter.IntVar( self )
+        self.choice = IntVar( self )
         self.choice.set( option )
 
-        Tkinter.Radiobutton( self, text = '9 x 9, 10 mines', variable = self.choice, value = 0 ).grid( row = 0, column = 0, sticky = Tkinter.W )
-        Tkinter.Radiobutton( self, text = '16 x 16, 40 mines', variable = self.choice, value = 1 ).grid(  row = 1, column = 0, sticky = Tkinter.W )
-        Tkinter.Radiobutton( self, text = '16 x 30, 99 mines', variable = self.choice, value = 2 ).grid(  row = 2, column = 0, sticky = Tkinter.W )
+        Radiobutton( self, text = '9 x 9, 10 mines', variable = self.choice, value = 0 ).grid( row = 0, column = 0, sticky = W )
+        Radiobutton( self, text = '16 x 16, 40 mines', variable = self.choice, value = 1 ).grid(  row = 1, column = 0, sticky = W )
+        Radiobutton( self, text = '16 x 30, 99 mines', variable = self.choice, value = 2 ).grid(  row = 2, column = 0, sticky = W )
 
         # Set the Ok & Cancel buttons
-        Tkinter.Button( self, text = 'Ok', command = self.onOk ).grid( row = 3, column = 0 )
-        Tkinter.Button( self, text = 'Cancel', command = self.onCancel ).grid( row = 3, column = 1 ) 
+        Button( self, text = 'Ok', command = self.onOk ).grid( row = 3, column = 0 )
+        Button( self, text = 'Cancel', command = self.onCancel ).grid( row = 3, column = 1 ) 
 
 
     def onOk( self ):
@@ -242,16 +244,16 @@ class OptionWindow( Tkinter.Toplevel ):
 #-------------------------------------------------------------------------------
 # My Toplevel Window Class
 #-------------------------------------------------------------------------------
-class RootWindow( Tkinter.Tk ):
+class RootWindow( Tk ):
     """A class for the toplevel window of my app."""
     
     def __init__( self, title = "" ):
         """Init my toplevel window."""
-        Tkinter.Tk.__init__( self )
+        Tk.__init__( self )
 
         # Create the images lists
         for name in imagesFilenames:
-            img = Tkinter.PhotoImage()
+            img = PhotoImage()
             img[ 'file' ] = name
             images.append( img )
 
@@ -259,9 +261,9 @@ class RootWindow( Tkinter.Tk ):
         self.title( title )
 
         # Create the menus
-        self.menubar = Tkinter.Menu( self )
+        self.menubar = Menu( self )
         self[ 'menu' ] = self.menubar
-        self.menu_file = Tkinter.Menu( self.menubar )
+        self.menu_file = Menu( self.menubar )
         self.menubar.add_cascade( menu = self.menu_file, label = 'File' )
         self.menu_file.add_command( label = 'New game', command = self.onNewGame )
         self.menu_file.add_command( label = 'Replay this game', command = self.onReplayThisGame )
@@ -298,7 +300,7 @@ if __name__ == '__main__':
     root = RootWindow( "Minesweeper" )
 
     # Put off the tearoff menus
-    root.option_add( '*tearOff', Tkinter.FALSE )
+    root.option_add( '*tearOff', FALSE )
 
     
     # Start the game
