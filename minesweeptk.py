@@ -214,24 +214,14 @@ class OptionWindow( Tkinter.Toplevel ):
         self.choice = Tkinter.IntVar( self )
         self.choice.set( option )
 
-        self.radio0 = Tkinter.Radiobutton( self, text = '9 x 9, 10 mines', variable = self.choice, value = 0 )
-        self.radio1 = Tkinter.Radiobutton( self, text = '16 x 16, 40 mines', variable = self.choice, value = 1 )
-        self.radio2 = Tkinter.Radiobutton( self, text = '16 x 30, 99 mines', variable = self.choice, value = 2 )
-
-        self.radio0.pack()
-        self.radio1.pack()
-        self.radio2.pack()
+        Tkinter.Radiobutton( self, text = '9 x 9, 10 mines', variable = self.choice, value = 0 ).grid( row = 0, column = 0, sticky = Tkinter.W )
+        Tkinter.Radiobutton( self, text = '16 x 16, 40 mines', variable = self.choice, value = 1 ).grid(  row = 1, column = 0, sticky = Tkinter.W )
+        Tkinter.Radiobutton( self, text = '16 x 30, 99 mines', variable = self.choice, value = 2 ).grid(  row = 2, column = 0, sticky = Tkinter.W )
 
         # Set the Ok & Cancel buttons
-        self.ok_button = Tkinter.Button( self )
-        self.cancel_button = Tkinter.Button( self )
+        Tkinter.Button( self, text = 'Ok', command = self.onOk ).grid( row = 3, column = 0 )
+        Tkinter.Button( self, text = 'Cancel', command = self.onCancel ).grid( row = 3, column = 1 ) 
 
-        self.ok_button.config( text = 'Ok', command = self.onOk )
-        self.cancel_button.config( text = 'Cancel', command = self.onCancel )
-
-        self.ok_button.pack()
-        self.cancel_button.pack()
-        
 
     def onOk( self ):
         """Set new values for rows, columns and mines' number. Then close the options window."""
