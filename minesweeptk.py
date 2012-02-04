@@ -15,7 +15,15 @@ imagesFilenames = ( 'zero.gif', 'one.gif', 'two.gif', 'three.gif',
                     'covered.gif' )
 images = []
 
+# Size of table and number of mines
+option = 1
+options = ( ( 9, 9, 10 ),
+            ( 16, 16, 40 ),
+            ( 16, 30, 99 ) )
 
+#-------------------------------------------------------------------------------
+# A class to implement a single cell
+#-------------------------------------------------------------------------------
 class CellButton( Tkinter.Label ):
     """A class to implement a Minesweeper cell button."""
     
@@ -63,7 +71,7 @@ class CellButton( Tkinter.Label ):
         
         self.status = newStatus
         self[ 'image' ] = images[ self.status ]
-        push = self.status <= 9 
+
                 
     def GetStatus( self ):
         """Return the current status."""
@@ -76,7 +84,9 @@ class CellButton( Tkinter.Label ):
             self._SetStatus( 9 )
             
         
-
+#-------------------------------------------------------------------------------
+# A class to implement a minesweeper table as a matrix of CellButton istances
+#-------------------------------------------------------------------------------
 class MinesweeperTable( Tkinter.Frame ):
     """A class to implement a Minesweeper panel.
     
@@ -139,10 +149,7 @@ class MinesweeperTable( Tkinter.Frame ):
                 print "You won!!!"
                 self.EndWinning()
             
-        else:
-            event.widget.Update()
-        
-        
+
     def OnRightClick( self, event ):
         """Handler for the mouse right click."""
         
@@ -160,8 +167,6 @@ class MinesweeperTable( Tkinter.Frame ):
         elif status == 11:
             self.game.QMark( i, j, True )
             event.widget.Update()
-        else:
-            event.widget.Update()
             
     def UpdateAllCells( self ):
         """Update all cells on the table."""
@@ -176,7 +181,6 @@ class MinesweeperTable( Tkinter.Frame ):
         for row in self.cells:
             for cell in row:
                 cell.Reveal()
-                # cell[ 'state' ] = 'disabled'
                 cell.unbind('<ButtonRelease-1>')
                 cell.unbind('<Button-3>')
                 
@@ -190,22 +194,121 @@ class MinesweeperTable( Tkinter.Frame ):
                 cell.unbind('<Button-3>')
                 
         
-                    
-    
-root = Tkinter.Tk()
+    def Restart( self ):
+        """Restart the game with the same mines' set."""
+        self.game.Restart()
+        self.create_cells()
+        self.UpdateAllCells()
 
-# Load images' files
-for name in imagesFilenames:
-    img = Tkinter.PhotoImage()
-    img[ 'file' ] = name
-    images.append( img )
+#-------------------------------------------------------------------------------
+# My Options Window
+#-------------------------------------------------------------------------------
+class OptionWindow( Tkinter.Toplevel ):
+    """A class for the options window."""
     
-# Insert File menu
-fileMenu = Tkinter.Menubutton()
-fileMenu[ 'text' ] = 'File'
-fileMenu.pack()
+    def __init__( self, master = None ):
+        """Initialize the option window with parent window."""
+        Tkinter.Toplevel.__init__( self, master )
+
+        # Set tree radio button to choose an option
+        self.choice = Tkinter.IntVar( self )
+        self.choice.set( option )
+
+        self.radio0 = Tkinter.Radiobutton( self, text = '9 x 9, 10 mines', variable = self.choice, value = 0 )
+        self.radio1 = Tkinter.Radiobutton( self, text = '16 x 16, 40 mines', variable = self.choice, value = 1 )
+        self.radio2 = Tkinter.Radiobutton( self, text = '16 x 30, 99 mines', variable = self.choice, value = 2 )
+
+        self.radio0.pack()
+        self.radio1.pack()
+        self.radio2.pack()
+
+        # Set the Ok & Cancel buttons
+        self.ok_button = Tkinter.Button( self )
+        self.cancel_button = Tkinter.Button( self )
+
+        self.ok_button.config( text = 'Ok', command = self.onOk )
+        self.cancel_button.config( text = 'Cancel', command = self.onCancel )
+
+        self.ok_button.pack()
+        self.cancel_button.pack()
+        
+
+    def onOk( self ):
+        """Set new values for rows, columns and mines' number. Then close the options window."""
+        global option
+        option = self.choice.get()        
+        self.destroy()
+
+
+    def onCancel( self ):
+        """Close the options window without saving."""
+        self.destroy()
+
+
+
+
+
+
+#-------------------------------------------------------------------------------
+# My Toplevel Window Class
+#-------------------------------------------------------------------------------
+class RootWindow( Tkinter.Tk ):
+    """A class for the toplevel window of my app."""
     
-table = MinesweeperTable( master = root, nrows = 16, ncols = 30, nmines = 99 )
-table.pack()
+    def __init__( self ):
+        """Init my toplevel window."""
+        Tkinter.Tk.__init__( self )
+
+        # Create the images lists
+        for name in imagesFilenames:
+            img = Tkinter.PhotoImage()
+            img[ 'file' ] = name
+            images.append( img )
+
+        # Create the menus
+        self.menubar = Tkinter.Menu( self )
+        self[ 'menu' ] = self.menubar
+        self.menu_file = Tkinter.Menu( self.menubar )
+        self.menubar.add_cascade( menu = self.menu_file, label = 'File' )
+        self.menu_file.add_command( label = 'New game', command = self.onNewGame )
+        self.menu_file.add_command( label = 'Replay this game', command = self.onReplayThisGame )
+        self.menu_file.add_command( label = 'Options...', command = self.onOptions )
+        self.menu_file.add_separator()
+        self.menu_file.add_command( label = 'Quit', command = self.onQuit )
+
+        # Create a new game
+        self.onNewGame()
+
+
+    def onNewGame( self ):
+        """Handler of File->New game command."""
+        if hasattr( self, 'table' ):
+            self.table.destroy()
+
+        self.table = MinesweeperTable( master = self, nrows = options[ option ][ 0 ],
+                                                      ncols = options[ option ][ 1 ],
+                                                      nmines = options[ option ][ 2 ] )
+        self.table.pack()
+
+    def onReplayThisGame( self ):
+        """Handler of File->Replay this game command."""
+        self.table.Restart()
+
+    def onOptions( self ):
+        """Handler of File->Options... command."""
+        options = OptionWindow( self )
+
+    def onQuit( self ):
+        """Handler of File->Quit command."""
+        exit()
+
+                    
+root = RootWindow()
+
+# Put off the tearoff menus
+root.option_add( '*tearOff', Tkinter.FALSE )
+
+    
+# Start the game
 root.mainloop()
 
