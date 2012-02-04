@@ -279,7 +279,7 @@ class RootWindow( Tkinter.Tk ):
             self.table.destroy()
 
         self.table = MinesweeperTable( master = self, **options[ option ] )
-        self.table.pack()
+        self.table.grid()
 
     def onReplayThisGame( self ):
         """Handler of File->Replay this game command."""
@@ -293,13 +293,14 @@ class RootWindow( Tkinter.Tk ):
         """Handler of File->Quit command."""
         exit()
 
-                    
-root = RootWindow( "Minesweeper" )
+if __name__ == '__main__':
+    """It means that the module is opened as an application."""                    
+    root = RootWindow( "Minesweeper" )
 
-# Put off the tearoff menus
-root.option_add( '*tearOff', Tkinter.FALSE )
+    # Put off the tearoff menus
+    root.option_add( '*tearOff', Tkinter.FALSE )
 
     
-# Start the game
-root.mainloop()
+    # Start the game
+    root.mainloop()
 
