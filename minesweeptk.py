@@ -4,6 +4,7 @@ It uses the module minesweeper.py which gives two classes:
 - Cell, for a single cell
 - Game, which is a matrix of Cells."""
 
+import sys                 # To exit from the interpreter
 from Tkinter import *      # For GUI stuff
 from ttk import *
 import minesweeper  # For the minesweeper game
@@ -350,7 +351,7 @@ class RootWindow( Tk ):
 
     def onQuit( self ):
         """Handler of File->Quit command."""
-        exit()
+        sys.exit()
 
 if __name__ == '__main__':
     """It means that the module is opened as an application."""                    
