@@ -17,9 +17,9 @@ images = []
 
 # Size of table and number of mines
 option = 1
-options = ( ( 9, 9, 10 ),
-            ( 16, 16, 40 ),
-            ( 16, 30, 99 ) )
+options = ( { "nrows": 9, "ncols": 9, "nmines": 10 },
+            { "nrows": 16, "ncols": 16, "nmines": 40 },
+            { "nrows": 16, "ncols": 30, "nmines": 99 } )
 
 #-------------------------------------------------------------------------------
 # A class to implement a single cell
@@ -255,7 +255,7 @@ class OptionWindow( Tkinter.Toplevel ):
 class RootWindow( Tkinter.Tk ):
     """A class for the toplevel window of my app."""
     
-    def __init__( self ):
+    def __init__( self, title = "" ):
         """Init my toplevel window."""
         Tkinter.Tk.__init__( self )
 
@@ -264,6 +264,9 @@ class RootWindow( Tkinter.Tk ):
             img = Tkinter.PhotoImage()
             img[ 'file' ] = name
             images.append( img )
+
+        # Set the window title
+        self.title( title )
 
         # Create the menus
         self.menubar = Tkinter.Menu( self )
@@ -285,9 +288,7 @@ class RootWindow( Tkinter.Tk ):
         if hasattr( self, 'table' ):
             self.table.destroy()
 
-        self.table = MinesweeperTable( master = self, nrows = options[ option ][ 0 ],
-                                                      ncols = options[ option ][ 1 ],
-                                                      nmines = options[ option ][ 2 ] )
+        self.table = MinesweeperTable( master = self, **options[ option ] )
         self.table.pack()
 
     def onReplayThisGame( self ):
@@ -303,7 +304,7 @@ class RootWindow( Tkinter.Tk ):
         exit()
 
                     
-root = RootWindow()
+root = RootWindow( "Minesweeper" )
 
 # Put off the tearoff menus
 root.option_add( '*tearOff', Tkinter.FALSE )
