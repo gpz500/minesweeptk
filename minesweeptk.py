@@ -10,10 +10,18 @@ import minesweeper  # For the minesweeper game
 
 # The global list of Tkinter.Image objects to implement
 # overimpression statuses on the button
+
+# Define constants for all cell statuses
+
+CELL_STATUS_ZERO, CELL_STATUS_ONE, CELL_STATUS_TWO, CELL_STATUS_THREE, \
+CELL_STATUS_FOUR, CELL_STATUS_FIVE, CELL_STATUS_SIX, CELL_STATUS_SEVEN, \
+CELL_STATUS_EIGHT, CELL_STATUS_BOMB, CELL_STATUS_FLAG, CELL_STATUS_QMARK, \
+CELL_STATUS_COVERED, CELL_STATUS_PRESSED = range( 14 )
+
 imagesFilenames = ( 'zero.gif', 'one.gif', 'two.gif', 'three.gif',
                     'four.gif', 'five.gif', 'six.gif', 'seven.gif',
                     'eight.gif', 'bomb.gif', 'flag.gif', 'q_mark.gif',
-                    'covered.gif' )
+                    'covered.gif', 'pressed.gif' )
 images = []
 
 # Size of table and number of mines
@@ -28,6 +36,10 @@ options = ( { "nrows": 9, "ncols": 9, "nmines": 10 },
 class CellButton( Label ):
     """A class to implement a Minesweeper cell button."""
     
+    UNPRESSED = 0   # Cell non-pressed
+    PRESSED   = 1   # Cell pressed & mouse into
+    LEAVED    = 2   # Cell pressed & mouse out
+    
     def __init__( self, row, col, master = None ):
         """It define some cell attributes."""
         Label.__init__( self, master )
@@ -39,6 +51,9 @@ class CellButton( Label ):
         self.grid( row = row, column = col )
         self.status = -1
         self.cell = master.game[ row ][ col ]
+
+        # A variable to manage the press status of the cell
+        self.pressed = self.UNPRESSED 
         
     def Update( self ):
         """Update the status of the button in base of corresponding cell."""
@@ -84,6 +99,16 @@ class CellButton( Label ):
                 
         if self.cell.HasMine():
             self._SetStatus( 9 )
+
+    def UnbindAllEvents( self ):
+        self.unbind( '<Button-1>' )
+        self.unbind( '<B1-Leave>' )
+        self.unbind( '<B1-Enter>' )
+        self.unbind( '<ButtonRelease-1>' )
+        self.unbind( '<Button-3>' )
+        self.unbind( '<Control-Button-1>' )
+        self.unbind( '<Control-ButtonRelease-1>' )
+        
             
         
 #-------------------------------------------------------------------------------
@@ -117,25 +142,51 @@ class MinesweeperTable( Frame ):
             row = []
             for j in range( self.ncols ):
                 cell = CellButton( i, j, self )
-                cell.bind( '<ButtonRelease-1>', self.OnMouseRelease )
-                cell.bind( '<Control-Button-1>', self.OnRightClick )
+                cell.bind( '<Button-1>', self.OnButton1 )
+                cell.bind( '<B1-Leave>', self.OnB1Leave )
+                cell.bind( '<B1-Enter>', self.OnB1Enter )
+                cell.bind( '<ButtonRelease-1>', self.OnButtonRelease1 )
+                cell.bind( '<Button-3>', self.OnButton3 )
+                cell.bind( '<Control-Button-1>', self.OnButton3 )
                 cell.bind( '<Control-ButtonRelease-1>', self.Hole )
-                cell.bind( '<Button-3>', self.OnRightClick )
                 row.append( cell )
             self.cells.append( row )
+
+    def OnB1Enter( self, event ):
+        """Repress the cell if it was pressed."""
+        cell = event.widget
+        if cell.pressed == CellButton.LEAVED:
+            cell[ 'image' ] = images[ CELL_STATUS_PRESSED ]
+            cell.pressed = CellButton.PRESSED
+
+    def OnB1Leave( self, event ):
+        """Set original status."""
+        cell = event.widget
+        if cell.pressed == CellButton.PRESSED:
+            cell[ 'image' ] = images[ cell.GetStatus() ]
+            cell.pressed = CellButton.LEAVED
 
     def Hole( self, event ):
         """Hole handler. Intercept events and do nothing!"""
         pass
+
+    def OnButton1( self, event ):
+        """Handler of mouse left (primary) click."""
+        cell = event.widget
+        status = cell.GetStatus()
+        assert cell.pressed == CellButton.UNPRESSED
+
+        if status == CELL_STATUS_COVERED or status == CELL_STATUS_QMARK:
+            cell[ 'image' ] = images[ CELL_STATUS_PRESSED ]
+            cell.pressed = CellButton.PRESSED
                 
-    def OnMouseRelease( self, event ):
+    def OnButtonRelease1( self, event ):
         """Handler for the mouse click."""
-        status = event.widget.GetStatus()
+        cell = event.widget
         i = event.widget.row
         j = event.widget.col
         
-        
-        if status == 12 or status == 11:
+        if cell.pressed == CellButton.PRESSED:
             bomb = self.game.Uncover( i, j )
             
             if self.game[ i ][ j ].GetNeighborMinesNum() == 0:
@@ -150,9 +201,10 @@ class MinesweeperTable( Frame ):
             elif self.game.GetToDiscover() == 0:
                 print "You won!!!"
                 self.EndWinning()
-            
 
-    def OnRightClick( self, event ):
+        cell.pressed = CellButton.UNPRESSED            
+
+    def OnButton3( self, event ):
         """Handler for the mouse right click."""
         
         # Get coordinates of cell & current status
@@ -160,13 +212,13 @@ class MinesweeperTable( Frame ):
         i = event.widget.row
         j = event.widget.col
         
-        if status == 12:
+        if status == CELL_STATUS_COVERED:
             self.game.Flag( i, j )
             event.widget.Update()
-        elif status == 10:
+        elif status == CELL_STATUS_FLAG:
             self.game.QMark( i, j )
             event.widget.Update()
-        elif status == 11:
+        elif status == CELL_STATUS_QMARK:
             self.game.QMark( i, j, True )
             event.widget.Update()
             
@@ -183,8 +235,7 @@ class MinesweeperTable( Frame ):
         for row in self.cells:
             for cell in row:
                 cell.Reveal()
-                cell.unbind('<ButtonRelease-1>')
-                cell.unbind('<Button-3>')
+                cell.UnbindAllEvents()
                 
                 
     def EndWinning( self ):
@@ -192,8 +243,7 @@ class MinesweeperTable( Frame ):
         
         for row in self.cells:
             for cell in row:
-                cell.unbind('<ButtonRelease-1>')
-                cell.unbind('<Button-3>')
+                cell.UnbindAllEvents()
                 
         
     def Restart( self ):
@@ -216,17 +266,23 @@ class OptionWindow( Toplevel ):
         self.choice = IntVar( self )
         self.choice.set( option )
 
-        Radiobutton( self, text = '9 x 9, 10 mines', variable = self.choice, value = 0 ).grid( row = 0, column = 0, sticky = W )
-        Radiobutton( self, text = '16 x 16, 40 mines', variable = self.choice, value = 1 ).grid(  row = 1, column = 0, sticky = W )
-        Radiobutton( self, text = '16 x 30, 99 mines', variable = self.choice, value = 2 ).grid(  row = 2, column = 0, sticky = W )
+        Radiobutton( self, text = '9 x 9, 10 mines', variable = self.choice,
+            value = 0 ).grid( row = 0, column = 0, sticky = W )
+        Radiobutton( self, text = '16 x 16, 40 mines', variable = self.choice,
+            value = 1 ).grid(  row = 1, column = 0, sticky = W )
+        Radiobutton( self, text = '16 x 30, 99 mines', variable = self.choice,
+            value = 2 ).grid(  row = 2, column = 0, sticky = W )
 
         # Set the Ok & Cancel buttons
-        Button( self, text = 'Ok', command = self.onOk ).grid( row = 3, column = 0 )
-        Button( self, text = 'Cancel', command = self.onCancel ).grid( row = 3, column = 1 ) 
+        Button( self, text = 'Ok', command = self.onOk ).grid( row = 3,
+            column = 0 )
+        Button( self, text = 'Cancel', command = self.onCancel ).grid( row = 3,
+            column = 1 ) 
 
 
     def onOk( self ):
-        """Set new values for rows, columns and mines' number. Then close the options window."""
+        """Set new values for rows, columns and mines' number. Then close the
+        options window."""
         global option
         option = self.choice.get()        
         self.destroy()
@@ -266,7 +322,8 @@ class RootWindow( Tk ):
         self.menu_file = Menu( self.menubar )
         self.menubar.add_cascade( menu = self.menu_file, label = 'File' )
         self.menu_file.add_command( label = 'New game', command = self.onNewGame )
-        self.menu_file.add_command( label = 'Replay this game', command = self.onReplayThisGame )
+        self.menu_file.add_command( label = 'Replay this game',
+            command = self.onReplayThisGame )
         self.menu_file.add_command( label = 'Options...', command = self.onOptions )
         self.menu_file.add_separator()
         self.menu_file.add_command( label = 'Quit', command = self.onQuit )
