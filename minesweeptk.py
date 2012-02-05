@@ -108,6 +108,7 @@ class CellButton( Tkinter.Label ):
         self.unbind( '<ButtonRelease-1>' )
         self.unbind( '<Button-3>' )
         self.unbind( '<Control-Button-1>' )
+        self.unbind( '<Button-2>' )
         
             
         
@@ -151,9 +152,10 @@ class MinesweeperTable( Frame ):
                 cell.bind( '<ButtonRelease-1>', self.OnButtonRelease1 )
                 cell.bind( '<Button-3>', self.OnButton3 )
                 cell.bind( '<Control-Button-1>', self.OnButton3 )
+                cell.bind( '<Button-2>', self.OnButton3 )
                 row.append( cell )
             self.cells.append( row )
-
+            
     def OnB1Enter( self, event ):
         """Repress the cell if it was pressed."""
         cell = event.widget
