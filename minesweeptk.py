@@ -108,7 +108,6 @@ class CellButton( Tkinter.Label ):
         self.unbind( '<ButtonRelease-1>' )
         self.unbind( '<Button-3>' )
         self.unbind( '<Control-Button-1>' )
-        self.unbind( '<Control-ButtonRelease-1>' )
         
             
         
@@ -152,7 +151,6 @@ class MinesweeperTable( Frame ):
                 cell.bind( '<ButtonRelease-1>', self.OnButtonRelease1 )
                 cell.bind( '<Button-3>', self.OnButton3 )
                 cell.bind( '<Control-Button-1>', self.OnButton3 )
-                cell.bind( '<Control-ButtonRelease-1>', self.Hole )
                 row.append( cell )
             self.cells.append( row )
 
@@ -169,10 +167,6 @@ class MinesweeperTable( Frame ):
         if cell.pressed == CellButton.PRESSED:
             cell[ 'image' ] = images[ cell.GetStatus() ]
             cell.pressed = CellButton.LEAVED
-
-    def Hole( self, event ):
-        """Hole handler. Intercept events and do nothing!"""
-        pass
 
     def OnButton1( self, event ):
         """Handler of mouse left (primary) click."""
