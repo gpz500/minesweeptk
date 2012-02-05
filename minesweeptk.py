@@ -134,6 +134,9 @@ class MinesweeperTable( Frame ):
         self.create_cells()
         self.UpdateAllCells()
         
+        # Set some padding
+        self[ 'padding' ] = 12
+        
         
     def create_cells( self ):
         """Just a test function which create a lot of cells button."""
@@ -237,6 +240,22 @@ class MinesweeperTable( Frame ):
             for cell in row:
                 cell.Reveal()
                 cell.UnbindAllEvents()
+        
+        import tkMessageBox
+        choice = tkMessageBox.askyesnocancel(
+            title = "You loosed!",
+            icon = 'error',
+            message = """You loosed. Press:
+            Yes to quit
+            No to replay same game
+            Cancel to play a new game""" )
+        if choice == 0:
+            self.master.onReplayThisGame()
+        elif choice == 1:
+            sys.exit()
+        else:
+            self.master.onNewGame()
+            
                 
                 
     def EndWinning( self ):
@@ -246,6 +265,17 @@ class MinesweeperTable( Frame ):
             for cell in row:
                 cell.UnbindAllEvents()
                 
+        import tkMessageBox
+        choice = tkMessageBox.askyesno(
+            title = "You won!",
+            icon = 'info',
+            message = """You won! Press
+            Yes to quit
+            No to play a new game""" )
+        if choice == 0:
+            self.master.onNewGame()
+        else:
+            sys.exit()
         
     def Restart( self ):
         """Restart the game with the same mines' set."""
@@ -263,22 +293,32 @@ class OptionWindow( Toplevel ):
         """Initialize the option window with parent window."""
         Toplevel.__init__( self, master )
 
+        # Set a frame to get the background color
+        frame = Frame( self )
+        frame[ 'padding' ] = ( 3, 3, 12, 12 )
+        
         # Set tree radio button to choose an option
         self.choice = IntVar( self )
         self.choice.set( option )
 
-        Radiobutton( self, text = '9 x 9, 10 mines', variable = self.choice,
-            value = 0 ).grid( row = 0, column = 0, sticky = W )
-        Radiobutton( self, text = '16 x 16, 40 mines', variable = self.choice,
-            value = 1 ).grid(  row = 1, column = 0, sticky = W )
-        Radiobutton( self, text = '16 x 30, 99 mines', variable = self.choice,
-            value = 2 ).grid(  row = 2, column = 0, sticky = W )
+        Radiobutton( frame, text = '9 x 9, 10 mines',
+            variable = self.choice, value = 0 ).grid( row = 0,
+            column = 0,columnspan = 2, sticky = W )
+        Radiobutton( frame, text = '16 x 16, 40 mines', variable = self.choice,
+            value = 1 ).grid(  row = 1, column = 0, columnspan = 2,
+            sticky = W )
+        Radiobutton( frame, text = '16 x 30, 99 mines', variable = self.choice,
+            value = 2 ).grid(  row = 2, column = 0, columnspan = 2,
+            sticky = W )
 
         # Set the Ok & Cancel buttons
-        Button( self, text = 'Ok', command = self.onOk ).grid( row = 3,
+        Button( frame, text = 'Ok', command = self.onOk ).grid( row = 3,
             column = 0 )
-        Button( self, text = 'Cancel', command = self.onCancel ).grid( row = 3,
-            column = 1 ) 
+        Button( frame, text = 'Cancel', command = self.onCancel ).grid( row = 3,
+            column = 1 )
+            
+        # Put frame on the screen
+        frame.grid()
 
 
     def onOk( self ):
@@ -287,6 +327,7 @@ class OptionWindow( Toplevel ):
         global option
         option = self.choice.get()        
         self.destroy()
+        self.master.onNewGame()
 
 
     def onCancel( self ):
