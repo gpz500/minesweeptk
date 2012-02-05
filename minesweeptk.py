@@ -4,10 +4,11 @@ It uses the module minesweeper.py which gives two classes:
 - Cell, for a single cell
 - Game, which is a matrix of Cells."""
 
-import sys                 # To exit from the interpreter
-from Tkinter import *      # For GUI stuff
+import sys                  # To exit from the interpreter
+import Tkinter              # For GUI stuff
+from Tkinter import *       
 from ttk import *
-import minesweeper  # For the minesweeper game
+import minesweeper          # For the minesweeper game
 
 # The global list of Tkinter.Image objects to implement
 # overimpression statuses on the button
@@ -34,7 +35,7 @@ options = ( { "nrows": 9, "ncols": 9, "nmines": 10 },
 #-------------------------------------------------------------------------------
 # A class to implement a single cell
 #-------------------------------------------------------------------------------
-class CellButton( Label ):
+class CellButton( Tkinter.Label ):
     """A class to implement a Minesweeper cell button."""
     
     UNPRESSED = 0   # Cell non-pressed
@@ -43,10 +44,9 @@ class CellButton( Label ):
     
     def __init__( self, row, col, master = None ):
         """It define some cell attributes."""
-        Label.__init__( self, master )
+        Tkinter.Label.__init__( self, master )
         
-        self[ 'padding' ] = 0
-        self[ 'borderwidth' ] = 0
+        self[ 'bd' ] = 0
         self.row = row
         self.col = col
         self.grid( row = row, column = col )
