@@ -10,7 +10,6 @@ __date__ = "$Date$"
 __copyright__ = "Copyright (c) 2012 Alessandro Morgantini"
 __license__ = "Python"
 
-import sys                  # To exit from the interpreter
 import Tkinter              # For GUI stuff
 import Dialog               # For game over dialogs
 from Tkinter import *       
@@ -274,6 +273,8 @@ class MinesweeperTable( Frame ):
             for cell in row:
                 cell.Reveal()
                 cell.UnbindAllEvents()
+                
+        self.game.SetModified( False )
         
         # Ask for Exit, Replay, Play a new game
         dialog = Dialog.Dialog(
@@ -289,7 +290,7 @@ class MinesweeperTable( Frame ):
                         'Play a new game' )
         )
         if dialog.num == 0:
-            sys.exit()
+            self.master.onQuit()
         elif dialog.num == 1:
             self.master.onReplayThisGame()
         else:
@@ -306,6 +307,8 @@ class MinesweeperTable( Frame ):
             for cell in row:
                 cell.UnbindAllEvents()
                 
+        self.game.SetModified( False )
+                
         # Ask for Exit, Play a new game
         dialog = Dialog.Dialog(
             self,
@@ -319,7 +322,7 @@ class MinesweeperTable( Frame ):
                         'Play a new game' )
         )
         if dialog.num == 0:
-            sys.exit()
+            self.master.onQuit()
         else:
             self.master.onNewGame()
             
@@ -336,6 +339,10 @@ class MinesweeperTable( Frame ):
         remMines = self.game.nmines - self.game.nflags
         self.statusMessage.set( "%d remaining mine%s" % ( remMines,
             "" if remMines == 1 or remMines == -1 else "s" ) )
+            
+    def IsModified( self ):
+        """Return the modified flag status of associated game."""
+        return self.game.IsModified()
 
 #-------------------------------------------------------------------------------
 # My Options Window
@@ -394,6 +401,7 @@ class OptionWindow( Toplevel ):
         
         # Grab the events from all the application
         self.grab_set()
+        self.wm_transient( self.master )
 
 
     def onOk( self ):
@@ -444,7 +452,7 @@ class RootWindow( Tk ):
         self.menu_file.add_command( label = 'Options...', command = self.onOptions )
         self.menu_file.add_separator()
         self.menu_file.add_command( label = 'Quit', command = self.onQuit )
-
+        
         # Create a new game
         self.onNewGame()
 
@@ -467,7 +475,18 @@ class RootWindow( Tk ):
 
     def onQuit( self ):
         """Handler of File->Quit command."""
-        sys.exit()
+        confirm = False
+        
+        if not self.table.IsModified():
+            confirm = True
+        else:
+            import tkMessageBox
+            confirm = tkMessageBox.askyesno( title = "Quit",
+                                             message = "Are you shure you want to quit?" )
+        
+        if confirm:
+            self.destroy()
+        
 
 if __name__ == '__main__':
     """It means that the module is opened as an application."""                    
