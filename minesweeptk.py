@@ -6,6 +6,7 @@ It uses the module minesweeper.py which gives two classes:
 
 import sys                  # To exit from the interpreter
 import Tkinter              # For GUI stuff
+import Dialog               # For game over dialogs
 from Tkinter import *       
 from ttk import *
 import minesweeper          # For the minesweeper game
@@ -18,12 +19,14 @@ import minesweeper          # For the minesweeper game
 CELL_STATUS_ZERO, CELL_STATUS_ONE, CELL_STATUS_TWO, CELL_STATUS_THREE, \
 CELL_STATUS_FOUR, CELL_STATUS_FIVE, CELL_STATUS_SIX, CELL_STATUS_SEVEN, \
 CELL_STATUS_EIGHT, CELL_STATUS_BOMB, CELL_STATUS_FLAG, CELL_STATUS_QMARK, \
-CELL_STATUS_COVERED, CELL_STATUS_PRESSED = range( 14 )
+CELL_STATUS_COVERED, CELL_STATUS_PRESSED, CELL_STATUS_BBORD, CELL_STATUS_RBORD, \
+CELL_STATUS_CBORD = range( 17 )
 
 imagesFilenames = ( 'zero.gif', 'one.gif', 'two.gif', 'three.gif',
                     'four.gif', 'five.gif', 'six.gif', 'seven.gif',
                     'eight.gif', 'bomb.gif', 'flag.gif', 'q_mark.gif',
-                    'covered.gif', 'pressed.gif' )
+                    'covered.gif', 'pressed.gif', 'bottombord.gif', 'rightbord.gif',
+                    'cornerbord.gif' )
 images = []
 
 # Size of table and number of mines
@@ -134,9 +137,13 @@ class MinesweeperTable( Frame ):
         self.create_cells()
         self.UpdateAllCells()
         
-        # Set some padding
-        self[ 'padding' ] = 12
-        
+        # Create the status line
+        self.statusMessage = StringVar()
+        Label( self,
+               textvariable = self.statusMessage,
+               padding = ( 0, 3, 0, 3 )
+             ).grid( row = nrows + 1, column = 0, columnspan = ncols + 1 )
+        self.UpdateStatusMessage()
         
     def create_cells( self ):
         """Just a test function which create a lot of cells button."""
@@ -155,6 +162,25 @@ class MinesweeperTable( Frame ):
                 cell.bind( '<Button-2>', self.OnButton3 )
                 row.append( cell )
             self.cells.append( row )
+            
+            # Append a rightbord image to close the row
+            Tkinter.Label( self,
+                           bd = 0,
+                           image = images[ CELL_STATUS_RBORD ]
+                         ).grid( row = i, column = len( row ) )
+            
+        # Create the bottom border
+        for j in range( self.ncols ):
+            Tkinter.Label( self,
+                           bd = 0,
+                           image = images[ CELL_STATUS_BBORD ]
+                         ).grid( row = self.nrows, column = j )
+                         
+        # Create the right bottom corner
+        Tkinter.Label( self,
+                       bd = 0,
+                       image = images[ CELL_STATUS_CBORD ]
+                     ).grid( row = self.nrows, column = self.ncols )
             
     def OnB1Enter( self, event ):
         """Repress the cell if it was pressed."""
@@ -213,12 +239,17 @@ class MinesweeperTable( Frame ):
         j = event.widget.col
         
         if status == CELL_STATUS_COVERED:
+            # Put a flag
             self.game.Flag( i, j )
             event.widget.Update()
+            self.UpdateStatusMessage()
         elif status == CELL_STATUS_FLAG:
+            # Remove flag and put a question mark
             self.game.QMark( i, j )
             event.widget.Update()
+            self.UpdateStatusMessage()
         elif status == CELL_STATUS_QMARK:
+            # Remove question mark (and put nothing)
             self.game.QMark( i, j, True )
             event.widget.Update()
             
@@ -232,52 +263,73 @@ class MinesweeperTable( Frame ):
     def EndLoosing( self ):
         """Exit with error and block the game."""
         
+        # Reveals all bombs
         for row in self.cells:
             for cell in row:
                 cell.Reveal()
                 cell.UnbindAllEvents()
         
-        import tkMessageBox
-        choice = tkMessageBox.askyesnocancel(
+        # Ask for Exit, Replay, Play a new game
+        dialog = Dialog.Dialog(
+            self,
             title = "You loosed!",
             icon = 'error',
-            message = """You loosed. Press:
-            Yes to quit
-            No to replay same game
-            Cancel to play a new game""" )
-        if choice == 0:
-            self.master.onReplayThisGame()
-        elif choice == 1:
+            text = "You loosed...\n"
+                   "What do you want to do?",
+            bitmap = 'warning',
+            default = 0,
+            strings = ( 'Exit',
+                        'Replay this game',
+                        'Play a new game' )
+        )
+        if dialog.num == 0:
             sys.exit()
+        elif dialog.num == 1:
+            self.master.onReplayThisGame()
         else:
             self.master.onNewGame()
+        
             
                 
                 
     def EndWinning( self ):
         """Exit with success!"""
         
+        # Unbind all cells
         for row in self.cells:
             for cell in row:
                 cell.UnbindAllEvents()
                 
-        import tkMessageBox
-        choice = tkMessageBox.askyesno(
-            title = "You won!",
-            icon = 'info',
-            message = """You won! Press
-            Yes to quit
-            No to play a new game""" )
-        if choice == 0:
-            self.master.onNewGame()
-        else:
+        # Ask for Exit, Play a new game
+        dialog = Dialog.Dialog(
+            self,
+            title = "You Won!",
+            icon = 'error',
+            text = "You won...\n"
+                   "What do you want to do?",
+            bitmap = 'info',
+            default = 0,
+            strings = ( 'Exit',
+                        'Play a new game' )
+        )
+        if dialog.num == 0:
             sys.exit()
+        else:
+            self.master.onNewGame()
+            
         
     def Restart( self ):
         """Restart the game with the same mines' set."""
         self.game.Restart()
         self.create_cells()
         self.UpdateAllCells()
+        self.UpdateStatusMessage()
+        
+    def UpdateStatusMessage( self ):
+        """Ask the beyond game for data to update the status message."""
+        remMines = self.game.nmines - self.game.nflags
+        self.statusMessage.set( "%d remaining mine%s" % ( remMines,
+            "" if remMines == 1 or remMines == -1 else "s" ) )
 
 #-------------------------------------------------------------------------------
 # My Options Window
@@ -315,6 +367,9 @@ class OptionWindow( Toplevel ):
             
         # Put frame on the screen
         frame.grid()
+        
+        # Grab the events from all the application
+        self.grab_set()
 
 
     def onOk( self ):

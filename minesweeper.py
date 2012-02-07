@@ -94,14 +94,16 @@ class Cell:
         return self.status
         
     def SetStatus( self, newstatus ):
-        """Set current status of the cell."""
+        """Set current status of the cell. Return the old status."""
         if newstatus == self.status:
             raise MinesweeperStatusError( "Error: can't reassign the same status" )
         if self.status == Cell.FLAG and newstatus == Cell.REVEALED:
             raise MinesweeperStatusError( "Error: can't do the transition FLAG -> REVEALED" )
         if self.status == Cell.REVEALED:
             raise MinesweeperStatusError( "Error: can't come back from REVEALED status" )
+        oldstatus = self.status
         self.status = newstatus
+        return oldstatus
         
 class Game( list ):
     """A class for a whole minesweeper game."""
@@ -119,6 +121,12 @@ class Game( list ):
         # The number of cells without bombs: every time you discover a cell this
         # count cuts
         self.toDiscover = nrows * ncols - nmines
+        
+        # Save the number of mines
+        self.nmines = nmines
+        
+        # The number of flags on the game (initially 0)
+        self.nflags = 0
         
         # Create all the cells
         self.CreateCells( nrows, ncols )
@@ -176,7 +184,9 @@ class Game( list ):
     def Uncover( self, i, j ):
         """Uncover the cell (i, j). Return True if there is a mine, False otherwise."""
         cell = self[ i ][ j ]
-        cell.SetStatus( Cell.REVEALED )
+        oldStatus = cell.SetStatus( Cell.REVEALED )
+        if oldStatus == Cell.FLAG:
+            self.nflags -= 1
         self.toDiscover -= 1
         if cell.HasMine():
             return True
@@ -190,7 +200,9 @@ class Game( list ):
     def AutomaticUncover( self, cell ):
         """Uncover a chain of cells by neighboroad relation."""
         for myCell in self.GetAutoUncoverList( cell ):
-            myCell.SetStatus( Cell.REVEALED )
+            oldStatus = myCell.SetStatus( Cell.REVEALED )
+            if oldStatus == Cell.FLAG:
+                self.nflags -= 1
             self.toDiscover -= 1
             
     def GetAutoUncoverList( self, cell ):
@@ -198,7 +210,7 @@ class Game( list ):
         if cell.GetNeighborMinesNum():
             raise MinesweeperAutoUncoverError( "Error: can't automatic uncovers cells with some close mine!" )
         
-        myFiltFunction = lambda x: x.GetStatus() != Cell.REVEALED
+        myFiltFunction = lambda x: x.GetStatus() != Cell.REVEALED and x.GetStatus() != Cell.FLAG
         toUncover = filter( myFiltFunction, self.GetNeighborsList( cell ) )
         for nei in toUncover:
             if not nei.GetNeighborMinesNum():
@@ -211,13 +223,22 @@ class Game( list ):
         
     def Flag( self, i, j, reset = False ):
         """Set/Reset a flag."""
-        newstatus = Cell.COVERED if reset else Cell.FLAG
-        self[ i ][ j ].SetStatus( newstatus )
+        newStatus = Cell.COVERED if reset else Cell.FLAG
+        oldStatus = self[ i ][ j ].SetStatus( newStatus )
+        
+        # Update the count of flags
+        if oldStatus == Cell.FLAG and newStatus != Cell.FLAG:
+            self.nflags -= 1
+        elif oldStatus != Cell.FLAG and newStatus == Cell.FLAG:
+            self.nflags += 1
         
     def QMark( self, i, j, reset = False ):
-        """Set/Reset a flag."""
+        """Set/Reset a question mark."""
         newstatus = Cell.COVERED if reset else Cell.Q_MARK
-        self[ i ][ j ].SetStatus( newstatus )
+        oldstatus = self[ i ][ j ].SetStatus( newstatus )
+        if oldstatus == Cell.FLAG:
+            self.nflags -= 1
+        
         
     def GetToDiscover( self ):
         """Return the number of cells remaining to discover."""
@@ -255,8 +276,11 @@ class Game( list ):
         # Recreate the cells matrix
         self.CreateCells( nrows, ncols )
         
+        # Reset mines & counter
         self.SetMines( mines )
         self.toDiscover = nrows * ncols - len( mines )
+        self.nflags = 0
+        
         
     def CreateCells( self, nrows, ncols ):
         """(Re)create the cells matrix, erasing the possible exiting one."""
@@ -275,6 +299,14 @@ class Game( list ):
         i = random.randint( 0, len( self ) - 1 )
         j = random.randint( 0, len( self[ 0 ] ) - 1 )
         return ( i, j )
+        
+    def GetFlagsNum( self ):
+        """Return the number of currently number of flags."""
+        return self.nflags
+        
+    def GetMinesNum( self ):
+        """Return the number of mines in the game."""
+        return self.nmines
 
     
             
