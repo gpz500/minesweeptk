@@ -21,9 +21,12 @@ DATA_FILES = ['bomb.gif',
  'six.gif',
  'three.gif',
  'two.gif',
- 'zero.gif']
+ 'zero.gif',
+ 'bottombord.gif',
+ 'rightbord.gif',
+ 'cornerbord.gif']
 OPTIONS = {'argv_emulation': True,
- 'iconfile': '/Users/gpz500/src/Minesweeper (trunk)/bomb.icns'}
+ 'iconfile': 'bomb.icns'}
 
 setup(
     app=APP,
