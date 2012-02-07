@@ -343,21 +343,39 @@ class OptionWindow( Toplevel ):
 
         # Set a frame to get the background color
         frame = Frame( self )
-        frame[ 'padding' ] = ( 3, 3, 12, 12 )
+        frame[ 'padding' ] = 12
         
         # Set tree radio button to choose an option
         self.choice = IntVar( self )
         self.choice.set( option )
 
-        Radiobutton( frame, text = '9 x 9, 10 mines',
-            variable = self.choice, value = 0 ).grid( row = 0,
-            column = 0,columnspan = 2, sticky = W )
-        Radiobutton( frame, text = '16 x 16, 40 mines', variable = self.choice,
-            value = 1 ).grid(  row = 1, column = 0, columnspan = 2,
-            sticky = W )
-        Radiobutton( frame, text = '16 x 30, 99 mines', variable = self.choice,
-            value = 2 ).grid(  row = 2, column = 0, columnspan = 2,
-            sticky = W )
+        Radiobutton( frame,
+                     text = '9 x 9, 10 mines',
+                     variable = self.choice,
+                     value = 0,
+                     padding = ( 12, 0, 0, 2 )
+                     ).grid( row = 0,
+                             column = 0,
+                             columnspan = 2,
+                             sticky = W )
+        Radiobutton( frame,
+                     text = '16 x 16, 40 mines',
+                     variable = self.choice,
+                     value = 1,
+                     padding = ( 12, 2, 0, 2 )
+                     ).grid(  row = 1, 
+                              column = 0, 
+                              columnspan = 2,
+                              sticky = W )
+        Radiobutton( frame,
+                     text = '16 x 30, 99 mines',
+                     variable = self.choice,
+                     value = 2,
+                     padding = ( 12, 2, 0, 12 )
+                     ).grid( row = 2,
+                             column = 0,
+                             columnspan = 2,
+                             sticky = W )
 
         # Set the Ok & Cancel buttons
         Button( frame, text = 'Ok', command = self.onOk ).grid( row = 3,
@@ -450,8 +468,10 @@ if __name__ == '__main__':
     root = RootWindow( "Minesweeper" )
 
     # Put off the tearoff menus
-    root.option_add( '*tearOff', FALSE )
-
+    root.option_add( '*tearOff', False )
+    
+    # Set non resizable
+    root.wm_resizable( False, False )
     
     # Start the game
     root.mainloop()
