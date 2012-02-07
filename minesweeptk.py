@@ -458,6 +458,8 @@ class RootWindow( Tk ):
         # Create the menus
         self.menubar = Menu( self )
         self[ 'menu' ] = self.menubar
+        
+        # Menu File
         self.menu_file = Menu( self.menubar )
         self.menubar.add_cascade( menu = self.menu_file, label = 'File' )
         self.menu_file.add_command( label = 'New game', command = self.onNewGame )
@@ -468,6 +470,11 @@ class RootWindow( Tk ):
         self.menu_file.add_command( label = 'Options...', command = self.onOptions )
         self.menu_file.add_separator()
         self.menu_file.add_command( label = 'Quit', command = self.onQuit )
+        
+        # Menu Help
+        self.menu_help = Menu( self.menubar )
+        self.menubar.add_cascade( label = 'Help', menu = self.menu_help )
+        self.menu_help.add_command( label = 'About Minesweeptk...', command = self.OnAbout )
         
         # Intercept close command from Wm
         self.wm_protocol( "WM_DELETE_WINDOW", self.onQuit )
@@ -540,11 +547,27 @@ class RootWindow( Tk ):
         except IOError as exc:
             print >>sys.stderr, "Error", exc.errno, exc.strerror, \
                 "(%s)" % exc.filename
+                
+    def OnAbout( self ):
+        """Visualize an About dialog and exit."""
+        import tkMessageBox
+        tkMessageBox.showinfo(
+            title = "About Minesweeptk",
+            message = """Minesweeptk v0.1
+            
+A minesweeper game in Python and Tk
+written by Alessandro Morgantini <gpz500@technologist.com>
+Homepage: http://www.morgantini.org/
+
+Copyright (C) 2012 Alessandro Morgantini
+Released under the terms of GPLv3
+(http://www.gnu.org/licenses/gpl.html)"""
+        )
         
 
 if __name__ == '__main__':
     """It means that the module is opened as an application."""                    
-    root = RootWindow( "Minesweeper" )
+    root = RootWindow( "Minesweeptk" )
 
     # Put off the tearoff menus
     root.option_add( '*tearOff', False )
