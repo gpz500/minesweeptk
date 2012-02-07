@@ -39,6 +39,9 @@ option = 1
 options = ( { "nrows": 9, "ncols": 9, "nmines": 10 },
             { "nrows": 16, "ncols": 16, "nmines": 40 },
             { "nrows": 16, "ncols": 30, "nmines": 99 } )
+            
+# The file inside ~ where to save
+SAVE_FILE_NAME = '.minesweeptk_save'
 
 #-------------------------------------------------------------------------------
 # A class to implement a single cell
@@ -129,16 +132,23 @@ class MinesweeperTable( Frame ):
     Actually it is a matrix of CellButton instances."""
     
     
-    def __init__( self, master = None ):
-        """Initialize an instance of game."""
+    def __init__( self, master = None, game = None ):
+        """Initialize an instance of game.
+        
+        master is the Tk master widget
+        game is an existing minesweeper.Game instance.
+             If None __init__() create a random new one."""
         Frame.__init__( self, master )
         
         # Init the game
-        self.game = minesweeper.Game(
-            options[ option ][ 'nrows' ],
-            options[ option ][ 'ncols' ],
-            options[ option ][ 'nmines' ]
-        )
+        if game:
+            self.game = game
+        else:
+            self.game = minesweeper.Game(
+                options[ option ][ 'nrows' ],
+                options[ option ][ 'ncols' ],
+                options[ option ][ 'nmines' ]
+            )
         nrows = len( self.game )
         ncols = len( self.game[ 0 ] )
         self.create_cells()
@@ -453,6 +463,8 @@ class RootWindow( Tk ):
         self.menu_file.add_command( label = 'New game', command = self.onNewGame )
         self.menu_file.add_command( label = 'Replay this game',
             command = self.onReplayThisGame )
+        self.menu_file.add_command( label = 'Load', command = self.OnLoad )
+        self.menu_file.add_command( label = 'Save', command = self.OnSave )
         self.menu_file.add_command( label = 'Options...', command = self.onOptions )
         self.menu_file.add_separator()
         self.menu_file.add_command( label = 'Quit', command = self.onQuit )
@@ -493,6 +505,41 @@ class RootWindow( Tk ):
         
         if confirm:
             self.destroy()
+            
+    def OnSave( self ):
+        """Save current game on ~/.minesweeptk_save."""
+        import os
+        import pickle
+        
+        filename = os.path.join( os.path.expanduser( '~' ), SAVE_FILE_NAME )
+        try:
+            f = open( filename, "w" )
+            pck = pickle.Pickler( f )
+            pck.dump( self.table.game )
+            f.close()
+            self.table.game.SetModified( False )
+        except IOError as exc:
+            print >>sys.stderr, "Error", exc.errno, exc.strerror, \
+                "(%s)" % exc.filename
+        
+
+    def OnLoad( self ):
+        """Load game from ~/.minesweeptk_save."""
+        import os
+        import pickle
+        
+        filename = os.path.join( os.path.expanduser( '~' ), SAVE_FILE_NAME )
+        try:
+            f = open( filename, 'r' )
+            upck = pickle.Unpickler( f )
+            game = upck.load()
+            f.close()
+            self.table.destroy()
+            self.table = MinesweeperTable( self, game )
+            self.table.grid()
+        except IOError as exc:
+            print >>sys.stderr, "Error", exc.errno, exc.strerror, \
+                "(%s)" % exc.filename
         
 
 if __name__ == '__main__':
