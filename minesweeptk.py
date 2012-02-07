@@ -4,6 +4,12 @@ It uses the module minesweeper.py which gives two classes:
 - Cell, for a single cell
 - Game, which is a matrix of Cells."""
 
+__author__ = "Alessandro Morgantini <gpz500@technologist.com>"
+__version__ = "$Revision$"
+__date__ = "$Date$"
+__copyright__ = "Copyright (c) 2012 Alessandro Morgantini"
+__license__ = "Python"
+
 import sys                  # To exit from the interpreter
 import Tkinter              # For GUI stuff
 import Dialog               # For game over dialogs
