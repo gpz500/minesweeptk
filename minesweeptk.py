@@ -129,16 +129,18 @@ class MinesweeperTable( Frame ):
     Actually it is a matrix of CellButton instances."""
     
     
-    def __init__( self, nrows = 16, ncols = 30, nmines = 99, master = None ):
+    def __init__( self, master = None ):
         """Initialize an instance of game."""
         Frame.__init__( self, master )
         
         # Init the game
-        self.game = minesweeper.Game( nrows, ncols, nmines )
-
-        # Init cell buttons
-        self.nrows = nrows
-        self.ncols = ncols
+        self.game = minesweeper.Game(
+            options[ option ][ 'nrows' ],
+            options[ option ][ 'ncols' ],
+            options[ option ][ 'nmines' ]
+        )
+        nrows = len( self.game )
+        ncols = len( self.game[ 0 ] )
         self.create_cells()
         self.UpdateAllCells()
         
@@ -153,10 +155,12 @@ class MinesweeperTable( Frame ):
     def create_cells( self ):
         """Just a test function which create a lot of cells button."""
 
+        nrows = len( self.game )
+        ncols = len( self.game[ 0 ] ) 
         self.cells = []
-        for i in range( self.nrows ):
+        for i in range( nrows ):
             row = []
-            for j in range( self.ncols ):
+            for j in range( ncols ):
                 cell = CellButton( i, j, self )
                 cell.bind( '<Button-1>', self.OnButton1 )
                 cell.bind( '<B1-Leave>', self.OnB1Leave )
@@ -175,17 +179,17 @@ class MinesweeperTable( Frame ):
                          ).grid( row = i, column = len( row ) )
             
         # Create the bottom border
-        for j in range( self.ncols ):
+        for j in range( ncols ):
             Tkinter.Label( self,
                            bd = 0,
                            image = images[ CELL_STATUS_BBORD ]
-                         ).grid( row = self.nrows, column = j )
+                         ).grid( row = nrows, column = j )
                          
         # Create the right bottom corner
         Tkinter.Label( self,
                        bd = 0,
                        image = images[ CELL_STATUS_CBORD ]
-                     ).grid( row = self.nrows, column = self.ncols )
+                     ).grid( row = nrows, column = ncols )
             
     def OnB1Enter( self, event ):
         """Repress the cell if it was pressed."""
@@ -465,7 +469,7 @@ class RootWindow( Tk ):
         if hasattr( self, 'table' ):
             self.table.destroy()
 
-        self.table = MinesweeperTable( master = self, **options[ option ] )
+        self.table = MinesweeperTable( self )
         self.table.grid()
 
     def onReplayThisGame( self ):
