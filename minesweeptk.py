@@ -453,6 +453,9 @@ class RootWindow( Tk ):
         self.menu_file.add_separator()
         self.menu_file.add_command( label = 'Quit', command = self.onQuit )
         
+        # Intercept close command from Wm
+        self.wm_protocol( "WM_DELETE_WINDOW", self.onQuit )
+        
         # Create a new game
         self.onNewGame()
 
