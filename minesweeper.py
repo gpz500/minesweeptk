@@ -118,6 +118,9 @@ class Game( list ):
         # I have to create nrows list ncols cells
         self.cells = []
         
+        # Set the started flag (initially False)
+        self._modified = False
+        
         # The number of cells without bombs: every time you discover a cell this
         # count cuts
         self.toDiscover = nrows * ncols - nmines
@@ -188,6 +191,7 @@ class Game( list ):
         if oldStatus == Cell.FLAG:
             self.nflags -= 1
         self.toDiscover -= 1
+        self._modified = True
         if cell.HasMine():
             return True
             
@@ -226,6 +230,9 @@ class Game( list ):
         newStatus = Cell.COVERED if reset else Cell.FLAG
         oldStatus = self[ i ][ j ].SetStatus( newStatus )
         
+        # Set the started flag
+        self._modified = True
+        
         # Update the count of flags
         if oldStatus == Cell.FLAG and newStatus != Cell.FLAG:
             self.nflags -= 1
@@ -236,6 +243,7 @@ class Game( list ):
         """Set/Reset a question mark."""
         newstatus = Cell.COVERED if reset else Cell.Q_MARK
         oldstatus = self[ i ][ j ].SetStatus( newstatus )
+        self._modified = True
         if oldstatus == Cell.FLAG:
             self.nflags -= 1
         
@@ -276,10 +284,11 @@ class Game( list ):
         # Recreate the cells matrix
         self.CreateCells( nrows, ncols )
         
-        # Reset mines & counter
+        # Reset mines, counters & flags
         self.SetMines( mines )
         self.toDiscover = nrows * ncols - len( mines )
         self.nflags = 0
+        self._modified = False
         
         
     def CreateCells( self, nrows, ncols ):
@@ -308,6 +317,13 @@ class Game( list ):
         """Return the number of mines in the game."""
         return self.nmines
 
+    def IsModified( self ):
+        """Return the modified state."""
+        return self._modified
+        
+    def SetModified( self, toSave = True ):
+        """Set the modified state."""
+        self._modified = toSave
     
             
     

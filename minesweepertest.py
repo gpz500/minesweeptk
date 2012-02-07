@@ -288,6 +288,45 @@ class GameTest( unittest.TestCase ):
         game.Uncover( 4, 0 )
         game.Uncover( 2, 4 )
         
+    def testModifiedStart( self ):
+        """Game have start with False modified flag."""
+        game = minesweeper.Game()
+        self.assertEqual( False, game.IsModified() )
+        
+    def testModifiedSetUncover( self ):
+        """Modified flag has to set automatically when uncover a cell."""
+        game = minesweeper.Game()
+        game.Uncover( 4, 6 )
+        self.assertEqual( True, game.IsModified() )
+        
+    def testModifiedSetFlag( self ):
+        """Modified flag has to set automatically when flag a cell."""
+        game = minesweeper.Game()
+        game.Flag( 4, 6 )
+        self.assertEqual( True, game.IsModified() )
+        
+    def testModifiedSetQmark( self ):
+        """Modified flag has to set automatically when q_mark a cell."""
+        game = minesweeper.Game()
+        game.QMark( 4, 6 )
+        self.assertEqual( True, game.IsModified() )
+        
+    def testModifiedSetUnset( self ):
+        """Modified has to work well explicitly."""
+        game = minesweeper.Game()
+        game.SetModified()
+        self.assertEqual( True, game.IsModified() )
+        game.SetModified( False )
+        self.assertEqual( False, game.IsModified() )
+        
+    def testModifiedRestart( self ):
+        """Modified has to return False when the game is restarted."""
+        game = minesweeper.Game()
+        game.SetModified()
+        game.Restart()
+        self.assertEqual( False, game.IsModified() )
+
+        
 if __name__ == '__main__':
     unittest.main()
     
