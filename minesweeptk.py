@@ -10,6 +10,7 @@ __date__ = "$Date$"
 __copyright__ = "Copyright (c) 2012 Alessandro Morgantini"
 __license__ = "Python"
 
+import os
 import Tkinter              # For GUI stuff
 import Dialog               # For game over dialogs
 from Tkinter import *       
@@ -41,7 +42,7 @@ options = ( { "nrows": 9, "ncols": 9, "nmines": 10 },
             { "nrows": 16, "ncols": 30, "nmines": 99 } )
             
 # The file inside ~ where to save
-SAVE_FILE_NAME = '.minesweeptk_save'
+SAVE_FILE_NAME = os.path.join( os.path.expanduser( "~" ), ".minesweeptk_save" )
 
 #-------------------------------------------------------------------------------
 # A class to implement a single cell
@@ -479,6 +480,13 @@ class RootWindow( Tk ):
         self.menu_file.add_separator()
         self.menu_file.add_command( label = 'Quit', command = self.onQuit )
         
+        # Init the Load command
+        try:
+            os.stat( SAVE_FILE_NAME )
+        except:
+            self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'disabled' )
+            
+        
         # Menu Help
         self.menu_help = Menu( self.menubar )
         self.menubar.add_cascade( label = 'Help', menu = self.menu_help )
@@ -523,16 +531,15 @@ class RootWindow( Tk ):
             
     def OnSave( self ):
         """Save current game on ~/.minesweeptk_save."""
-        import os
         import pickle
         
-        filename = os.path.join( os.path.expanduser( '~' ), SAVE_FILE_NAME )
         try:
-            f = open( filename, "w" )
+            f = open( SAVE_FILE_NAME, "w" )
             pck = pickle.Pickler( f )
             pck.dump( self.table.game )
             f.close()
             self.table.game.SetModified( False )
+            self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'normal' )
         except IOError as exc:
             print >>sys.stderr, "Error", exc.errno, exc.strerror, \
                 "(%s)" % exc.filename
@@ -540,17 +547,16 @@ class RootWindow( Tk ):
 
     def OnLoad( self ):
         """Load game from ~/.minesweeptk_save."""
-        import os
         import pickle
         
-        filename = os.path.join( os.path.expanduser( '~' ), SAVE_FILE_NAME )
         try:
-            f = open( filename, 'r' )
+            f = open( SAVE_FILE_NAME, 'r' )
             upck = pickle.Unpickler( f )
             game = upck.load()
             f.close()
             self.table.destroy()
             self.table = MinesweeperTable( self, game )
+            self.table.game.SetModified( False )
             self.table.grid()
         except IOError as exc:
             print >>sys.stderr, "Error", exc.errno, exc.strerror, \
