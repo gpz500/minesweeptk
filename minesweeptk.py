@@ -368,10 +368,17 @@ class OptionWindow( Toplevel ):
     def __init__( self, master = None ):
         """Initialize the option window with parent window."""
         Toplevel.__init__( self, master )
-
+        
+        self.title( "Options" )
+        
         # Set a frame to get the background color
         frame = Frame( self )
         frame[ 'padding' ] = 12
+        
+        # Set a label with instructions
+        Label( frame,
+            text = "Choose table size and start a new game:",
+        ).grid( row = 0, column = 0, columnspan = 2, sticky = ( W, E ) ) 
         
         # Set tree radio button to choose an option
         self.choice = IntVar( self )
@@ -381,8 +388,8 @@ class OptionWindow( Toplevel ):
                      text = '9 x 9, 10 mines',
                      variable = self.choice,
                      value = 0,
-                     padding = ( 12, 0, 0, 2 )
-                     ).grid( row = 0,
+                     padding = ( 12, 12, 0, 2 )
+                     ).grid( row = 1,
                              column = 0,
                              columnspan = 2,
                              sticky = W )
@@ -391,7 +398,7 @@ class OptionWindow( Toplevel ):
                      variable = self.choice,
                      value = 1,
                      padding = ( 12, 2, 0, 2 )
-                     ).grid(  row = 1, 
+                     ).grid(  row = 2, 
                               column = 0, 
                               columnspan = 2,
                               sticky = W )
@@ -400,15 +407,15 @@ class OptionWindow( Toplevel ):
                      variable = self.choice,
                      value = 2,
                      padding = ( 12, 2, 0, 12 )
-                     ).grid( row = 2,
+                     ).grid( row = 3,
                              column = 0,
                              columnspan = 2,
                              sticky = W )
 
         # Set the Ok & Cancel buttons
-        Button( frame, text = 'Ok', command = self.onOk ).grid( row = 3,
+        Button( frame, text = 'Ok', command = self.onOk ).grid( row = 4,
             column = 0 )
-        Button( frame, text = 'Cancel', command = self.onCancel ).grid( row = 3,
+        Button( frame, text = 'Cancel', command = self.onCancel ).grid( row = 4,
             column = 1 )
             
         # Put frame on the screen
