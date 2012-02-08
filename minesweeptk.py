@@ -496,10 +496,12 @@ class HelpDialog( Toplevel ):
             "1) you have to discover all cells without mine to win;\n"
             "2) if you discover a cell with a mine, you loose.\n\n"
             "To discover a cell, click on it with the mouse.\n\n"
-            "In order to simplify your task, you can mark cells with\n"
-            "a flag or a question mark (?). Every time you right click\n"
-            "(or Control+click) on a covered cell you cycle beetwen\n"
-            "'unmarked' --> 'flagged' --> 'question mark' statuses.\n\n"
+            "In order to simplify your task, every cell you discover\n"
+            "indicates the number of mines in the adjacent cells.\n\n"
+            "You can also mark cells with a flag or a question mark (?)\n"
+            "to remember your hypothesis: every time you right\n"
+            "click (or Control+click) on an covered cell you cycle beetwen\n"
+            "'unmarked' --> 'flagged' --> 'question mark' stati.\n\n"
             "Explore the File menu to find some useful command!\n\n"
             "Enjoy!" ).grid( row = 0, column = 0 )
         
