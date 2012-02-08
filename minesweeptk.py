@@ -12,22 +12,19 @@ __license__ = "Python"
 
 import os
 import Tkinter              # For GUI stuff
-import Dialog               # For game over dialogs
+import Dialog               # For "Game Over" dialogs
 from Tkinter import *       
 from ttk import *
 import minesweeper          # For the minesweeper game
 
-# The global list of Tkinter.Image objects to implement
-# overimpression statuses on the button
-
-# Define constants for all cell statuses
-
+# Define constants for cells status
 CELL_STATUS_ZERO, CELL_STATUS_ONE, CELL_STATUS_TWO, CELL_STATUS_THREE, \
 CELL_STATUS_FOUR, CELL_STATUS_FIVE, CELL_STATUS_SIX, CELL_STATUS_SEVEN, \
 CELL_STATUS_EIGHT, CELL_STATUS_BOMB, CELL_STATUS_FLAG, CELL_STATUS_QMARK, \
 CELL_STATUS_COVERED, CELL_STATUS_PRESSED, CELL_STATUS_BBORD, CELL_STATUS_RBORD, \
 CELL_STATUS_CBORD = range( 17 )
 
+# Images to display a cell in every cell status
 imagesFilenames = ( 'zero.gif', 'one.gif', 'two.gif', 'three.gif',
                     'four.gif', 'five.gif', 'six.gif', 'seven.gif',
                     'eight.gif', 'bomb.gif', 'flag.gif', 'q_mark.gif',
@@ -41,64 +38,79 @@ options = ( { "nrows": 9, "ncols": 9, "nmines": 10 },
             { "nrows": 16, "ncols": 16, "nmines": 40 },
             { "nrows": 16, "ncols": 30, "nmines": 99 } )
             
-# The file inside ~ where to save
+# The filename in '~' where to save the current game
 SAVE_FILE_NAME = os.path.join( os.path.expanduser( "~" ), ".minesweeptk_save" )
 
 #-------------------------------------------------------------------------------
 # A class to implement a single cell
 #-------------------------------------------------------------------------------
 class CellButton( Tkinter.Label ):
-    """A class to implement a Minesweeper cell button."""
+    """CellButton is the widget class which implement a single cell.
     
+    It's a class derived from Tkinter.Label, so it is able to visualize
+    images. Every single cell is linked to the "real" cell in the
+    underlying minesweeper.Game instance."""
+    
+    # Status value related to mouse pressing on the cell
     UNPRESSED = 0   # Cell non-pressed
-    PRESSED   = 1   # Cell pressed & mouse into
-    LEAVED    = 2   # Cell pressed & mouse out
+    PRESSED   = 1   # Cell pressed with mouse cursor inside the cell
+    LEAVED    = 2   # Cell pressed with mouse cursor outdise the cell
     
-    def __init__( self, row, col, master = None ):
-        """It define some cell attributes."""
-        Tkinter.Label.__init__( self, master )
+    def __init__( self, master, ucell ):
+        """Initialize a new CellButton instance.
         
-        self[ 'bd' ] = 0
-        self.row = row
-        self.col = col
-        self.grid( row = row, column = col )
-        self.status = -1
-        self.cell = master.game[ row ][ col ]
+        master: the cell master widget, usually the game table
+        ucell:  the underlying cell in the minesweeper.Game instance
+                which this cell is linked to."""
+        
+        Tkinter.Label.__init__( self, master )
 
+        # Every cell widget is linked to a "real" cell in the
+        # underlying minesweeper.Game instance
+        self.ucell = ucell
+        
+        self[ 'bd' ] = 0    # borderwidth = 0
+        row, col = self.ucell.GetCoordinates()
+        self.grid( row = row, column = col )
+        
+        # This is cell status (it identifies which image to show on the cell)
+        # starting non-initialized
+        self.status = -1
+        
         # A variable to manage the press status of the cell
         self.pressed = self.UNPRESSED
         
-        # Add a bind tag
+        # Add a bind tag. This assigns to all cells a common Tk widget class
         tagsList = list( self.bindtags() )
         tagsList.append( self.__class__.__name__ )
         self.bindtags( tuple( tagsList ) )
         
     def Update( self ):
-        """Update the status of the button in base of corresponding cell."""
-        cellSt = self.cell.GetStatus()
+        """Update the cell status from the underlying ucell."""
+        ucellSt = self.ucell.GetStatus()
         
-        if cellSt == minesweeper.Cell.COVERED:
+        if ucellSt == minesweeper.Cell.COVERED:
             newStatus = CELL_STATUS_COVERED
-        elif cellSt == minesweeper.Cell.FLAG:
+        elif ucellSt == minesweeper.Cell.FLAG:
             newStatus = CELL_STATUS_FLAG
-        elif cellSt == minesweeper.Cell.Q_MARK:
+        elif ucellSt == minesweeper.Cell.Q_MARK:
             newStatus = CELL_STATUS_QMARK
-        elif self.cell.HasMine():
+        elif self.ucell.HasMine():
             newStatus = CELL_STATUS_BOMB
         else:
-            newStatus = self.cell.GetNeighborMinesNum()
+            newStatus = self.ucell.GetNeighborMinesNum()
             
         self._SetStatus( newStatus )
         
         
     def _SetStatus( self, newStatus ):
-        """Set the status of cell.
+        """Set the cell display status.
         
-        Stati from 0 to 8 mean: pushed button whit n neighbor bombs
-        9: bomb in it
-        10: covered with flag
-        11: covered with question mark
-        12: covered without anything"""
+        0 - 8: uncovered whit n adjacent bombs
+        9:     uncovered whit a bomb in it
+        10:    covered with a flag
+        11:    covered with a question mark
+        12:    covered without anything"""
         
         # Exit immediately if new status is equal to current one
         if newStatus == self.status:
@@ -109,13 +121,13 @@ class CellButton( Tkinter.Label ):
 
                 
     def GetStatus( self ):
-        """Return the current status."""
+        """Return the current cell display status."""
         return self.status
         
     def Reveal( self ):
-        """Uncover the cell, only if there is a bomb."""
+        """Uncover the cell, only if there is a bomb in it."""
                 
-        if self.cell.HasMine():
+        if self.ucell.HasMine():
             self._SetStatus( CELL_STATUS_BOMB )
 
           
@@ -126,21 +138,24 @@ class CellButton( Tkinter.Label ):
 class MinesweeperTable( Frame ):
     """A class to implement a Minesweeper panel.
     
-    Actually it is a matrix of CellButton instances."""
+    Actually it is a matrix of CellButton instances. It is linked to a instance
+    of minesweeper.Game: the real underlying game."""
     
     
     def __init__( self, master = None, game = None ):
-        """Initialize an instance of game.
+        """Initialize an instance of game table.
         
-        master is the Tk master widget
-        game is an existing minesweeper.Game instance.
-             If None __init__() create a random new one."""
+        master: the Tk master widget
+        game:   is an existing minesweeper.Game instance.
+                If None __init__() create a random new one."""
         Frame.__init__( self, master )
         
         # Init the game
         if game:
             self.game = game
         else:
+            # If there is no existing game, create a new one using currently
+            # active option for table dimension & mines number
             self.game = minesweeper.Game(
                 options[ option ][ 'nrows' ],
                 options[ option ][ 'ncols' ],
@@ -160,7 +175,7 @@ class MinesweeperTable( Frame ):
         self.UpdateStatusMessage()
         
     def create_cells( self ):
-        """Create all the cells in the table."""
+        """Create all the cell widgets in the table."""
 
         nrows = len( self.game )
         ncols = len( self.game[ 0 ] ) 
@@ -168,7 +183,7 @@ class MinesweeperTable( Frame ):
         for i in range( nrows ):
             row = []
             for j in range( ncols ):
-                cell = CellButton( i, j, self )
+                cell = CellButton( self, self.game[ i ][ j ] )
                 row.append( cell )
             self.cells.append( row )
             
@@ -185,32 +200,36 @@ class MinesweeperTable( Frame ):
                            image = images[ CELL_STATUS_BBORD ]
                          ).grid( row = nrows, column = j )
                          
-        # Create the right bottom corner
+        # Create the bottom right corner
         Tkinter.Label( self,
                        bd = 0,
                        image = images[ CELL_STATUS_CBORD ]
                      ).grid( row = nrows, column = ncols )
-                     
+        
+        # Bind all used events on the cell widgets wiht the handlers
         self.BindAllEvents()
 
         
             
     def OnB1Enter( self, event ):
-        """Repress the cell if it was pressed."""
+        """The mouse enter the cell with button 1 pressed: press
+        again the cell, if it was yet pressed."""
         cell = event.widget
         if cell.pressed == CellButton.LEAVED:
             cell[ 'image' ] = images[ CELL_STATUS_PRESSED ]
             cell.pressed = CellButton.PRESSED
 
     def OnB1Leave( self, event ):
-        """Set original status."""
+        """The mouse leaves a cell with button 1 pressed: reset
+        the original image and sign as LEAVED."""
         cell = event.widget
         if cell.pressed == CellButton.PRESSED:
             cell[ 'image' ] = images[ cell.GetStatus() ]
             cell.pressed = CellButton.LEAVED
 
     def OnButton1( self, event ):
-        """Handler of mouse left (primary) click."""
+        """The mouse button 1 has pressed in the cell: sign as PRESSED,
+        but not if a flag is there."""
         cell = event.widget
         status = cell.GetStatus()
         assert cell.pressed == CellButton.UNPRESSED
@@ -220,10 +239,10 @@ class MinesweeperTable( Frame ):
             cell.pressed = CellButton.PRESSED
                 
     def OnButtonRelease1( self, event ):
-        """Handler for the mouse click."""
+        """The mouse button 1 has released on the cell: the cell
+        has to be uncovered!"""
         cell = event.widget
-        i = event.widget.row
-        j = event.widget.col
+        i, j = cell.ucell.GetCoordinates()
         
         if cell.pressed == CellButton.PRESSED:
             bomb = self.game.Uncover( i, j )
@@ -248,8 +267,7 @@ class MinesweeperTable( Frame ):
         
         # Get coordinates of cell & current status
         status = event.widget.GetStatus()
-        i = event.widget.row
-        j = event.widget.col
+        i, j = event.widget.ucell.GetCoordinates()
         
         if status == CELL_STATUS_COVERED:
             # Put a flag
@@ -267,14 +285,14 @@ class MinesweeperTable( Frame ):
             event.widget.Update()
             
     def UpdateAllCells( self ):
-        """Update all cells on the table."""
+        """Update all cells on the table from the underlying minesweeper.Game instance."""
         for row in self.cells:
             for cell in row:
                 cell.Update()
                 
                 
     def EndLoosing( self ):
-        """Exit with error and block the game."""
+        """Manage the defeat."""
         
         # Reveals all bombs
         for row in self.cells:
@@ -308,7 +326,7 @@ class MinesweeperTable( Frame ):
                 
                 
     def EndWinning( self ):
-        """Exit with success!"""
+        """Manage the success!"""
         
         # Unbind all cells
         self.UnbindAllEvents()
@@ -335,6 +353,9 @@ class MinesweeperTable( Frame ):
         
     def Restart( self ):
         """Restart the game with the same mines' set."""
+        for row in self.cells:
+            for cell in row:
+                cell.destroy()
         self.game.Restart()
         self.create_cells()
         self.UpdateAllCells()
@@ -347,7 +368,7 @@ class MinesweeperTable( Frame ):
             "" if remMines == 1 or remMines == -1 else "s" ) )
             
     def IsModified( self ):
-        """Return the modified flag status of associated game."""
+        """Return the modified flag status of underlying game."""
         return self.game.IsModified()
         
     def BindAllEvents( self ):
@@ -383,7 +404,7 @@ class OptionWindow( Toplevel ):
         
         self.title( "Options" )
         
-        # Set a frame to get the background color
+        # Use a frame to properly get the background color
         frame = Frame( self )
         frame[ 'padding' ] = 12
         
@@ -392,7 +413,7 @@ class OptionWindow( Toplevel ):
             text = "Choose table size and start a new game:",
         ).grid( row = 0, column = 0, columnspan = 2, sticky = ( W, E ) ) 
         
-        # Set tree radio button to choose an option
+        # Set three radio button to choose an option
         self.choice = IntVar( self )
         self.choice.set( option )
 
@@ -460,7 +481,7 @@ class OptionWindow( Toplevel ):
 # My Toplevel Window Class
 #-------------------------------------------------------------------------------
 class RootWindow( Tk ):
-    """A class for the toplevel window of my app."""
+    """A class for the toplevel window of the application."""
     
     def __init__( self, title = "" ):
         """Init my toplevel window."""
@@ -491,7 +512,8 @@ class RootWindow( Tk ):
         self.menu_file.add_separator()
         self.menu_file.add_command( label = 'Quit', command = self.onQuit )
         
-        # Init the Load command
+        # Init the Load command: if the save file is not at its place, File->Load is
+        # disabled
         try:
             os.stat( SAVE_FILE_NAME )
         except:
@@ -530,6 +552,7 @@ class RootWindow( Tk ):
         """Handler of File->Quit command."""
         confirm = False
         
+        # Ask for user confirmation if the game is modified
         if not self.table.IsModified():
             confirm = True
         else:

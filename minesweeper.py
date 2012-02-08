@@ -5,8 +5,8 @@ The classes are:
     - Cell, for a single cell
     - Game, for a two dimensional array of cells
     
-If game = Game(), the cells are addressed as game[i][j] where 0 <= i <= nrows
-and 0 <= j <= ncols.
+If game = Game(), the cells are addressed as game[i][j] where 0 <= i < nrows
+and 0 <= j < ncols.
 """
 
 
@@ -35,21 +35,20 @@ class MinesweeperMinesCount( MinesweeperError ):
 class Cell:
     """This is a class for a single cell.
     
-    Create an instance of this class for every cell in the map when a game is
+    Create an instance of this class for every cell in the table when a game is
     started."""
     
-    # Some usesul constants
-    COVERED = 0
-    REVEALED = 1
-    FLAG = 2
-    Q_MARK = 3
+    # Some usesul constants for cell status
+    COVERED = 0         # Covered without anything
+    REVEALED = 1        # Uncovered
+    FLAG = 2            # Covered with a flag over
+    Q_MARK = 3          # Covered with a question mark over
     
     def __init__( self, x, y ):
         """The init method for a instance.
         The arguments are:
     
-        x, y:     the coordinates of the cell
-        mine:     is there a mine (True or False)?"""
+        x, y:     the cell coordinates."""
         if x < 0 or y < 0:
             raise MinesweeperCellError( "Coordinates must be both >= 0" )
     
@@ -59,22 +58,22 @@ class Cell:
         # This is the cell status (initially COVERED)
         self.status = self.COVERED
         
-        # This is the number of neighbor cells with a mine (initially 0)
+        # This is the number of neighbor mines (initially 0)
         self.neighborMines = 0
         
         # This is the presence of a mine or not (initially false)
         self.mine = False
         
     def SetNeighbors( self, neighbors ):
-        """Set the actual number of neighbors."""
-        self.neighbors = neighbors
+        """Set the actual number of neighbor mines."""
+        self.neighborMines = neighbors
         
     def GetNeighborMinesNum( self ):
-        """Return the actual number of neighbors."""
+        """Return the current number of neighbor mines."""
         return self.neighborMines
         
     def IncNeighbors( self ):
-        """Increment the numbers of neighbors mines by 1."""
+        """Increment by 1 the numbers of neighbor mines."""
         self.neighborMines += 1
         
     def GetCoordinates( self ):
@@ -170,7 +169,7 @@ class Game( list ):
         """Compute a list of neighbors."""
         li = []
         if j == -1:
-            # i is the cell object
+            # then, i is the cell object
             j = i.y
             i = i.x
                 
@@ -310,7 +309,7 @@ class Game( list ):
         return ( i, j )
         
     def GetFlagsNum( self ):
-        """Return the number of currently number of flags."""
+        """Return the number of flags on the table."""
         return self.nflags
         
     def GetMinesNum( self ):
@@ -328,7 +327,7 @@ class Game( list ):
             
     
 def PrintGame( game, unveil = False ):
-    """Print the table of games, with actual covered, flagged, q_mark."""
+    """Print the table of games, with currently covered, flagged, q_mark."""
     nrows = len( game )
     ncols = len( game[ 0 ] )
     lines = []
@@ -386,7 +385,10 @@ def PrintGame( game, unveil = False ):
 if __name__ == '__main__':
     # Do a game on terminal
     import sys
-    import readline
+    try:
+        import readline
+    except ImportError:
+        pass
     import re
     myGame = Game( 9, 9, 10 )
     
@@ -420,10 +422,7 @@ if __name__ == '__main__':
                         myGame.QMark( i, j )
                 elif command == 'R':
                     # Reveal a cell
-                    try:
-                        mine = myGame.Uncover( i, j )
-                    except MinesweeperStatusError:
-                        mine = False
+                    mine = myGame.Uncover( i, j )
                     if mine:
                         print "Bomb!"
                         PrintGame( myGame, True )
@@ -442,6 +441,6 @@ if __name__ == '__main__':
                 print "Position out of range!"
 
             except MinesweeperStatusError:
-		pass
+                print "Yet managed cell!"
 
             
