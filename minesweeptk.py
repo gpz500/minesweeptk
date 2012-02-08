@@ -474,7 +474,43 @@ class OptionWindow( Toplevel ):
 
 
 
-
+#-------------------------------------------------------------------------------
+# My Help dialog
+#-------------------------------------------------------------------------------
+class HelpDialog( Toplevel ):
+    """This is the Help dialog class widget. It show some help on the game."""
+    
+    def __init__( self, master = None ):
+        """Initialize and assemble the Help window."""
+        Toplevel.__init__( self, master )
+        
+        self.title( "Minesweeptk Help" )
+        
+        # Create a Frame widget
+        frame = Frame( self )
+        frame[ "padding" ] = 12
+        
+        # Put a simple text on the screen
+        Label( frame, text = "Hello, this is a very simple minesweeper game.\n\n"
+            "The game rules are simple:\n"
+            "1) you have to discover all cells without mine to win;\n"
+            "2) if you discover a cell with a mine, you loose.\n\n"
+            "To discover a cell, click on it with the mouse.\n\n"
+            "In order to simplify your task, you can mark cells with\n"
+            "a flag or a question mark (?). Every time you right click\n"
+            "(or Control+click) on a covered cell you cycle beetwen\n"
+            "'unmarked' --> 'flagged' --> 'question mark' statuses.\n\n"
+            "Explore the File menu to find some useful command!\n\n"
+            "Enjoy!" ).grid( row = 0, column = 0 )
+        
+        
+        # Put a close button
+        Button( frame, text = 'Close', command = self.destroy ).grid(
+            row = 10, column = 0, sticky = E )
+        
+        
+        # Put the frame on the screen
+        frame.grid()
 
 
 #-------------------------------------------------------------------------------
@@ -523,6 +559,7 @@ class RootWindow( Tk ):
         # Menu Help
         self.menu_help = Menu( self.menubar )
         self.menubar.add_cascade( label = 'Help', menu = self.menu_help )
+        self.menu_help.add_command( label = "Minesweeptk Help...", command = self.OnHelp )
         self.menu_help.add_command( label = 'About Minesweeptk...', command = self.OnAbout )
         
         # Intercept close command from Wm
@@ -601,7 +638,7 @@ class RootWindow( Tk ):
         import tkMessageBox
         tkMessageBox.showinfo(
             title = "About Minesweeptk",
-            message = """Minesweeptk v0.1
+            message = """Minesweeptk v0.2
             
 A minesweeper game in Python and Tk
 written by Alessandro Morgantini <gpz500@technologist.com>
@@ -611,6 +648,11 @@ Copyright (C) 2012 Alessandro Morgantini
 Released under the terms of GPLv3
 (http://www.gnu.org/licenses/gpl.html)"""
         )
+        
+    def OnHelp( self ):
+        """Handler of Help->Minesweeptk Help command.
+        Open an simple help dialog and exit."""
+        HelpDialog( self )
         
 
 if __name__ == '__main__':
