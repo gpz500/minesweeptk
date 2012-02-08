@@ -72,13 +72,13 @@ class CellButton( Tkinter.Label ):
         cellSt = self.cell.GetStatus()
         
         if cellSt == minesweeper.Cell.COVERED:
-            newStatus = 12
+            newStatus = CELL_STATUS_COVERED
         elif cellSt == minesweeper.Cell.FLAG:
-            newStatus = 10
+            newStatus = CELL_STATUS_FLAG
         elif cellSt == minesweeper.Cell.Q_MARK:
-            newStatus = 11
+            newStatus = CELL_STATUS_QMARK
         elif self.cell.HasMine():
-            newStatus = 9
+            newStatus = CELL_STATUS_BOMB
         else:
             newStatus = self.cell.GetNeighborMinesNum()
             
@@ -107,12 +107,13 @@ class CellButton( Tkinter.Label ):
         return self.status
         
     def Reveal( self ):
-        """Update the status of the button in base of corresponding cell."""
+        """Uncover the cell, only if there is a bomb."""
                 
         if self.cell.HasMine():
-            self._SetStatus( 9 )
+            self._SetStatus( CELL_STATUS_BOMB )
 
     def UnbindAllEvents( self ):
+        """Unbind all used events from the cell."""
         self.unbind( '<Button-1>' )
         self.unbind( '<B1-Leave>' )
         self.unbind( '<B1-Enter>' )
@@ -163,7 +164,7 @@ class MinesweeperTable( Frame ):
         self.UpdateStatusMessage()
         
     def create_cells( self ):
-        """Just a test function which create a lot of cells button."""
+        """Create all the cells in the table."""
 
         nrows = len( self.game )
         ncols = len( self.game[ 0 ] ) 
@@ -497,7 +498,7 @@ class RootWindow( Tk ):
 
     def onOptions( self ):
         """Handler of File->Options... command."""
-        options = OptionWindow( self )
+        OptionWindow( self )
 
     def onQuit( self ):
         """Handler of File->Quit command."""
