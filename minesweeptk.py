@@ -66,7 +66,12 @@ class CellButton( Tkinter.Label ):
         self.cell = master.game[ row ][ col ]
 
         # A variable to manage the press status of the cell
-        self.pressed = self.UNPRESSED 
+        self.pressed = self.UNPRESSED
+        
+        # Add a bind tag
+        tagsList = list( self.bindtags() )
+        tagsList.append( self.__class__.__name__ )
+        self.bindtags( tuple( tagsList ) )
         
     def Update( self ):
         """Update the status of the button in base of corresponding cell."""
@@ -113,17 +118,7 @@ class CellButton( Tkinter.Label ):
         if self.cell.HasMine():
             self._SetStatus( CELL_STATUS_BOMB )
 
-    def UnbindAllEvents( self ):
-        """Unbind all used events from the cell."""
-        self.unbind( '<Button-1>' )
-        self.unbind( '<B1-Leave>' )
-        self.unbind( '<B1-Enter>' )
-        self.unbind( '<ButtonRelease-1>' )
-        self.unbind( '<Button-3>' )
-        self.unbind( '<Control-Button-1>' )
-        self.unbind( '<Button-2>' )
-        
-            
+          
         
 #-------------------------------------------------------------------------------
 # A class to implement a minesweeper table as a matrix of CellButton istances
@@ -174,13 +169,6 @@ class MinesweeperTable( Frame ):
             row = []
             for j in range( ncols ):
                 cell = CellButton( i, j, self )
-                cell.bind( '<Button-1>', self.OnButton1 )
-                cell.bind( '<B1-Leave>', self.OnB1Leave )
-                cell.bind( '<B1-Enter>', self.OnB1Enter )
-                cell.bind( '<ButtonRelease-1>', self.OnButtonRelease1 )
-                cell.bind( '<Button-3>', self.OnButton3 )
-                cell.bind( '<Control-Button-1>', self.OnButton3 )
-                cell.bind( '<Button-2>', self.OnButton3 )
                 row.append( cell )
             self.cells.append( row )
             
@@ -202,6 +190,10 @@ class MinesweeperTable( Frame ):
                        bd = 0,
                        image = images[ CELL_STATUS_CBORD ]
                      ).grid( row = nrows, column = ncols )
+                     
+        self.BindAllEvents()
+
+        
             
     def OnB1Enter( self, event ):
         """Repress the cell if it was pressed."""
@@ -288,8 +280,8 @@ class MinesweeperTable( Frame ):
         for row in self.cells:
             for cell in row:
                 cell.Reveal()
-                cell.UnbindAllEvents()
-                
+        
+        self.UnbindAllEvents()
         self.game.SetModified( False )
         
         # Ask for Exit, Replay, Play a new game
@@ -319,10 +311,8 @@ class MinesweeperTable( Frame ):
         """Exit with success!"""
         
         # Unbind all cells
-        for row in self.cells:
-            for cell in row:
-                cell.UnbindAllEvents()
-                
+        self.UnbindAllEvents()
+                        
         self.game.SetModified( False )
                 
         # Ask for Exit, Play a new game
@@ -359,6 +349,27 @@ class MinesweeperTable( Frame ):
     def IsModified( self ):
         """Return the modified flag status of associated game."""
         return self.game.IsModified()
+        
+    def BindAllEvents( self ):
+        """Bind all used events on the cells."""
+        self.bind_class( CellButton.__name__, '<Button-1>', self.OnButton1 )
+        self.bind_class( CellButton.__name__, '<B1-Leave>', self.OnB1Leave )
+        self.bind_class( CellButton.__name__, '<B1-Enter>', self.OnB1Enter )
+        self.bind_class( CellButton.__name__, '<ButtonRelease-1>', self.OnButtonRelease1 )
+        self.bind_class( CellButton.__name__, '<Button-3>', self.OnButton3 )
+        self.bind_class( CellButton.__name__, '<Control-Button-1>', self.OnButton3 )
+        self.bind_class( CellButton.__name__, '<Button-2>', self.OnButton3 )
+
+        
+    def UnbindAllEvents( self ):
+        """Unbind all used events from the cells."""
+        self.unbind_class( CellButton.__name__, '<Button-1>' )
+        self.unbind_class( CellButton.__name__, '<B1-Leave>' )
+        self.unbind_class( CellButton.__name__, '<B1-Enter>' )
+        self.unbind_class( CellButton.__name__, '<ButtonRelease-1>' )
+        self.unbind_class( CellButton.__name__, '<Button-3>' )
+        self.unbind_class( CellButton.__name__, '<Control-Button-1>' )
+        self.unbind_class( CellButton.__name__, '<Button-2>' )
 
 #-------------------------------------------------------------------------------
 # My Options Window
