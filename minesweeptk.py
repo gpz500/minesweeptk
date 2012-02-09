@@ -508,7 +508,7 @@ class HelpDialog( Toplevel ):
             "indicates the number of mines in the adjacent cells.\n\n"
             "You can also mark cells with a flag or a question mark (?)\n"
             "to remember your hypothesis: every time you right\n"
-            "click (or Control+click) on an covered cell you cycle beetwen\n"
+            "click (or Control+click) on an covered cell you cycle between\n"
             "'unmarked' --> 'flagged' --> 'question mark' stati.\n\n"
             "Explore the File menu to find some useful command!\n\n"
             "Enjoy!" ).grid( row = 0, column = 0 )
