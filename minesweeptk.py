@@ -17,6 +17,9 @@ from Tkinter import *
 from ttk import *
 import minesweeper          # For the minesweeper game
 
+# The application name
+APP_NAME = "Minesweeptk"
+
 # Define constants for cells status
 CELL_STATUS_ZERO, CELL_STATUS_ONE, CELL_STATUS_TWO, CELL_STATUS_THREE, \
 CELL_STATUS_FOUR, CELL_STATUS_FIVE, CELL_STATUS_SIX, CELL_STATUS_SEVEN, \
@@ -259,6 +262,9 @@ class MinesweeperTable( Frame ):
             elif self.game.GetToDiscover() == 0:
                 print "You won!!!"
                 self.EndWinning()
+                
+            # Set the modified flag (*) on the title bar
+            self.master.RefreshTitle()
 
         cell.pressed = CellButton.UNPRESSED            
 
@@ -283,6 +289,8 @@ class MinesweeperTable( Frame ):
             # Remove question mark (and put nothing)
             self.game.QMark( i, j, True )
             event.widget.Update()
+            
+        self.master.RefreshTitle()
             
     def UpdateAllCells( self ):
         """Update all cells on the table from the underlying minesweeper.Game instance."""
@@ -484,7 +492,7 @@ class HelpDialog( Toplevel ):
         """Initialize and assemble the Help window."""
         Toplevel.__init__( self, master )
         
-        self.title( "Minesweeptk Help" )
+        self.title( APP_NAME + " Help" )
         
         # Create a Frame widget
         frame = Frame( self )
@@ -521,18 +529,15 @@ class HelpDialog( Toplevel ):
 class RootWindow( Tk ):
     """A class for the toplevel window of the application."""
     
-    def __init__( self, title = "" ):
+    def __init__( self ):
         """Init my toplevel window."""
         Tk.__init__( self )
-
+        
         # Create the images lists
         for name in imagesFilenames:
             img = PhotoImage()
             img[ 'file' ] = name
             images.append( img )
-
-        # Set the window title
-        self.title( title )
 
         # Create the menus
         self.menubar = Menu( self )
@@ -561,8 +566,8 @@ class RootWindow( Tk ):
         # Menu Help
         self.menu_help = Menu( self.menubar )
         self.menubar.add_cascade( label = 'Help', menu = self.menu_help )
-        self.menu_help.add_command( label = "Minesweeptk Help...", command = self.OnHelp )
-        self.menu_help.add_command( label = 'About Minesweeptk...', command = self.OnAbout )
+        self.menu_help.add_command( label = APP_NAME + " Help...", command = self.OnHelp )
+        self.menu_help.add_command( label = 'About ' + APP_NAME + '...', command = self.OnAbout )
         
         # Intercept close command from Wm
         self.wm_protocol( "WM_DELETE_WINDOW", self.onQuit )
@@ -578,10 +583,12 @@ class RootWindow( Tk ):
 
         self.table = MinesweeperTable( self )
         self.table.grid()
+        self.RefreshTitle()
 
     def onReplayThisGame( self ):
         """Handler of File->Replay this game command."""
         self.table.Restart()
+        self.RefreshTitle()
 
     def onOptions( self ):
         """Handler of File->Options... command."""
@@ -613,6 +620,7 @@ class RootWindow( Tk ):
             f.close()
             self.table.game.SetModified( False )
             self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'normal' )
+            self.RefreshTitle()
         except IOError as exc:
             print >>sys.stderr, "Error", exc.errno, exc.strerror, \
                 "(%s)" % exc.filename
@@ -631,6 +639,7 @@ class RootWindow( Tk ):
             self.table = MinesweeperTable( self, game )
             self.table.game.SetModified( False )
             self.table.grid()
+            self.RefreshTitle()
         except IOError as exc:
             print >>sys.stderr, "Error", exc.errno, exc.strerror, \
                 "(%s)" % exc.filename
@@ -639,8 +648,8 @@ class RootWindow( Tk ):
         """Visualize an About dialog and exit."""
         import tkMessageBox
         tkMessageBox.showinfo(
-            title = "About Minesweeptk",
-            message = """Minesweeptk v0.2
+            title = "About " + APP_NAME,
+            message = APP_NAME + """ v0.2
             
 A minesweeper game in Python and Tk
 written by Alessandro Morgantini <gpz500@technologist.com>
@@ -656,10 +665,22 @@ Released under the terms of GPLv3
         Open an simple help dialog and exit."""
         HelpDialog( self )
         
+        
+    def RefreshTitle( self ):
+        """Refresh the title string in base of the underlying game table."""
+        try:
+            modSign = "*" if self.table.IsModified() else ""
+        except AttributeError:
+            modSign = ""
+            
+        newTitle = modSign + APP_NAME
+        if self.title() != newTitle:
+            self.title( newTitle )
+        
 
 if __name__ == '__main__':
     """It means that the module is opened as an application."""                    
-    root = RootWindow( "Minesweeptk" )
+    root = RootWindow()
 
     # Put off the tearoff menus
     root.option_add( '*tearOff', False )
