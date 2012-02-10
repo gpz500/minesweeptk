@@ -25,21 +25,23 @@ CELL_STATUS_ZERO, CELL_STATUS_ONE, CELL_STATUS_TWO, CELL_STATUS_THREE, \
 CELL_STATUS_FOUR, CELL_STATUS_FIVE, CELL_STATUS_SIX, CELL_STATUS_SEVEN, \
 CELL_STATUS_EIGHT, CELL_STATUS_BOMB, CELL_STATUS_FLAG, CELL_STATUS_QMARK, \
 CELL_STATUS_COVERED, CELL_STATUS_PRESSED, CELL_STATUS_BBORD, CELL_STATUS_RBORD, \
-CELL_STATUS_CBORD = range( 17 )
+CELL_STATUS_CBORD, CELL_STATUS_FALSEN, CELL_STATUS_FALSEP = range( 19 )
 
 # Images to display a cell in every cell status
 imagesFilenames = ( 'zero.gif', 'one.gif', 'two.gif', 'three.gif',
                     'four.gif', 'five.gif', 'six.gif', 'seven.gif',
                     'eight.gif', 'bomb.gif', 'flag.gif', 'q_mark.gif',
                     'covered.gif', 'pressed.gif', 'bottombord.gif', 'rightbord.gif',
-                    'cornerbord.gif' )
+                    'cornerbord.gif', 'falsenegative.gif', 'falsepositive.gif' )
 images = []
 
 # Size of table and number of mines
 option = 1
-options = ( { "nrows": 9, "ncols": 9, "nmines": 10 },
+options = [ { "nrows": 9, "ncols": 9, "nmines": 10 },
             { "nrows": 16, "ncols": 16, "nmines": 40 },
-            { "nrows": 16, "ncols": 30, "nmines": 99 } )
+            { "nrows": 16, "ncols": 30, "nmines": 99 },
+            { "nrows": 16, "ncols": 16, "nmines": 40 } ]
+
             
 # The filename in '~' where to save the current game
 SAVE_FILE_NAME = os.path.join( os.path.expanduser( "~" ), ".minesweeptk_save" )
@@ -128,10 +130,24 @@ class CellButton( Tkinter.Label ):
         return self.status
         
     def Reveal( self ):
-        """Uncover the cell, only if there is a bomb in it."""
+        """Uncover the cell.
+        
+        Uncover the cell only if there is a bomb in it, or
+        without any bomb, but with a flag (false positive)."""
                 
         if self.ucell.HasMine():
-            self._SetStatus( CELL_STATUS_BOMB )
+            if self.status == CELL_STATUS_COVERED or \
+               self.status == CELL_STATUS_FLAG or \
+               self.status == CELL_STATUS_QMARK:
+                # Reveael a bomb
+                self._SetStatus( CELL_STATUS_BOMB )
+            else:
+                # Reveal a false negative (a bomb without flag)
+                self._SetStatus( CELL_STATUS_FALSEN )
+        elif self.status == CELL_STATUS_FLAG:
+            # Reveal a false positive (a flag without bomb)
+            self._SetStatus( CELL_STATUS_FALSEP )
+            
 
           
         
@@ -256,15 +272,16 @@ class MinesweeperTable( Frame ):
                 event.widget.Update()
             
             if bomb:
+                # If there is a bomd, you loose
                 print "Bomb! Game over..."
                 self.EndLoosing()
-            # Check for victory
             elif self.game.GetToDiscover() == 0:
+                # If there's no more bombs to discover, you win
                 print "You won!!!"
                 self.EndWinning()
-                
-            # Set the modified flag (*) on the title bar
-            self.master.RefreshTitle()
+            else:
+                # Neither defeat nor victory: update the window's title
+                self.master.RefreshTitle()
 
         cell.pressed = CellButton.UNPRESSED            
 
@@ -302,7 +319,7 @@ class MinesweeperTable( Frame ):
     def EndLoosing( self ):
         """Manage the defeat."""
         
-        # Reveals all bombs
+        # Reveal all bombs
         for row in self.cells:
             for cell in row:
                 cell.Reveal()
@@ -335,6 +352,11 @@ class MinesweeperTable( Frame ):
                 
     def EndWinning( self ):
         """Manage the success!"""
+        
+        # Reveal all bombs
+        for row in self.cells:
+            for cell in row:
+                cell.Reveal()
         
         # Unbind all cells
         self.UnbindAllEvents()
@@ -413,54 +435,92 @@ class OptionWindow( Toplevel ):
         self.title( "Options" )
         
         # Use a frame to properly get the background color
-        frame = Frame( self )
-        frame[ 'padding' ] = 12
+        contents = Frame( self )
+        contents[ 'padding' ] = 12
         
         # Set a label with instructions
-        Label( frame,
+        Label( contents,
             text = "Choose table size and start a new game:",
         ).grid( row = 0, column = 0, columnspan = 2, sticky = ( W, E ) ) 
         
         # Set three radio button to choose an option
+        frame1 = Frame( contents )
+        frame1.grid( row = 1, column = 0, columnspan = 2 )
         self.choice = IntVar( self )
         self.choice.set( option )
 
-        Radiobutton( frame,
+        Radiobutton( frame1,
                      text = '9 x 9, 10 mines',
                      variable = self.choice,
                      value = 0,
-                     padding = ( 12, 12, 0, 2 )
+                     padding = ( 12, 12, 12, 2 ),
+                     command = self.OnChangeOption
                      ).grid( row = 1,
                              column = 0,
-                             columnspan = 2,
-                             sticky = W )
-        Radiobutton( frame,
+                             sticky = ( W, N ) )
+        Radiobutton( frame1,
                      text = '16 x 16, 40 mines',
                      variable = self.choice,
                      value = 1,
-                     padding = ( 12, 2, 0, 2 )
+                     padding = ( 12, 2, 12, 2 ),
+                     command = self.OnChangeOption
                      ).grid(  row = 2, 
                               column = 0, 
-                              columnspan = 2,
-                              sticky = W )
-        Radiobutton( frame,
+                              sticky = ( W, N ) )
+        Radiobutton( frame1,
                      text = '16 x 30, 99 mines',
                      variable = self.choice,
                      value = 2,
-                     padding = ( 12, 2, 0, 12 )
+                     padding = ( 12, 2, 12, 2 ),
+                     command = self.OnChangeOption
                      ).grid( row = 3,
                              column = 0,
-                             columnspan = 2,
-                             sticky = W )
+                             sticky = ( W, N ) )
+                             
+        Radiobutton( frame1,
+                     text = 'Custom',
+                     variable = self.choice,
+                     value = 3,
+                     padding = ( 12, 2, 12, 12 ),
+                     command = self.OnChangeOption
+                     ).grid( row = 4,
+                             column = 0,
+                             sticky = ( W, N ) )
+        
+        # Widgets to set custom options
+        self.height = IntVar()
+        self.height.set( options[ 3 ][ 'nrows' ] )
+        self.labelHeight = Label( frame1, text = 'Height (9-24):', padding = ( 12, 12, 12, 2 ) )
+        self.labelHeight.grid( row = 1, column = 1, sticky = W )
+        self.entryHeight = Entry( frame1, width = 4, textvariable = self.height,
+            validate = 'focusout', validatecommand = self.ValidateHeight, invalidcommand = self.InvalidHeight )
+        self.entryHeight.grid( row = 1, column = 2, sticky = W )
+        
+        self.width = IntVar()
+        self.width.set( options[ 3 ][ 'ncols' ] )
+        self.labelWidth = Label( frame1, text = 'Width (9-30):', padding = ( 12, 2, 12, 2 ) )
+        self.labelWidth.grid( row = 2, column = 1, sticky = W )
+        self.entryWidth = Entry( frame1, width = 4, textvariable = self.width,
+            validate = 'focusout', validatecommand = self.ValidateWidth, invalidcommand = self.InvalidWidth )
+        self.entryWidth.grid( row = 2, column = 2, sticky = W )
+        
+        self.mines = IntVar()
+        self.mines.set( options[ 3 ][ 'nmines' ] )
+        self.labelMines = Label( frame1, text = "Mines (10-668):", padding = ( 12, 2, 12, 2 ) )
+        self.labelMines.grid( row = 3, column = 1, sticky = W )
+        self.entryMines = Entry( frame1, width = 4, textvariable = self.mines,
+            validate = 'focusout', validatecommand = self.ValidateMines, invalidcommand = self.InvalidMines )
+        self.entryMines.grid( row = 3, column = 2, sticky = W )
+        
+        self.RefreshCustomOptions()
+        
 
         # Set the Ok & Cancel buttons
-        Button( frame, text = 'Ok', command = self.onOk ).grid( row = 4,
-            column = 0 )
-        Button( frame, text = 'Cancel', command = self.onCancel ).grid( row = 4,
-            column = 1 )
+        Button( contents, text = 'Ok', command = self.onOk ).grid( row = 4, column = 0 )
+        Button( contents, text = 'Cancel', command = self.onCancel ).grid( row = 4, column = 1 )
             
         # Put frame on the screen
-        frame.grid()
+        contents.grid()
         
         # Grab the events from all the application
         self.grab_set()
@@ -471,7 +531,13 @@ class OptionWindow( Toplevel ):
         """Set new values for rows, columns and mines' number. Then close the
         options window."""
         global option
-        option = self.choice.get()        
+        option = self.choice.get()
+        
+        # option == 3 means "Custom options"
+        if option == 3:
+            options[ 3 ][ 'nrows' ] = self.height.get()
+            options[ 3 ][ 'ncols' ] = self.width.get()
+            options[ 3 ][ 'nmines' ] = self.mines.get()
         self.destroy()
         self.master.onNewGame()
 
@@ -479,8 +545,74 @@ class OptionWindow( Toplevel ):
     def onCancel( self ):
         """Close the options window without saving."""
         self.destroy()
+        
+    def RefreshCustomOptions( self ):
+        """Refresh the enabled status of custom options widget."""
+        state = ( "!" if self.choice.get() == 3 else "" ) + "disabled"
+        self.labelHeight.state( ( state, ) )
+        self.entryHeight.state( ( state, ) )
+        self.labelWidth.state( ( state, ) )
+        self.entryWidth.state( ( state, ) )
+        self.labelMines.state( ( state, ) )
+        self.entryMines.state( ( state, ) )
+        
+    def OnChangeOption( self ):
+        """Handler of options radio buttons. It executes when the user check any
+        of radio buttons."""
+        self.RefreshCustomOptions()
+        
+    def ValidateHeight( self ):
+        """Validate the height entry."""
+        try:
+            if self.height.get() < 9 or self.height.get() > 24:
+                return False
+            return True
+        except ValueError:
+            self.height.set( 0 )
+            return False
+        
+    def ValidateWidth( self ):
+        """Validate the width entry."""
+        try:
+            if self.width.get() < 9 or self.width.get() > 30:
+                return False
+            return True
+        except ValueError:
+            self.width.set( 0 )
+            return False
+        
+    def ValidateMines( self ):
+        """Validate the mines entry."""
+        try:
+            maxmines = self.width.get() * self.height.get()
+            if self.mines.get() < 10 or self.mines.get() > min( maxmines, 668 ):
+                return False
+            return True
+        except ValueError:
+            self.mines.set( 0 )
+            return False
+        
+    def InvalidHeight( self ):
+        """Fix the invalid height value."""
+        val = max( self.height.get(), 9 )
+        val = min( val, 24 )
+        self.height.set( val )
 
-
+    def InvalidWidth( self ):
+        """Fix the invalid width value."""
+        val = max( self.width.get(), 9 )
+        val = min( val, 30 )
+        self.width.set( val )
+        
+    def InvalidMines( self ):
+        """Fix the invalid mines value."""
+        val = max( self.mines.get(), 10 )
+        try:
+            val = min( val, self.height.get() * self.width.get() )
+        except ValueError:
+            val = 10
+        val = min( val, 668 )
+        self.mines.set( val )
 
 #-------------------------------------------------------------------------------
 # My Help dialog

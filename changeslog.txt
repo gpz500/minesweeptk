@@ -1,0 +1,17 @@
+* New feature: now, when the game finishes, the table shows false positives
+  (cells signaled with a flag, but without any bomb) and false negatives (the
+  cell you've just discovered with a bomb inside)
+* New feature: the window's title shows the game's modified state with a star
+  (*) close to the application name
+
+2012 February 08 - Version 0.2
+===============================================================================
+* Bugfix: now the File->Load menu command is activated only if the save file
+  exists
+-------------------------------------------------------------------------------
+* New feature: added an Help window
+* New feature: added a message in the Options dialog
+
+2012 February 07 - Version 0.1
+===============================================================================
+* Initial release
