@@ -24,7 +24,9 @@ DATA_FILES = ['bomb.gif',
  'zero.gif',
  'bottombord.gif',
  'rightbord.gif',
- 'cornerbord.gif']
+ 'cornerbord.gif',
+ 'falsenegative.gif',
+ 'falsepositive.gif']
 OPTIONS = {'argv_emulation': True,
  'iconfile': 'bomb.icns'}
 
