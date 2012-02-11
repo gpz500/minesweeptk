@@ -1,3 +1,5 @@
+2012 February 11 - Version 0.3
+===============================================================================
 * New feature: it's possible to choose custom table size and mines' number
 * New feature: now, when the game finishes, the table shows false positives
   (cells signaled with a flag, but without any bomb) and false negatives (the
