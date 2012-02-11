@@ -444,8 +444,8 @@ class OptionWindow( Toplevel ):
         ).grid( row = 0, column = 0, columnspan = 2, sticky = ( W, E ) ) 
         
         # Set three radio button to choose an option
-        frame1 = Frame( contents )
-        frame1.grid( row = 1, column = 0, columnspan = 2 )
+        frame1 = Frame( contents, padding = ( 24, 24, 24, 48 ) )
+        frame1.grid( row = 1, column = 0, sticky = N )
         self.choice = IntVar( self )
         self.choice.set( option )
 
@@ -453,62 +453,61 @@ class OptionWindow( Toplevel ):
                      text = '9 x 9, 10 mines',
                      variable = self.choice,
                      value = 0,
-                     padding = ( 12, 12, 12, 2 ),
                      command = self.OnChangeOption
                      ).grid( row = 1,
                              column = 0,
-                             sticky = ( W, N ) )
+                             sticky = W )
         Radiobutton( frame1,
                      text = '16 x 16, 40 mines',
                      variable = self.choice,
                      value = 1,
-                     padding = ( 12, 2, 12, 2 ),
                      command = self.OnChangeOption
                      ).grid(  row = 2, 
-                              column = 0, 
-                              sticky = ( W, N ) )
+                              column = 0,
+                              sticky = W )
         Radiobutton( frame1,
                      text = '16 x 30, 99 mines',
                      variable = self.choice,
                      value = 2,
-                     padding = ( 12, 2, 12, 2 ),
                      command = self.OnChangeOption
                      ).grid( row = 3,
                              column = 0,
-                             sticky = ( W, N ) )
+                             sticky = W )
                              
-        Radiobutton( frame1,
+        # Widgets to set custom options
+        frame2 = Frame( contents, padding = ( 24, 24, 24, 48 ) )
+        frame2.grid( row = 1, column = 1, sticky = N )
+        
+        Radiobutton( frame2,
                      text = 'Custom',
                      variable = self.choice,
                      value = 3,
-                     padding = ( 12, 2, 12, 12 ),
                      command = self.OnChangeOption
-                     ).grid( row = 4,
-                             column = 0,
-                             sticky = ( W, N ) )
-        
-        # Widgets to set custom options
+                     ).grid( row = 0,
+                             column = 1,
+                             sticky = W )
+
         self.height = IntVar()
         self.height.set( options[ 3 ][ 'nrows' ] )
-        self.labelHeight = Label( frame1, text = 'Height (9-24):', padding = ( 12, 12, 12, 2 ) )
+        self.labelHeight = Label( frame2, text = 'Height (9-24):', padding = ( 24, 0, 0, 0 ) )
         self.labelHeight.grid( row = 1, column = 1, sticky = W )
-        self.entryHeight = Entry( frame1, width = 4, textvariable = self.height,
+        self.entryHeight = Entry( frame2, width = 4, textvariable = self.height,
             validate = 'focusout', validatecommand = self.ValidateHeight, invalidcommand = self.InvalidHeight )
         self.entryHeight.grid( row = 1, column = 2, sticky = W )
         
         self.width = IntVar()
         self.width.set( options[ 3 ][ 'ncols' ] )
-        self.labelWidth = Label( frame1, text = 'Width (9-30):', padding = ( 12, 2, 12, 2 ) )
+        self.labelWidth = Label( frame2, text = 'Width (9-30):', padding = ( 24, 0, 0, 0 ) )
         self.labelWidth.grid( row = 2, column = 1, sticky = W )
-        self.entryWidth = Entry( frame1, width = 4, textvariable = self.width,
+        self.entryWidth = Entry( frame2, width = 4, textvariable = self.width,
             validate = 'focusout', validatecommand = self.ValidateWidth, invalidcommand = self.InvalidWidth )
         self.entryWidth.grid( row = 2, column = 2, sticky = W )
         
         self.mines = IntVar()
         self.mines.set( options[ 3 ][ 'nmines' ] )
-        self.labelMines = Label( frame1, text = "Mines (10-668):", padding = ( 12, 2, 12, 2 ) )
+        self.labelMines = Label( frame2, text = "Mines (10-668):", padding = ( 24, 0, 0, 0 ) )
         self.labelMines.grid( row = 3, column = 1, sticky = W )
-        self.entryMines = Entry( frame1, width = 4, textvariable = self.mines,
+        self.entryMines = Entry( frame2, width = 4, textvariable = self.mines,
             validate = 'focusout', validatecommand = self.ValidateMines, invalidcommand = self.InvalidMines )
         self.entryMines.grid( row = 3, column = 2, sticky = W )
         
@@ -519,7 +518,7 @@ class OptionWindow( Toplevel ):
         Button( contents, text = 'Ok', command = self.onOk ).grid( row = 4, column = 0 )
         Button( contents, text = 'Cancel', command = self.onCancel ).grid( row = 4, column = 1 )
             
-        # Put frame on the screen
+        # Put main frame on the screen
         contents.grid()
         
         # Grab the events from all the application
