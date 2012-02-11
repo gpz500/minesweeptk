@@ -702,6 +702,10 @@ class RootWindow( Tk ):
         
         # Intercept close command from Wm
         self.wm_protocol( "WM_DELETE_WINDOW", self.onQuit )
+		
+		# Intercept Command+Q on Macintosh
+        if self.tk.call( 'tk', 'windowingsystem' ) == "aqua":
+            self.createcommand( "exit", self.onQuit )
         
         # Create a new game
         self.onNewGame()
