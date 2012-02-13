@@ -47,6 +47,88 @@ options = [ { "nrows": 9, "ncols": 9, "nmines": 10 },
 SAVE_FILE_NAME = os.path.join( os.path.expanduser( "~" ), ".minesweeptk_save" )
 
 #-------------------------------------------------------------------------------
+# A class to save/load persistent data
+#-------------------------------------------------------------------------------
+class PersistentData:
+    """This class implements an interface to manage persistent data."""
+    
+    def __init__( self, filename ):
+        """Initialize the instance with the file name."""
+        
+        # Init the filename 
+        self.filename = filename
+        
+        # Import pickle module and map as instance variable
+        import pickle
+        self.pickle = pickle
+        
+        
+    def SaveGame( self, game ):
+        """Save the supplied game on file."""
+        # Load saved options
+        try:
+            svdOption, svdOptions = self.LoadOptions()
+        except IOError:
+            # If the file does'n exist, set default values
+            # for custom options
+            svdOption = option
+            svdOptions = options[ 3 ]
+            
+        f = open( self.filename, "wb" )
+        pck = self.pickle.Pickler( f )
+        pck.dump( game )
+        pck.dump( svdOption )
+        pck.dump( svdOptions )
+        f.close()
+       
+        
+    def LoadGame( self ):
+        """Load the saved game from file."""
+        f = open( self.filename, "rb" )
+        unpck = self.pickle.Unpickler( f )
+        game = unpck.load()
+        f.close()
+        return game
+            
+        
+    def SaveOptions( self, option, options ):
+        """Save the supplied custom options on file."""
+        # Load saved game
+        try:
+            svdGame = self.LoadGame()
+        except IOError:
+            # If the file doesn't exist, put an invalid one
+            svdGame = "You've never saved any game!"
+            
+        f = open( self.filename, "wb" )
+        pck =  self.pickle.Pickler( f )
+        pck.dump( svdGame )
+        pck.dump( option )
+        pck.dump( options )
+        f.close()
+
+        
+    def LoadOptions( self ):
+        """Load the saved custom options from file."""
+        f = open( self.filename, "rb" )
+        unpck = self.pickle.Unpickler( f )
+        # Read the saved game
+        dummy = unpck.load()
+        try:
+            svdOption = unpck.load()
+            svdOptions = unpck.load()
+        except EOFError:
+            # It's possible open old savings (without options), so,
+            # if the file is too short, set default values
+            svdOption = option
+            svdOptions = options[ 3 ]
+        f.close()
+        return ( svdOption, svdOptions )
+        
+    
+
+
+#-------------------------------------------------------------------------------
 # A class to implement a single cell
 #-------------------------------------------------------------------------------
 class CellButton( Tkinter.Label ):
@@ -529,14 +611,13 @@ class OptionWindow( Toplevel ):
     def onOk( self ):
         """Set new values for rows, columns and mines' number. Then close the
         options window."""
-        global option
-        option = self.choice.get()
+        global option, options
         
-        # option == 3 means "Custom options"
-        if option == 3:
-            options[ 3 ][ 'nrows' ] = self.height.get()
-            options[ 3 ][ 'ncols' ] = self.width.get()
-            options[ 3 ][ 'nmines' ] = self.mines.get()
+        option = self.choice.get()
+        options[ 3 ][ 'nrows' ] = self.height.get()
+        options[ 3 ][ 'ncols' ] = self.width.get()
+        options[ 3 ][ 'nmines' ] = self.mines.get()
+        self.master.persData.SaveOptions( option, options[ 3 ] )
         self.destroy()
         self.master.onNewGame()
 
@@ -681,17 +762,23 @@ class RootWindow( Tk ):
         self.menu_file.add_command( label = 'Replay this game',
             command = self.onReplayThisGame )
         self.menu_file.add_command( label = 'Load', command = self.OnLoad )
+        self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'disabled' )
         self.menu_file.add_command( label = 'Save', command = self.OnSave )
         self.menu_file.add_command( label = 'Options...', command = self.onOptions )
         self.menu_file.add_separator()
         self.menu_file.add_command( label = 'Quit', command = self.onQuit )
         
-        # Init the Load command: if the save file is not at its place, File->Load is
-        # disabled
+        # Load options from save file. If there is a valid game in the file,
+        # enable File->Load command
+        self.persData = PersistentData( SAVE_FILE_NAME )
+        global option, options
         try:
-            os.stat( SAVE_FILE_NAME )
-        except:
-            self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'disabled' )
+            game = self.persData.LoadGame()
+            if type( game ) == minesweeper.Game:
+                self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'normal' )
+            option, options[ 3 ] = self.persData.LoadOptions()
+        except IOError:
+            pass
             
         
         # Menu Help
@@ -746,38 +833,19 @@ class RootWindow( Tk ):
             
     def OnSave( self ):
         """Save current game on ~/.minesweeptk_save."""
-        import pickle
-        
-        try:
-            f = open( SAVE_FILE_NAME, "w" )
-            pck = pickle.Pickler( f )
-            pck.dump( self.table.game )
-            f.close()
-            self.table.game.SetModified( False )
-            self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'normal' )
-            self.RefreshTitle()
-        except IOError as exc:
-            print >>sys.stderr, "Error", exc.errno, exc.strerror, \
-                "(%s)" % exc.filename
-        
+        self.persData.SaveGame( self.table.game )
+        self.table.game.SetModified( False )
+        self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'normal' )
+        self.RefreshTitle()
 
     def OnLoad( self ):
         """Load game from ~/.minesweeptk_save."""
-        import pickle
-        
-        try:
-            f = open( SAVE_FILE_NAME, 'r' )
-            upck = pickle.Unpickler( f )
-            game = upck.load()
-            f.close()
-            self.table.destroy()
-            self.table = MinesweeperTable( self, game )
-            self.table.game.SetModified( False )
-            self.table.grid()
-            self.RefreshTitle()
-        except IOError as exc:
-            print >>sys.stderr, "Error", exc.errno, exc.strerror, \
-                "(%s)" % exc.filename
+        game = self.persData.LoadGame()
+        self.table.destroy()
+        self.table = MinesweeperTable( self, game )
+        self.table.game.SetModified( False )
+        self.table.grid()
+        self.RefreshTitle()
                 
     def OnAbout( self ):
         """Visualize an About dialog and exit."""

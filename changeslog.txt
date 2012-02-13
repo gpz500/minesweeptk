@@ -1,4 +1,7 @@
-* New feature: on Macintosh now intercept Command+Q to ask user for quit or not
+* Bugfix: on Macintosh now intercept Command+Q to ask user for quit or not
+--------------------------------------------------------------------------------
+* New feature: the options are persistent now (they are saved on file when
+  modified and loaded from file during startup)
 
 2012 February 11 - Version 0.3
 ================================================================================
