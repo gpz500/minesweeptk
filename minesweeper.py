@@ -17,6 +17,10 @@ __copyright__ = "Copyright (c) 2012 Alessandro Morgantini"
 __license__ = "Python"
 
 
+# Release version
+VERSION = "0.4"
+
+
 class MinesweeperError( Exception ):
     pass
     

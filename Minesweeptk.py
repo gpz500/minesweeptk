@@ -852,7 +852,7 @@ class RootWindow( Tk ):
         import tkMessageBox
         tkMessageBox.showinfo(
             title = "About " + APP_NAME,
-            message = APP_NAME + """ v0.4
+            message = APP_NAME + " v" + minesweeper.VERSION + """
             
 A minesweeper game in Python and Tk
 written by Alessandro Morgantini <gpz500@technologist.com>
