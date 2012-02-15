@@ -132,9 +132,3 @@ else:
         py_modules = [ 'minesweeper', 'ttk' ]
     )
 
-    for f in glob.glob( os.path.join( 'dist', APP_NAME + '-' + VERSION + '.*' ) ):
-        if os.path.isfile( os.path.basename( f ) ):
-            os.remove( os.path.basename( f ) )
-        shutil.move( f, os.getcwd() )
-    
-    os.rmdir( 'dist' )
