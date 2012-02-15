@@ -74,20 +74,19 @@ class PersistentData:
             svdOption = option
             svdOptions = options[ 3 ]
             
-        f = open( self.filename, "wb" )
-        pck = self.pickle.Pickler( f )
-        pck.dump( game )
-        pck.dump( svdOption )
-        pck.dump( svdOptions )
-        f.close()
+        with open( self.filename, "wb" ) as f:
+            pck = self.pickle.Pickler( f )
+            pck.dump( game )
+            pck.dump( svdOption )
+            pck.dump( svdOptions )
        
         
     def LoadGame( self ):
         """Load the saved game from file."""
-        f = open( self.filename, "rb" )
-        unpck = self.pickle.Unpickler( f )
-        game = unpck.load()
-        f.close()
+        with open( self.filename, "rb" ) as f:
+            unpck = self.pickle.Unpickler( f )
+            game = unpck.load()
+
         return game
             
         
@@ -100,29 +99,28 @@ class PersistentData:
             # If the file doesn't exist, put an invalid one
             svdGame = "You've never saved any game!"
             
-        f = open( self.filename, "wb" )
-        pck =  self.pickle.Pickler( f )
-        pck.dump( svdGame )
-        pck.dump( option )
-        pck.dump( options )
-        f.close()
+        with open( self.filename, "wb" ) as f:
+            pck =  self.pickle.Pickler( f )
+            pck.dump( svdGame )
+            pck.dump( option )
+            pck.dump( options )
 
         
     def LoadOptions( self ):
         """Load the saved custom options from file."""
-        f = open( self.filename, "rb" )
-        unpck = self.pickle.Unpickler( f )
-        # Read the saved game
-        dummy = unpck.load()
-        try:
-            svdOption = unpck.load()
-            svdOptions = unpck.load()
-        except EOFError:
-            # It's possible open old savings (without options), so,
-            # if the file is too short, set default values
-            svdOption = option
-            svdOptions = options[ 3 ]
-        f.close()
+        with open( self.filename, "rb" ) as f:
+            unpck = self.pickle.Unpickler( f )
+            # Read the saved game
+            dummy = unpck.load()
+            try:
+                svdOption = unpck.load()
+                svdOptions = unpck.load()
+            except EOFError:
+                # It's possible open old savings (without options), so,
+                # if the file is too short, set default values
+                svdOption = option
+                svdOptions = options[ 3 ]
+        
         return ( svdOption, svdOptions )
         
     
