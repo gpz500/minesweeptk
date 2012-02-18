@@ -20,6 +20,10 @@ import minesweeper          # For the minesweeper game
 # The application name
 APP_NAME = "Minesweeptk"
 
+# Some i18n
+import gettext
+gettext.install( APP_NAME, 'locale' )
+
 # Define constants for cells status
 CELL_STATUS_ZERO, CELL_STATUS_ONE, CELL_STATUS_TWO, CELL_STATUS_THREE, \
 CELL_STATUS_FOUR, CELL_STATUS_FIVE, CELL_STATUS_SIX, CELL_STATUS_SEVEN, \
@@ -353,11 +357,11 @@ class MinesweeperTable( Frame ):
             
             if bomb:
                 # If there is a bomd, you loose
-                print "Bomb! Game over..."
+                print _( "Bomb! Game over..." )
                 self.EndLoosing()
             elif self.game.GetToDiscover() == 0:
                 # If there's no more bombs to discover, you win
-                print "You won!!!"
+                print _( "You won!!!" )
                 self.EndWinning()
             else:
                 # Neither defeat nor victory: update the window's title
@@ -410,15 +414,14 @@ class MinesweeperTable( Frame ):
         # Ask for Exit, Replay, Play a new game
         dialog = Dialog.Dialog(
             self,
-            title = "You loosed!",
+            title = _( "You loosed!" ),
             icon = 'error',
-            text = "You loosed...\n"
-                   "What do you want to do?",
+            text = _( "You loosed...\nWhat do you want to do?" ),
             bitmap = 'warning',
             default = 0,
-            strings = ( 'Exit',
-                        'Replay this game',
-                        'Play a new game' )
+            strings = ( _( 'Exit' ),
+                        _( 'Replay this game' ),
+                        _( 'Play a new game' ) )
         )
         if dialog.num == 0:
             self.master.onQuit()
@@ -446,14 +449,13 @@ class MinesweeperTable( Frame ):
         # Ask for Exit, Play a new game
         dialog = Dialog.Dialog(
             self,
-            title = "You Won!",
+            title = _( "You Won!" ),
             icon = 'error',
-            text = "You won...\n"
-                   "What do you want to do?",
+            text = _( "You won...\nWhat do you want to do?" ),
             bitmap = 'info',
             default = 0,
-            strings = ( 'Exit',
-                        'Play a new game' )
+            strings = ( _( 'Exit' ),
+                        _( 'Play a new game' ) )
         )
         if dialog.num == 0:
             self.master.onQuit()
@@ -474,8 +476,10 @@ class MinesweeperTable( Frame ):
     def UpdateStatusMessage( self ):
         """Ask the beyond game for data to update the status message."""
         remMines = self.game.nmines - self.game.nflags
-        self.statusMessage.set( "%d remaining mine%s" % ( remMines,
-            "" if remMines == 1 or remMines == -1 else "s" ) )
+        if remMines == 1:
+            self.statusMessage.set( _( "1 remaining mine" ) )
+        else:
+            self.statusMessage.set( _( "%d remaining mines" ) % remMines )
             
     def IsModified( self ):
         """Return the modified flag status of underlying game."""
@@ -512,7 +516,7 @@ class OptionWindow( Toplevel ):
         """Initialize the option window with parent window."""
         Toplevel.__init__( self, master )
         
-        self.title( "Options" )
+        self.title( _("Options") )
         
         # Use a frame to properly get the background color
         contents = Frame( self )
@@ -520,7 +524,7 @@ class OptionWindow( Toplevel ):
         
         # Set a label with instructions
         Label( contents,
-            text = "Choose table size and start a new game:",
+            text = _("Choose table size and start a new game:"),
         ).grid( row = 0, column = 0, columnspan = 2, sticky = ( W, E ) ) 
         
         # Set three radio button to choose an option
@@ -530,7 +534,7 @@ class OptionWindow( Toplevel ):
         self.choice.set( option )
 
         Radiobutton( frame1,
-                     text = '9 x 9, 10 mines',
+                     text = _('9 x 9, 10 mines'),
                      variable = self.choice,
                      value = 0,
                      command = self.OnChangeOption
@@ -538,7 +542,7 @@ class OptionWindow( Toplevel ):
                              column = 0,
                              sticky = W )
         Radiobutton( frame1,
-                     text = '16 x 16, 40 mines',
+                     text = _('16 x 16, 40 mines'),
                      variable = self.choice,
                      value = 1,
                      command = self.OnChangeOption
@@ -546,7 +550,7 @@ class OptionWindow( Toplevel ):
                               column = 0,
                               sticky = W )
         Radiobutton( frame1,
-                     text = '16 x 30, 99 mines',
+                     text = _('16 x 30, 99 mines'),
                      variable = self.choice,
                      value = 2,
                      command = self.OnChangeOption
@@ -559,7 +563,7 @@ class OptionWindow( Toplevel ):
         frame2.grid( row = 1, column = 1, sticky = N )
         
         Radiobutton( frame2,
-                     text = 'Custom',
+                     text = _('Custom'),
                      variable = self.choice,
                      value = 3,
                      command = self.OnChangeOption
@@ -569,7 +573,7 @@ class OptionWindow( Toplevel ):
 
         self.height = IntVar()
         self.height.set( options[ 3 ][ 'nrows' ] )
-        self.labelHeight = Label( frame2, text = 'Height (9-24):', padding = ( 24, 0, 0, 0 ) )
+        self.labelHeight = Label( frame2, text = _('Height (9-24):'), padding = ( 24, 0, 0, 0 ) )
         self.labelHeight.grid( row = 1, column = 1, sticky = W )
         self.entryHeight = Entry( frame2, width = 4, textvariable = self.height,
             validate = 'focusout', validatecommand = self.ValidateHeight, invalidcommand = self.InvalidHeight )
@@ -577,7 +581,7 @@ class OptionWindow( Toplevel ):
         
         self.width = IntVar()
         self.width.set( options[ 3 ][ 'ncols' ] )
-        self.labelWidth = Label( frame2, text = 'Width (9-30):', padding = ( 24, 0, 0, 0 ) )
+        self.labelWidth = Label( frame2, text = _('Width (9-30):'), padding = ( 24, 0, 0, 0 ) )
         self.labelWidth.grid( row = 2, column = 1, sticky = W )
         self.entryWidth = Entry( frame2, width = 4, textvariable = self.width,
             validate = 'focusout', validatecommand = self.ValidateWidth, invalidcommand = self.InvalidWidth )
@@ -585,7 +589,7 @@ class OptionWindow( Toplevel ):
         
         self.mines = IntVar()
         self.mines.set( options[ 3 ][ 'nmines' ] )
-        self.labelMines = Label( frame2, text = "Mines (10-668):", padding = ( 24, 0, 0, 0 ) )
+        self.labelMines = Label( frame2, text = _("Mines (10-668):"), padding = ( 24, 0, 0, 0 ) )
         self.labelMines.grid( row = 3, column = 1, sticky = W )
         self.entryMines = Entry( frame2, width = 4, textvariable = self.mines,
             validate = 'focusout', validatecommand = self.ValidateMines, invalidcommand = self.InvalidMines )
@@ -702,14 +706,14 @@ class HelpDialog( Toplevel ):
         """Initialize and assemble the Help window."""
         Toplevel.__init__( self, master )
         
-        self.title( APP_NAME + " Help" )
+        self.title( _( "%s Help" ) % APP_NAME )
         
         # Create a Frame widget
         frame = Frame( self )
         frame[ "padding" ] = 12
         
         # Put a simple text on the screen
-        Label( frame, text = "Hello, this is a very simple minesweeper game.\n\n"
+        Label( frame, text = _("Hello, this is a very simple minesweeper game.\n\n"
             "The game rules are simple:\n"
             "1) you have to discover all cells without mine to win;\n"
             "2) if you discover a cell with a mine, you loose.\n\n"
@@ -721,11 +725,11 @@ class HelpDialog( Toplevel ):
             "click (or Control+click) on an covered cell you cycle between\n"
             "'unmarked' --> 'flagged' --> 'question mark' stati.\n\n"
             "Explore the File menu to find some useful command!\n\n"
-            "Enjoy!" ).grid( row = 0, column = 0 )
+            "Enjoy!") ).grid( row = 0, column = 0 )
         
         
         # Put a close button
-        Button( frame, text = 'Close', command = self.destroy ).grid(
+        Button( frame, text = _('Close'), command = self.destroy ).grid(
             row = 10, column = 0, sticky = E )
         
         
@@ -755,16 +759,16 @@ class RootWindow( Tk ):
         
         # Menu File
         self.menu_file = Menu( self.menubar )
-        self.menubar.add_cascade( menu = self.menu_file, label = 'File' )
-        self.menu_file.add_command( label = 'New game', command = self.onNewGame )
-        self.menu_file.add_command( label = 'Replay this game',
+        self.menubar.add_cascade( menu = self.menu_file, label = _( 'File' ) )
+        self.menu_file.add_command( label = _( 'New game' ), command = self.onNewGame )
+        self.menu_file.add_command( label = _( 'Replay this game' ),
             command = self.onReplayThisGame )
-        self.menu_file.add_command( label = 'Load', command = self.OnLoad )
-        self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'disabled' )
-        self.menu_file.add_command( label = 'Save', command = self.OnSave )
-        self.menu_file.add_command( label = 'Options...', command = self.onOptions )
+        self.menu_file.add_command( label = _( 'Load' ), command = self.OnLoad )
+        self.menu_file.entryconfigure( self.menu_file.index( _( 'Load' ) ), state = 'disabled' )
+        self.menu_file.add_command( label = _( 'Save' ), command = self.OnSave )
+        self.menu_file.add_command( label = _( 'Options...' ), command = self.onOptions )
         self.menu_file.add_separator()
-        self.menu_file.add_command( label = 'Quit', command = self.onQuit )
+        self.menu_file.add_command( label = _( 'Quit' ), command = self.onQuit )
         
         # Load options from save file. If there is a valid game in the file,
         # enable File->Load command
@@ -773,7 +777,7 @@ class RootWindow( Tk ):
         try:
             game = self.persData.LoadGame()
             if type( game ) == minesweeper.Game:
-                self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'normal' )
+                self.menu_file.entryconfigure( self.menu_file.index( _( 'Load' ) ), state = 'normal' )
             option, options[ 3 ] = self.persData.LoadOptions()
         except IOError:
             pass
@@ -781,9 +785,9 @@ class RootWindow( Tk ):
         
         # Menu Help
         self.menu_help = Menu( self.menubar )
-        self.menubar.add_cascade( label = 'Help', menu = self.menu_help )
-        self.menu_help.add_command( label = APP_NAME + " Help...", command = self.OnHelp )
-        self.menu_help.add_command( label = 'About ' + APP_NAME + '...', command = self.OnAbout )
+        self.menubar.add_cascade( label = _( 'Help' ), menu = self.menu_help )
+        self.menu_help.add_command( label = _( "%s Help..." ) % APP_NAME, command = self.OnHelp )
+        self.menu_help.add_command( label = _( 'About %s' ) % APP_NAME + '...', command = self.OnAbout )
         
         # Intercept close command from Wm
         self.wm_protocol( "WM_DELETE_WINDOW", self.onQuit )
@@ -833,7 +837,7 @@ class RootWindow( Tk ):
         """Save current game on ~/.minesweeptk_save."""
         self.persData.SaveGame( self.table.game )
         self.table.game.SetModified( False )
-        self.menu_file.entryconfigure( self.menu_file.index( 'Load' ), state = 'normal' )
+        self.menu_file.entryconfigure( self.menu_file.index( _( 'Load' ) ), state = 'normal' )
         self.RefreshTitle()
 
     def OnLoad( self ):
