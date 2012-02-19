@@ -854,7 +854,7 @@ class RootWindow( Tk ):
         import tkMessageBox
         tkMessageBox.showinfo(
             title = "About " + APP_NAME,
-            message = APP_NAME + " v" + minesweeper.VERSION + """
+            message = _("""%s v%s
             
 A minesweeper game in Python and Tk
 written by Alessandro Morgantini <gpz500@technologist.com>
@@ -862,7 +862,7 @@ Homepage: http://www.morgantini.org/
 
 Copyright (C) 2012 Alessandro Morgantini
 Released under the terms of GPLv3
-(http://www.gnu.org/licenses/gpl.html)"""
+(http://www.gnu.org/licenses/gpl.html)""") % ( APP_NAME, minesweeper.VERSION )
         )
         
     def OnHelp( self ):

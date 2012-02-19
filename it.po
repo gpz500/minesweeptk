@@ -1,0 +1,215 @@
+# Italian translations for gpz package
+# Traduzioni italiane per il pacchetto gpz..
+# Copyright (C) 2012 ORGANIZATION
+# Alessandro Morgantini <gpz500@technologist.com>, 2012.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gpz 500\n"
+"POT-Creation-Date: 2012-02-18 17:38+CET\n"
+"PO-Revision-Date: 2012-02-18 17:06+0100\n"
+"Last-Translator: Alessandro Morgantini <gpz500@technologist.com>\n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: Minesweeptk.py:360
+msgid "Bomb! Game over..."
+msgstr "Bomba! Gioco finito..."
+
+#: Minesweeptk.py:364
+msgid "You won!!!"
+msgstr "Hai vinto!!!"
+
+#: Minesweeptk.py:417
+msgid "You loosed!"
+msgstr "Hai perso!"
+
+#: Minesweeptk.py:419
+msgid ""
+"You loosed...\n"
+"What do you want to do?"
+msgstr ""
+"Hai perso...\n"
+"Cosa vuoi fare?"
+
+#: Minesweeptk.py:422 Minesweeptk.py:457
+msgid "Exit"
+msgstr "Esci"
+
+#: Minesweeptk.py:423 Minesweeptk.py:764
+msgid "Replay this game"
+msgstr "Rigioca questa partita"
+
+#: Minesweeptk.py:424 Minesweeptk.py:458
+msgid "Play a new game"
+msgstr "Gioca una nuova partita"
+
+#: Minesweeptk.py:452
+msgid "You Won!"
+msgstr "Hai vinto!"
+
+#: Minesweeptk.py:454
+msgid ""
+"You won...\n"
+"What do you want to do?"
+msgstr ""
+"Hai vinto...\n"
+"Cosa vuoi fare?"
+
+#: Minesweeptk.py:480
+msgid "1 remaining mine"
+msgstr "1 mina rimanente"
+
+#: Minesweeptk.py:482
+msgid "%d remaining mines"
+msgstr "%d mine rimanenti"
+
+#: Minesweeptk.py:519
+msgid "Options"
+msgstr "Opzioni"
+
+#: Minesweeptk.py:527
+msgid "Choose table size and start a new game:"
+msgstr "Scegli le dimensioni della tabella e inizia una nuova partita:"
+
+#: Minesweeptk.py:537
+msgid "9 x 9, 10 mines"
+msgstr "9 x 9, 10 mine"
+
+#: Minesweeptk.py:545
+msgid "16 x 16, 40 mines"
+msgstr "16 x 16, 40 mine"
+
+#: Minesweeptk.py:553
+msgid "16 x 30, 99 mines"
+msgstr "16 x 30, 99 mine"
+
+#: Minesweeptk.py:566
+msgid "Custom"
+msgstr "Personalizzato"
+
+#: Minesweeptk.py:576
+msgid "Height (9-24):"
+msgstr "Altezza (9-24):"
+
+#: Minesweeptk.py:584
+msgid "Width (9-30):"
+msgstr "Larghezza (9-30):"
+
+#: Minesweeptk.py:592
+msgid "Mines (10-668):"
+msgstr "Mine (10-668):"
+
+#: Minesweeptk.py:709
+msgid "%s Help"
+msgstr "Aiuto di %s"
+
+#: Minesweeptk.py:716
+msgid ""
+"Hello, this is a very simple minesweeper game.\n"
+"\n"
+"The game rules are simple:\n"
+"1) you have to discover all cells without mine to win;\n"
+"2) if you discover a cell with a mine, you loose.\n"
+"\n"
+"To discover a cell, click on it with the mouse.\n"
+"\n"
+"In order to simplify your task, every cell you discover\n"
+"indicates the number of mines in the adjacent cells.\n"
+"\n"
+"You can also mark cells with a flag or a question mark (?)\n"
+"to remember your hypothesis: every time you right\n"
+"click (or Control+click) on an covered cell you cycle between\n"
+"'unmarked' --> 'flagged' --> 'question mark' stati.\n"
+"\n"
+"Explore the File menu to find some useful command!\n"
+"\n"
+"Enjoy!"
+msgstr ""
+"Ciao, questo è un Campo minato molto semplice.\n"
+"\n"
+"Le regole del gioco sono:\n"
+"1) per vincere devi scoperchiare tutte le celle senza una mina;\n"
+"2) se scoperchi una cella con una mina, perdi.\n"
+"\n"
+"Per scoperchiare una cella, fai click sulla cella con il mouse.\n"
+"\n"
+"In modo da semplificarti il compito, ogni cella che scoperchi\n"
+"ti indica il numero di mine contenute nelle celle adiacenti.\n"
+"\n"
+"Puoi anche marcare le celle con una bandierina o un punto interrogativo (?)\n"
+"per annotare le tue ipotesi: ogni volta che fai click con il tasto destro "
+"del mouse\n"
+"(oppure Control+Click) su una cella coperta ciclerai tra\n"
+"gli stati 'non marcata' --> 'con bandierina' --> 'punto interrogativo'.\n"
+"\n"
+"Esplora il menù File per scoprire alcuni utili comandi!\n"
+"\n"
+"Divertiti!"
+
+#: Minesweeptk.py:732
+msgid "Close"
+msgstr "Chiudi"
+
+#: Minesweeptk.py:762
+msgid "File"
+msgstr ""
+
+#: Minesweeptk.py:763
+msgid "New game"
+msgstr "Nuova partita"
+
+#: Minesweeptk.py:766 Minesweeptk.py:767 Minesweeptk.py:780 Minesweeptk.py:840
+msgid "Load"
+msgstr "Carica"
+
+#: Minesweeptk.py:768
+msgid "Save"
+msgstr "Salva"
+
+#: Minesweeptk.py:769
+msgid "Options..."
+msgstr "Opzioni..."
+
+#: Minesweeptk.py:771
+msgid "Quit"
+msgstr "Esci"
+
+#: Minesweeptk.py:788
+msgid "Help"
+msgstr "Aiuto"
+
+#: Minesweeptk.py:789
+msgid "%s Help..."
+msgstr "Aiuto di %s..."
+
+#: Minesweeptk.py:790
+msgid "About %s"
+msgstr "Informazioni su %s"
+
+#: Minesweeptk.py:857
+msgid ""
+"%s v%s\n"
+"            \n"
+"A minesweeper game in Python and Tk\n"
+"written by Alessandro Morgantini <gpz500@technologist.com>\n"
+"Homepage: http://www.morgantini.org/\n"
+"\n"
+"Copyright (C) 2012 Alessandro Morgantini\n"
+"Released under the terms of GPLv3\n"
+"(http://www.gnu.org/licenses/gpl.html)"
+msgstr ""
+"%s v%s\n"
+"\n"
+"Un gioco di Campo minato in Python e Tk\n"
+"scritto da Alessandro Morgantini <gpz500@technologist.com>\n"
+"Homepage: http://www.morgantini.org/\n"
+"\n"
+"Copyright (C) 2012 Alessandro Morgantini\n"
+"Rilasciato nei termini della GPLv3\n"
+"(http://www.gnu.org/licenses/gpl.html)"

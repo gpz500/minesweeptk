@@ -58,7 +58,10 @@ if "py2exe" in sys.argv:
         windows = [ {
             "script": APP_NAME + ".py",
             "icon_resources": [ ( 1, "bomb.ico" ) ]
-        } ]
+        } ],
+        data_files = [
+            ( "locale\\it\LC_MESSAGES\\", [ "locale\\it\\LC_MESSAGES\\Minesweeptk.mo" ] )
+        ]
     )
     
     # Put in dist *.txt files
@@ -68,7 +71,7 @@ if "py2exe" in sys.argv:
     # Put in dist *.gif files
     for file in GIF_FILES:
         shutil.copy( file, 'dist' )
-        
+
     # Create the .zip file    
     shutil.move( 'dist', APP_NAME )
     ArchiveDir( APP_NAME, APP_NAME + "-Win32-" + VERSION + ".zip" )
