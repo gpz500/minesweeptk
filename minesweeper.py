@@ -18,7 +18,7 @@ __license__ = "Python"
 
 
 # Release version
-VERSION = "0.4"
+VERSION = "0.5"
 
 
 class MinesweeperError( Exception ):

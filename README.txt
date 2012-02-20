@@ -24,6 +24,14 @@ it in your own applications, run this command as superuser:
 
     # python setup.py install
     
+I'm in the effort of localize to several languages Minesweeptk.py. In order to
+compile GNU gettext binary files (*.mo) from input files (*.po) run the command
+
+    $ make
+    
+(it requires GNU gettext installed). The resulting files will be in
+./locale/*/LC_MESSAGES/Minesweeptk.mo
+    
 Install (Mac OS X)
 ===================
 

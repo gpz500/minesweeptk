@@ -4,6 +4,8 @@ It uses the module minesweeper.py which gives two classes:
 - Cell, for a single cell
 - Game, which is a matrix of Cells."""
 
+from __future__ import with_statement   # For Python 2.5
+
 __author__ = "Alessandro Morgantini <gpz500@technologist.com>"
 __version__ = "$Revision$"
 __date__ = "$Date$"
@@ -21,6 +23,12 @@ import minesweeper          # For the minesweeper game
 APP_NAME = "Minesweeptk"
 
 # Some i18n
+import sys
+if sys.platform == "win32":
+    # On Windows the environment LANG is not set by default
+    import locale
+    loc, cp = locale.getdefaultlocale()
+    os.environ[ 'LANG' ] = loc + "." + cp
 import gettext
 gettext.install( APP_NAME, 'locale' )
 

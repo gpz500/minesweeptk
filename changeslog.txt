@@ -1,3 +1,6 @@
+* New feature: now it works with Python 2.5 too
+* New feature: added the Italian localization
+
 2012 February 14 - Version 0.4
 ================================================================================
 * Bugfix: on Macintosh now intercept Command+Q to ask user for quit or not

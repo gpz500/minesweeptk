@@ -9,6 +9,7 @@ DOC_FILES = [ 'license.txt', 'changeslog.txt', 'README.txt' ]
 GIF_FILES = glob.glob( '*.gif' )
 PY_FILES = [ 'minesweepertest.py', 'Minesweeptk.py' ]
 ICO_FILES = [ 'bomb.ico', 'bomb.icns' ]
+I18N_FILES = [ 'Makefile', 'it.po' ]
 
 
 def ArchiveDir( dirpath, archname ):
@@ -85,9 +86,13 @@ elif "py2app" in sys.argv:
     assert sys.platform == 'darwin', 'You must be on Mac OS X to run this!'
     from setuptools import setup
     
+    # Extra files to include in the distribution
+    extraFiles = GIF_FILES
+    extraFiles.append( "locale/it/LC_MESSAGES/Minesweeptk.mo" )
+    
     setup(
         app = [ APP_NAME + ".py" ],
-        data_files = GIF_FILES,
+        data_files = extraFiles,
         options = {
             'py2app': {
                 'argv_emulation': True,
@@ -116,6 +121,7 @@ else:
     extraFiles.extend( GIF_FILES )
     extraFiles.extend( PY_FILES )
     extraFiles.extend( ICO_FILES )
+    extraFiles.extend( I18N_FILES )
     
     # Create a MANIFEST.in file
     f = open( 'MANIFEST.in', 'w' )
