@@ -835,8 +835,8 @@ class RootWindow( Tk ):
             confirm = True
         else:
             import tkMessageBox
-            confirm = tkMessageBox.askyesno( title = "Quit",
-                                             message = "Are you shure you want to quit?" )
+            confirm = tkMessageBox.askyesno( title = _("Quit"),
+                                             message = _("Are you shure you want to quit?") )
         
         if confirm:
             self.destroy()
@@ -861,16 +861,16 @@ class RootWindow( Tk ):
         """Visualize an About dialog and exit."""
         import tkMessageBox
         tkMessageBox.showinfo(
-            title = "About " + APP_NAME,
-            message = _("""%s v%s
-            
-A minesweeper game in Python and Tk
-written by Alessandro Morgantini <gpz500@technologist.com>
-Homepage: http://www.morgantini.org/
-
-Copyright (C) 2012 Alessandro Morgantini
-Released under the terms of GPLv3
-(http://www.gnu.org/licenses/gpl.html)""") % ( APP_NAME, minesweeper.VERSION )
+            title = _("About %s") % APP_NAME,
+            message = _("%s v%s\n"
+                "\n"
+                "A minesweeper game in Python and Tk\n"
+                "written by Alessandro Morgantini <gpz500@technologist.com>\n"
+                "Homepage: http://www.morgantini.org/\n"
+                "\n"
+                "Copyright (C) 2012 Alessandro Morgantini\n"
+                "Released under the terms of GPLv3\n"
+                "(http://www.gnu.org/licenses/gpl.html)") % ( APP_NAME, minesweeper.VERSION )
         )
         
     def OnHelp( self ):

@@ -1,13 +1,13 @@
-# Italian translations for gpz package
-# Traduzioni italiane per il pacchetto gpz..
-# Copyright (C) 2012 ORGANIZATION
+# Italian translations for Minesweeptk package
+# Traduzioni italiane per il pacchetto Minesweeptk
+# Copyright (C) 2012 Alessandro Morgantini
 # Alessandro Morgantini <gpz500@technologist.com>, 2012.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gpz 500\n"
-"POT-Creation-Date: 2012-02-20 15:07+CET\n"
-"PO-Revision-Date: 2012-02-18 17:06+0100\n"
+"Project-Id-Version: Minesweeptk 0.5\n"
+"POT-Creation-Date: 2012-02-21 14:33+CET\n"
+"PO-Revision-Date: 2012-02-21 14:40+0100\n"
 "Last-Translator: Alessandro Morgantini <gpz500@technologist.com>\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -158,7 +158,7 @@ msgstr "Chiudi"
 
 #: Minesweeptk.py:770
 msgid "File"
-msgstr ""
+msgstr "File"
 
 #: Minesweeptk.py:771
 msgid "New game"
@@ -188,18 +188,18 @@ msgstr "Aiuto"
 msgid "%s Help..."
 msgstr "Aiuto di %s..."
 
-#: Minesweeptk.py:798
+#: Minesweeptk.py:798 Minesweeptk.py:864
 msgid "About %s"
 msgstr "Informazioni su %s"
 
 #: Minesweeptk.py:839
 msgid "Are you shure you want to quit?"
-msgstr "Sei sicuro che vuoi uscire?"
+msgstr "Sei sicuro di voler uscire?"
 
 #: Minesweeptk.py:865
 msgid ""
 "%s v%s\n"
-"            \n"
+"\n"
 "A minesweeper game in Python and Tk\n"
 "written by Alessandro Morgantini <gpz500@technologist.com>\n"
 "Homepage: http://www.morgantini.org/\n"
