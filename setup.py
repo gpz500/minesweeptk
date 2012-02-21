@@ -89,8 +89,8 @@ elif "py2app" in sys.argv:
     
     # Extra files to include in the distribution
     extraFiles = GIF_FILES
-    extraFiles.append( "locale/it/LC_MESSAGES/Minesweeptk.mo" )
-    extraFiles.append( "locale/en/LC_MESSAGES/Minesweeptk.mo" )
+    extraFiles.append( ( "locale/it/LC_MESSAGES", [ "locale/it/LC_MESSAGES/Minesweeptk.mo" ] ) )
+    extraFiles.append( ( "locale/en/LC_MESSAGES", [ "locale/en/LC_MESSAGES/Minesweeptk.mo" ] ) )
     
     setup(
         app = [ APP_NAME + ".py" ],

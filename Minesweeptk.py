@@ -24,11 +24,18 @@ APP_NAME = "Minesweeptk"
 
 # Some i18n
 import sys
-if sys.platform == "win32":
-    # On Windows the environment LANG is not set by default
-    import locale
-    loc, cp = locale.getdefaultlocale()
-    os.environ[ 'LANG' ] = loc + "." + cp
+if not 'LANG' in os.environ:
+    if sys.platform == "win32":
+        # On Windows the environment LANG is not set by default
+        import locale
+        loc, cp = locale.getdefaultlocale()
+        os.environ[ 'LANG' ] = loc + "." + cp
+    elif sys.platform == "darwin":
+        # On Macintosh you hav to get preferred language from OS
+        #import AppKit
+        #prefs = AppKit.NSUserDefaults.standardUserDefaults()
+        #os.environ[ 'LANG' ] = prefs[ 'AppleLanguages' ][ 0 ].encode( 'utf8' )
+        pass
 import gettext
 gettext.install( APP_NAME, 'locale' )
 
