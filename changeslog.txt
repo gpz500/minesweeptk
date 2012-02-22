@@ -1,3 +1,5 @@
+2012 February 22 - Version 0.5
+================================================================================
 * New feature: now it works with Python 2.5 too
 * New feature: added the Italian localization
 

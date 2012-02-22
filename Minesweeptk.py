@@ -23,19 +23,24 @@ import minesweeper          # For the minesweeper game
 APP_NAME = "Minesweeptk"
 
 # Some i18n
-import sys
+import locale
 if not 'LANG' in os.environ:
-    if sys.platform == "win32":
-        # On Windows the environment LANG is not set by default
-        import locale
+    import sys
+    if sys.platform == "darwin":
+        # On Macintosh you have to get preferred language from OS
+        import subprocess
+        pp = subprocess.Popen( [ 'defaults', 'read', '-g', 'AppleLocale' ],
+            stdout = subprocess.PIPE )
+        os.environ[ 'LANG' ] = pp.communicate()[ 0 ].strip()
+        
+    else:
+        # On other OS get defaults
         loc, cp = locale.getdefaultlocale()
-        os.environ[ 'LANG' ] = loc + "." + cp
-    elif sys.platform == "darwin":
-        # On Macintosh you hav to get preferred language from OS
-        #import AppKit
-        #prefs = AppKit.NSUserDefaults.standardUserDefaults()
-        #os.environ[ 'LANG' ] = prefs[ 'AppleLanguages' ][ 0 ].encode( 'utf8' )
-        pass
+        os.environ[ 'LANG' ] = loc
+        if cp:
+            os.environ[ 'LANG' ] += "." + cp
+            
+locale.setlocale( locale.LC_CTYPE, '' )
 import gettext
 gettext.install( APP_NAME, 'locale' )
 
