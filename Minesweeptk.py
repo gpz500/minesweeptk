@@ -22,28 +22,6 @@ import minesweeper          # For the minesweeper game
 # The application name
 APP_NAME = "Minesweeptk"
 
-# Some i18n
-import locale
-if not 'LANG' in os.environ:
-    import sys
-    if sys.platform == "darwin":
-        # On Macintosh you have to get preferred language from OS
-        import subprocess
-        pp = subprocess.Popen( [ 'defaults', 'read', '-g', 'AppleLocale' ],
-            stdout = subprocess.PIPE )
-        os.environ[ 'LANG' ] = pp.communicate()[ 0 ].strip()
-        
-    else:
-        # On other OS get defaults
-        loc, cp = locale.getdefaultlocale()
-        os.environ[ 'LANG' ] = loc
-        if cp:
-            os.environ[ 'LANG' ] += "." + cp
-            
-locale.setlocale( locale.LC_CTYPE, '' )
-import gettext
-gettext.install( APP_NAME, 'locale' )
-
 # Define constants for cells status
 CELL_STATUS_ZERO, CELL_STATUS_ONE, CELL_STATUS_TWO, CELL_STATUS_THREE, \
 CELL_STATUS_FOUR, CELL_STATUS_FIVE, CELL_STATUS_SIX, CELL_STATUS_SEVEN, \
@@ -69,6 +47,34 @@ options = [ { "nrows": 9, "ncols": 9, "nmines": 10 },
             
 # The filename in '~' where to save the current game
 SAVE_FILE_NAME = os.path.join( os.path.expanduser( "~" ), ".minesweeptk_save" )
+
+#-------------------------------------------------------------------------------
+# A function to initialize i18n stuff
+#-------------------------------------------------------------------------------
+def InitI18n():
+    """Initialize th I18N stuff: load modules, set environments etc..."""
+    
+    import locale
+    if not 'LANG' in os.environ:
+        import sys
+        if sys.platform == "darwin":
+            # On Macintosh you have to get preferred language from OS
+            import subprocess
+            pp = subprocess.Popen( [ 'defaults', 'read', '-g', 'AppleLocale' ],
+                stdout = subprocess.PIPE )
+            os.environ[ 'LANG' ] = pp.communicate()[ 0 ].strip()
+        
+        else:
+            # On other OS get defaults
+            loc, cp = locale.getdefaultlocale()
+            os.environ[ 'LANG' ] = loc
+            if cp:
+                os.environ[ 'LANG' ] += "." + cp
+            
+    locale.setlocale( locale.LC_CTYPE, '' )
+    import gettext
+    gettext.install( APP_NAME, 'locale' )
+
 
 #-------------------------------------------------------------------------------
 # A class to save/load persistent data
@@ -904,7 +910,11 @@ class RootWindow( Tk ):
         
 
 if __name__ == '__main__':
-    """It means that the module is opened as an application."""                    
+    """It means that the module is opened as an application."""
+    # Init the I18N stuff
+    InitI18n()
+    
+    # Create the root window
     root = RootWindow()
 
     # Put off the tearoff menus
