@@ -70,8 +70,12 @@ def InitI18n():
             os.environ[ 'LANG' ] = loc
             if cp:
                 os.environ[ 'LANG' ] += "." + cp
-            
+    
+    # Set the default locale for LC_CTYPE
     locale.setlocale( locale.LC_CTYPE, '' )
+    
+    # Initialize gettext engine to look for localised messages in 'locale'
+    # subdirectory of current working directory
     import gettext
     gettext.install( APP_NAME, 'locale' )
 
