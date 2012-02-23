@@ -218,10 +218,10 @@ class Game( list ):
             raise MinesweeperAutoUncoverError( "Error: can't automatic uncovers cells with some close mine!" )
         
         myFiltFunction = lambda x: x.GetStatus() != Cell.REVEALED and x.GetStatus() != Cell.FLAG
-        toUncover = filter( myFiltFunction, self.GetNeighborsList( cell ) )
+        toUncover = list( filter( myFiltFunction, self.GetNeighborsList( cell ) ) )
         for nei in toUncover:
             if not nei.GetNeighborMinesNum():
-                neiToUncover = filter( myFiltFunction, [ item for item in self.GetNeighborsList( nei ) if not item in toUncover ] )
+                neiToUncover = list( filter( myFiltFunction, [ item for item in self.GetNeighborsList( nei ) if not item in toUncover ] ) )
                 toUncover.extend( neiToUncover )
                 
         return toUncover
@@ -340,7 +340,7 @@ def PrintGame( game, unveil = False ):
     tents = [ ' ' ]     # First column for the ABC...
     units = [ ' ' ]
     for j in range( 1, ncols + 1 ):
-        quot = j / 10
+        quot = j // 10
         remain = j % 10
         if quot:
             tents.append( str( quot ) )
@@ -381,7 +381,7 @@ def PrintGame( game, unveil = False ):
     
 
 
-    print "\n".join( lines )
+    print( "\n".join( lines ) )
             
         
     
@@ -398,7 +398,7 @@ if __name__ == '__main__':
     
     while True:
         PrintGame( myGame )
-        command = raw_input( "[Q|B i j|? i j|R i j] > " )
+        command = input( "[Q|B i j|? i j|R i j] > " )
         
         myResult = re.search( '^\s*[qQ]\s*$', command )
         if myResult:
@@ -428,23 +428,23 @@ if __name__ == '__main__':
                     # Reveal a cell
                     mine = myGame.Uncover( i, j )
                     if mine:
-                        print "Bomb!"
+                        print( "Bomb!" )
                         PrintGame( myGame, True )
-                        command = raw_input( "Do you want to replay? [y|N]> " )
+                        command = input( "Do you want to replay? [y|N]> " )
                         if not command or command.lstrip().upper()[ 0 ] != 'Y':
-                            print "Bye!"
+                            print( "Bye!" )
                             exit()
                         else:
                             myGame.Restart()
                     elif myGame.GetToDiscover() == 0:
-                        print "You won!"
+                        print( "You won!" )
                         PrintGame( myGame )
                         exit()
 
             except IndexError:
-                print "Position out of range!"
+                print( "Position out of range!" )
 
             except MinesweeperStatusError:
-                print "Yet managed cell!"
+                print( "Yet managed cell!" )
 
             

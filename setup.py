@@ -22,20 +22,20 @@ def ArchiveDir( dirpath, archname ):
     """
     import zipfile
 
-    print "Create", archname
+    print( "Create", archname )
     archive = zipfile.ZipFile( archname, "w", zipfile.ZIP_DEFLATED )
 
-    print "Archive", dirpath + os.sep
+    print( "Archive", dirpath + os.sep )
     archive.write( dirpath )
     
     for dir, subdirs, files in os.walk( dirpath ):
         for subdir in subdirs:
             sdname = os.path.join( dir, subdir )
-            print "Archive", sdname + os.sep
+            print( "Archive", sdname + os.sep )
             archive.write( sdname )
         for file in files:
             fname = os.path.join( dir, file )
-            print "Archive", fname
+            print( "Archive", fname )
             archive.write( fname )
     
     archive.close()    
@@ -128,7 +128,7 @@ else:
     # Create a MANIFEST.in file
     f = open( 'MANIFEST.in', 'w' )
     for file in extraFiles:
-        print >>f, "include", file
+        print( "include", file, file = f )
     f.close()
 
     

@@ -4,8 +4,6 @@ It uses the module minesweeper.py which gives two classes:
 - Cell, for a single cell
 - Game, which is a matrix of Cells."""
 
-from __future__ import with_statement   # For Python 2.5
-
 __author__ = "Alessandro Morgantini <gpz500@technologist.com>"
 __version__ = "$Revision$"
 __date__ = "$Date$"
@@ -13,10 +11,10 @@ __copyright__ = "Copyright (c) 2012 Alessandro Morgantini"
 __license__ = "Python"
 
 import os
-import Tkinter              # For GUI stuff
-import Dialog               # For "Game Over" dialogs
-from Tkinter import *       
-from ttk import *
+import tkinter              # For GUI stuff
+import tkinter.dialog       # For "Game Over" dialogs
+from tkinter import *       
+from tkinter.ttk import *
 import minesweeper          # For the minesweeper game
 
 # The application name
@@ -27,7 +25,7 @@ CELL_STATUS_ZERO, CELL_STATUS_ONE, CELL_STATUS_TWO, CELL_STATUS_THREE, \
 CELL_STATUS_FOUR, CELL_STATUS_FIVE, CELL_STATUS_SIX, CELL_STATUS_SEVEN, \
 CELL_STATUS_EIGHT, CELL_STATUS_BOMB, CELL_STATUS_FLAG, CELL_STATUS_QMARK, \
 CELL_STATUS_COVERED, CELL_STATUS_PRESSED, CELL_STATUS_BBORD, CELL_STATUS_RBORD, \
-CELL_STATUS_CBORD, CELL_STATUS_FALSEN, CELL_STATUS_FALSEP = range( 19 )
+CELL_STATUS_CBORD, CELL_STATUS_FALSEN, CELL_STATUS_FALSEP = list( range( 19) )
 
 # Images to display a cell in every cell status
 imagesFilenames = ( 'zero.gif', 'one.gif', 'two.gif', 'three.gif',
@@ -159,7 +157,7 @@ class PersistentData:
 #-------------------------------------------------------------------------------
 # A class to implement a single cell
 #-------------------------------------------------------------------------------
-class CellButton( Tkinter.Label ):
+class CellButton( tkinter.Label ):
     """CellButton is the widget class which implement a single cell.
     
     It's a class derived from Tkinter.Label, so it is able to visualize
@@ -178,7 +176,7 @@ class CellButton( Tkinter.Label ):
         ucell:  the underlying cell in the minesweeper.Game instance
                 which this cell is linked to."""
         
-        Tkinter.Label.__init__( self, master )
+        tkinter.Label.__init__( self, master )
 
         # Every cell widget is linked to a "real" cell in the
         # underlying minesweeper.Game instance
@@ -317,20 +315,20 @@ class MinesweeperTable( Frame ):
             self.cells.append( row )
             
             # Append a rightbord image to close the row
-            Tkinter.Label( self,
+            tkinter.Label( self,
                            bd = 0,
                            image = images[ CELL_STATUS_RBORD ]
                          ).grid( row = i, column = len( row ) )
             
         # Create the bottom border
         for j in range( ncols ):
-            Tkinter.Label( self,
+            tkinter.Label( self,
                            bd = 0,
                            image = images[ CELL_STATUS_BBORD ]
                          ).grid( row = nrows, column = j )
                          
         # Create the bottom right corner
-        Tkinter.Label( self,
+        tkinter.Label( self,
                        bd = 0,
                        image = images[ CELL_STATUS_CBORD ]
                      ).grid( row = nrows, column = ncols )
@@ -383,11 +381,11 @@ class MinesweeperTable( Frame ):
             
             if bomb:
                 # If there is a bomd, you loose
-                print _( "Bomb! Game over..." )
+                print( _("Bomb! Game over...") )
                 self.EndLoosing()
             elif self.game.GetToDiscover() == 0:
                 # If there's no more bombs to discover, you win
-                print _( "You won!!!" )
+                print( _("You won!!!") )
                 self.EndWinning()
             else:
                 # Neither defeat nor victory: update the window's title
@@ -438,7 +436,7 @@ class MinesweeperTable( Frame ):
         self.game.SetModified( False )
         
         # Ask for Exit, Replay, Play a new game
-        dialog = Dialog.Dialog(
+        dialog = tkinter.dialog.Dialog(
             self,
             title = _( "You loosed!" ),
             icon = 'error',
@@ -473,7 +471,7 @@ class MinesweeperTable( Frame ):
         self.game.SetModified( False )
                 
         # Ask for Exit, Play a new game
-        dialog = Dialog.Dialog(
+        dialog = tkinter.dialog.Dialog(
             self,
             title = _( "You Won!" ),
             icon = 'error',
@@ -852,8 +850,8 @@ class RootWindow( Tk ):
         if not self.table.IsModified():
             confirm = True
         else:
-            import tkMessageBox
-            confirm = tkMessageBox.askyesno( title = _("Quit"),
+            import tkinter.messagebox
+            confirm = tkinter.messagebox.askyesno( title = _("Quit"),
                                              message = _("Are you shure you want to quit?") )
         
         if confirm:
@@ -877,8 +875,8 @@ class RootWindow( Tk ):
                 
     def OnAbout( self ):
         """Visualize an About dialog and exit."""
-        import tkMessageBox
-        tkMessageBox.showinfo(
+        import tkinter.messagebox
+        tkinter.messagebox.showinfo(
             title = _("About %s") % APP_NAME,
             message = _("%s v%s\n"
                 "\n"
