@@ -1,0 +1,197 @@
+# Japanese translations for Minesweeptk package
+# Traduzioni giapponesi per il pacchetto Minesweeptk
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Minesweeptk\n"
+"POT-Creation-Date: 2012-03-04 18:15+ora solare Europa occidentale\n"
+"PO-Revision-Date: 2012-03-17 13:24+0100\n"
+"Last-Translator: Roan Soldaini\n"
+"Language-Team: Minesweeptk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Poedit-Language: Japanese\n"
+"X-Poedit-Country: JAPAN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: Minesweeptk.py:380
+msgid "Bomb! Game over..."
+msgstr ""
+
+#: Minesweeptk.py:384
+msgid "You won!!!"
+msgstr ""
+
+#: Minesweeptk.py:437
+msgid "You loosed!"
+msgstr ""
+
+#: Minesweeptk.py:439
+msgid ""
+"You loosed...\n"
+"What do you want to do?"
+msgstr "ＹＯＵ　ＬＯＳＥ　次は何をしますか。"
+
+#: Minesweeptk.py:442
+#: Minesweeptk.py:477
+msgid "Exit"
+msgstr "終了"
+
+#: Minesweeptk.py:443
+#: Minesweeptk.py:784
+msgid "Replay this game"
+msgstr "前回のゲームはもう一度"
+
+#: Minesweeptk.py:444
+#: Minesweeptk.py:478
+msgid "Play a new game"
+msgstr "新しいゲームにする"
+
+#: Minesweeptk.py:472
+msgid "You Won!"
+msgstr "ＹＯＵ　ＷＯＮ！"
+
+#: Minesweeptk.py:474
+msgid ""
+"You won...\n"
+"What do you want to do?"
+msgstr "ＹＯＵ　ＷＯＮ　次は何をしますか。"
+
+#: Minesweeptk.py:500
+msgid "1 remaining mine"
+msgstr "地雷は後一つです！"
+
+#: Minesweeptk.py:502
+msgid "%d remaining mines"
+msgstr "後%d地雷があります。"
+
+#: Minesweeptk.py:539
+msgid "Options"
+msgstr "オプション"
+
+#: Minesweeptk.py:547
+msgid "Choose table size and start a new game:"
+msgstr "テーブルのサイズを選び、新しいゲームを始まる。"
+
+#: Minesweeptk.py:557
+msgid "9 x 9, 10 mines"
+msgstr "9 x 9, 地雷１０個"
+
+#: Minesweeptk.py:565
+msgid "16 x 16, 40 mines"
+msgstr "16 x 16, 地雷４０個"
+
+#: Minesweeptk.py:573
+msgid "16 x 30, 99 mines"
+msgstr "16 x 30, 地雷９９個"
+
+#: Minesweeptk.py:586
+msgid "Custom"
+msgstr "自定義"
+
+#: Minesweeptk.py:596
+msgid "Height (9-24):"
+msgstr "高さ(9-24):"
+
+#: Minesweeptk.py:604
+msgid "Width (9-30):"
+msgstr "横幅(9-30):"
+
+#: Minesweeptk.py:612
+msgid "Mines (10-668):"
+msgstr "地雷数(10-668):"
+
+#: Minesweeptk.py:729
+msgid "%s Help"
+msgstr "%s ヘルプ"
+
+#: Minesweeptk.py:736
+msgid ""
+"Hello, this is a very simple minesweeper game.\n"
+"\n"
+"The game rules are simple:\n"
+"1) you have to discover all cells without mine to win;\n"
+"2) if you discover a cell with a mine, you loose.\n"
+"\n"
+"To discover a cell, click on it with the mouse.\n"
+"\n"
+"In order to simplify your task, every cell you discover\n"
+"indicates the number of mines in the adjacent cells.\n"
+"\n"
+"You can also mark cells with a flag or a question mark (?)\n"
+"to remember your hypothesis: every time you right\n"
+"click (or Control+click) on an covered cell you cycle between\n"
+"'unmarked' --> 'flagged' --> 'question mark' stati.\n"
+"\n"
+"Explore the File menu to find some useful command!\n"
+"\n"
+"Enjoy!"
+msgstr ""
+
+#: Minesweeptk.py:752
+msgid "Close"
+msgstr "閉じる"
+
+#: Minesweeptk.py:782
+msgid "File"
+msgstr "ファイル"
+
+#: Minesweeptk.py:783
+msgid "New game"
+msgstr "新しいゲーム"
+
+#: Minesweeptk.py:786
+#: Minesweeptk.py:787
+#: Minesweeptk.py:800
+#: Minesweeptk.py:860
+msgid "Load"
+msgstr "ロード"
+
+#: Minesweeptk.py:788
+msgid "Save"
+msgstr "保存"
+
+#: Minesweeptk.py:789
+msgid "Options..."
+msgstr "オプション..."
+
+#: Minesweeptk.py:791
+#: Minesweeptk.py:850
+msgid "Quit"
+msgstr "中止"
+
+#: Minesweeptk.py:808
+msgid "Help"
+msgstr "ヘルプ"
+
+#: Minesweeptk.py:809
+msgid "%s Help..."
+msgstr "%s ヘルプ..."
+
+#: Minesweeptk.py:810
+#: Minesweeptk.py:876
+msgid "About %s"
+msgstr "%s について"
+
+#: Minesweeptk.py:851
+msgid "Are you shure you want to quit?"
+msgstr "本当に終了してもよろしいですか？"
+
+#: Minesweeptk.py:877
+msgid ""
+"%s v%s\n"
+"\n"
+"A minesweeper game in Python and Tk\n"
+"written by Alessandro Morgantini <gpz500@technologist.com>\n"
+"Homepage: http://www.morgantini.org/\n"
+"\n"
+"Copyright (C) 2012 Alessandro Morgantini\n"
+"Released under the terms of GPLv3\n"
+"(http://www.gnu.org/licenses/gpl.html)"
+msgstr ""
+

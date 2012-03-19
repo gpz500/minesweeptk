@@ -64,6 +64,11 @@ To build the Minesweeper application bundle for Mac OS X, from the source tree
     
 Note: you need py2exe from http://svn.pythonmac.org/py2app/trunk/doc/index.html.
     
+Credits
+=======
+
+Thanks to Roan Soldaini for the Japanese translation.
+
 Contacts
 ========
 

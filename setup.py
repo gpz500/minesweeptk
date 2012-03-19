@@ -9,7 +9,7 @@ DOC_FILES = [ 'license.txt', 'changeslog.txt', 'README.txt' ]
 GIF_FILES = glob.glob( '*.gif' )
 PY_FILES = [ 'minesweepertest.py', 'Minesweeptk.py' ]
 ICO_FILES = [ 'bomb.ico', 'bomb.icns' ]
-I18N_FILES = [ 'Makefile', 'it.po', 'en.po' ]
+I18N_FILES = [ 'Makefile', 'it.po', 'en.po', 'ja.po' ]
 
 
 def ArchiveDir( dirpath, archname ):
@@ -62,7 +62,8 @@ if "py2exe" in sys.argv:
         } ],
         data_files = [
             ( "locale\\it\\LC_MESSAGES\\", [ "locale\\it\\LC_MESSAGES\\Minesweeptk.mo" ] ),
-            ( "locale\\en\\LC_MESSAGES\\", [ "locale\\en\\LC_MESSAGES\\Minesweeptk.mo" ] )
+            ( "locale\\en\\LC_MESSAGES\\", [ "locale\\en\\LC_MESSAGES\\Minesweeptk.mo" ] ),
+            ( "locale\\ja\\LC_MESSAGES\\", [ "locale\\ja\\LC_MESSAGES\\Minesweeptk.mo" ] )
         ]
     )
     
@@ -91,6 +92,7 @@ elif "py2app" in sys.argv:
     extraFiles = GIF_FILES
     extraFiles.append( ( "locale/it/LC_MESSAGES", [ "locale/it/LC_MESSAGES/Minesweeptk.mo" ] ) )
     extraFiles.append( ( "locale/en/LC_MESSAGES", [ "locale/en/LC_MESSAGES/Minesweeptk.mo" ] ) )
+    extraFiles.append( ( "locale/ja/LC_MESSAGES", [ "locale/ja/LC_MESSAGES/Minesweeptk.mo" ] ) )
     
     setup(
         app = [ APP_NAME + ".py" ],
