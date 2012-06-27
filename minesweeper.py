@@ -204,6 +204,29 @@ class Game( list ):
                 
         return False
         
+    def Free( self, i, j ):
+        """Free the cell (i, j) from covered, but not flagged, close cells."""
+        
+        cell = self[ i ][ j ]
+        foundMine = False
+        closeCells = self.GetNeighborsList( cell )
+        closeFlags = 0
+        for c in closeCells:
+            if c.GetStatus() == Cell.FLAG:
+                closeFlags += 1
+        
+        # If there are a number of flags different to number of mines, exit now
+        if closeFlags != cell.GetNeighborMinesNum():
+            return foundMine
+            
+        
+        for toUncover in closeCells:
+            if toUncover.GetStatus() != Cell.FLAG and toUncover.GetStatus() != Cell.REVEALED:
+                ii, jj = toUncover.GetCoordinates()
+                foundMine = foundMine or self.Uncover( ii, jj )
+            
+        return foundMine
+        
     def AutomaticUncover( self, cell ):
         """Uncover a chain of cells by neighboroad relation."""
         for myCell in self.GetAutoUncoverList( cell ):
