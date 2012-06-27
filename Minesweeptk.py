@@ -420,6 +420,34 @@ class MinesweeperTable( Frame ):
             event.widget.Update()
             
         self.master.RefreshTitle()
+        
+    def OnDoubleButton1( self, event ):
+        """Handler of double click event."""
+        
+        # Get coordinates of cell & current status
+        status = event.widget.GetStatus()
+        i, j = event.widget.ucell.GetCoordinates()
+        
+        if status < CELL_STATUS_ONE or status >= CELL_STATUS_BOMB:
+            # Nothing to do
+            return
+
+        # Uncover all uncoverable close cells
+        bomb = self.game.Free( i, j )
+        self.UpdateAllCells()
+      
+        if bomb:
+            # If there is a bomd, you loose
+            print( _( "Bomb! Game over..." ) )
+            self.EndLoosing()
+        elif self.game.GetToDiscover() == 0:
+            # If there's no more bombs to discover, you win
+            print( _( "You won!!!" ) )
+            self.EndWinning()
+        else:
+            # Neither defeat nor victory: update the window's title
+            self.master.RefreshTitle()
+        
             
     def UpdateAllCells( self ):
         """Update all cells on the table from the underlying minesweeper.Game instance."""
@@ -522,6 +550,7 @@ class MinesweeperTable( Frame ):
         self.bind_class( CellButton.__name__, '<Button-3>', self.OnButton3 )
         self.bind_class( CellButton.__name__, '<Control-Button-1>', self.OnButton3 )
         self.bind_class( CellButton.__name__, '<Button-2>', self.OnButton3 )
+        self.bind_class( CellButton.__name__, '<Double-Button-1>', self.OnDoubleButton1 )
 
         
     def UnbindAllEvents( self ):
@@ -751,7 +780,9 @@ class HelpDialog( Toplevel ):
             "You can also mark cells with a flag or a question mark (?)\n"
             "to remember your hypothesis: every time you right\n"
             "click (or Control+click) on an covered cell you cycle between\n"
-            "'unmarked' --> 'flagged' --> 'question mark' stati.\n\n"
+            "'unmarked' --> 'flagged' --> 'question mark' stati.\n"
+            "Double clicking on an uncovered cell, uncovers all the\n"
+            "non-flagged adiacent cells.\n\n"
             "Explore the File menu to find some useful command!\n\n"
             "Enjoy!") ).grid( row = 0, column = 0 )
         
