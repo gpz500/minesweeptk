@@ -6,8 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Minesweeptk 0.5\n"
-"POT-Creation-Date: 2012-02-21 14:33+CET\n"
-"PO-Revision-Date: 2012-02-21 14:40+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-07-13 12:36+0200\n"
+"PO-Revision-Date: 2012-07-13 12:39+0100\n"
 "Last-Translator: Alessandro Morgantini <gpz500@technologist.com>\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -17,19 +18,21 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: Minesweeptk.py:368
+#: Minesweeptk.py:390
+#: Minesweeptk.py:443
 msgid "Bomb! Game over..."
 msgstr "Bomba! Gioco finito..."
 
-#: Minesweeptk.py:372
+#: Minesweeptk.py:394
+#: Minesweeptk.py:447
 msgid "You won!!!"
 msgstr "Hai vinto!!!"
 
-#: Minesweeptk.py:425
+#: Minesweeptk.py:475
 msgid "You loosed!"
 msgstr "Hai perso!"
 
-#: Minesweeptk.py:427
+#: Minesweeptk.py:477
 msgid ""
 "You loosed...\n"
 "What do you want to do?"
@@ -37,23 +40,26 @@ msgstr ""
 "Hai perso...\n"
 "Cosa vuoi fare?"
 
-#: Minesweeptk.py:430 Minesweeptk.py:465
+#: Minesweeptk.py:480
+#: Minesweeptk.py:515
 msgid "Exit"
 msgstr "Esci"
 
-#: Minesweeptk.py:431 Minesweeptk.py:772
+#: Minesweeptk.py:481
+#: Minesweeptk.py:825
 msgid "Replay this game"
 msgstr "Rigioca questa partita"
 
-#: Minesweeptk.py:432 Minesweeptk.py:466
+#: Minesweeptk.py:482
+#: Minesweeptk.py:516
 msgid "Play a new game"
 msgstr "Gioca una nuova partita"
 
-#: Minesweeptk.py:460
+#: Minesweeptk.py:510
 msgid "You Won!"
 msgstr "Hai vinto!"
 
-#: Minesweeptk.py:462
+#: Minesweeptk.py:512
 msgid ""
 "You won...\n"
 "What do you want to do?"
@@ -61,55 +67,57 @@ msgstr ""
 "Hai vinto...\n"
 "Cosa vuoi fare?"
 
-#: Minesweeptk.py:488
+#: Minesweeptk.py:538
 msgid "1 remaining mine"
 msgstr "1 mina rimanente"
 
-#: Minesweeptk.py:490
+#: Minesweeptk.py:540
+#, python-format
 msgid "%d remaining mines"
 msgstr "%d mine rimanenti"
 
-#: Minesweeptk.py:527
+#: Minesweeptk.py:578
 msgid "Options"
 msgstr "Opzioni"
 
-#: Minesweeptk.py:535
+#: Minesweeptk.py:586
 msgid "Choose table size and start a new game:"
 msgstr "Scegli le dimensioni della tabella e inizia una nuova partita:"
 
-#: Minesweeptk.py:545
+#: Minesweeptk.py:596
 msgid "9 x 9, 10 mines"
 msgstr "9 x 9, 10 mine"
 
-#: Minesweeptk.py:553
+#: Minesweeptk.py:604
 msgid "16 x 16, 40 mines"
 msgstr "16 x 16, 40 mine"
 
-#: Minesweeptk.py:561
+#: Minesweeptk.py:612
 msgid "16 x 30, 99 mines"
 msgstr "16 x 30, 99 mine"
 
-#: Minesweeptk.py:574
+#: Minesweeptk.py:625
 msgid "Custom"
 msgstr "Personalizzato"
 
-#: Minesweeptk.py:584
+#: Minesweeptk.py:635
 msgid "Height (9-24):"
 msgstr "Altezza (9-24):"
 
-#: Minesweeptk.py:592
+#: Minesweeptk.py:643
 msgid "Width (9-30):"
 msgstr "Larghezza (9-30):"
 
-#: Minesweeptk.py:600
+#: Minesweeptk.py:651
 msgid "Mines (10-668):"
 msgstr "Mine (10-668):"
 
-#: Minesweeptk.py:717
+#: Minesweeptk.py:768
+#, python-format
 msgid "%s Help"
 msgstr "Aiuto di %s"
 
-#: Minesweeptk.py:724
+#: Minesweeptk.py:775
 msgid ""
 "Hello, this is a very simple minesweeper game.\n"
 "\n"
@@ -126,6 +134,8 @@ msgid ""
 "to remember your hypothesis: every time you right\n"
 "click (or Control+click) on an covered cell you cycle between\n"
 "'unmarked' --> 'flagged' --> 'question mark' stati.\n"
+"Double clicking on an uncovered cell, uncovers all the\n"
+"non-flagged adiacent cells.\n"
 "\n"
 "Explore the File menu to find some useful command!\n"
 "\n"
@@ -143,60 +153,69 @@ msgstr ""
 "ti indica il numero di mine contenute nelle celle adiacenti.\n"
 "\n"
 "Puoi anche marcare le celle con una bandierina o un punto interrogativo (?)\n"
-"per annotare le tue ipotesi: ogni volta che fai click con il tasto destro "
-"del mouse\n"
+"per annotare le tue ipotesi: ogni volta che fai click con il tasto destro del mouse\n"
 "(oppure Control+Click) su una cella coperta ciclerai tra\n"
 "gli stati 'non marcata' --> 'con bandierina' --> 'punto interrogativo'.\n"
+"Doppio-click su una cella scoperta scopre tutte le celle adiacenti\n"
+"non segnalate da una bandierina.\n"
 "\n"
 "Esplora il menù File per scoprire alcuni utili comandi!\n"
 "\n"
 "Divertiti!"
 
-#: Minesweeptk.py:740
+#: Minesweeptk.py:793
 msgid "Close"
 msgstr "Chiudi"
 
-#: Minesweeptk.py:770
+#: Minesweeptk.py:823
 msgid "File"
 msgstr "File"
 
-#: Minesweeptk.py:771
+#: Minesweeptk.py:824
 msgid "New game"
 msgstr "Nuova partita"
 
-#: Minesweeptk.py:774 Minesweeptk.py:775 Minesweeptk.py:788 Minesweeptk.py:848
+#: Minesweeptk.py:827
+#: Minesweeptk.py:828
+#: Minesweeptk.py:841
+#: Minesweeptk.py:901
 msgid "Load"
 msgstr "Carica"
 
-#: Minesweeptk.py:776
+#: Minesweeptk.py:829
 msgid "Save"
 msgstr "Salva"
 
-#: Minesweeptk.py:777
+#: Minesweeptk.py:830
 msgid "Options..."
 msgstr "Opzioni..."
 
-#: Minesweeptk.py:779 Minesweeptk.py:838
+#: Minesweeptk.py:832
+#: Minesweeptk.py:891
 msgid "Quit"
 msgstr "Esci"
 
-#: Minesweeptk.py:796
+#: Minesweeptk.py:849
 msgid "Help"
 msgstr "Aiuto"
 
-#: Minesweeptk.py:797
+#: Minesweeptk.py:850
+#, python-format
 msgid "%s Help..."
 msgstr "Aiuto di %s..."
 
-#: Minesweeptk.py:798 Minesweeptk.py:864
+#: Minesweeptk.py:851
+#: Minesweeptk.py:917
+#, python-format
 msgid "About %s"
 msgstr "Informazioni su %s"
 
-#: Minesweeptk.py:839
+#: Minesweeptk.py:892
 msgid "Are you shure you want to quit?"
 msgstr "Sei sicuro di voler uscire?"
 
-#: Minesweeptk.py:865
+#: Minesweeptk.py:918
+#, python-format
 msgid ""
 "%s v%s\n"
 "\n"
@@ -217,3 +236,4 @@ msgstr ""
 "Copyright (C) 2012 Alessandro Morgantini\n"
 "Rilasciato nei termini della GPLv3\n"
 "(http://www.gnu.org/licenses/gpl.html)"
+
