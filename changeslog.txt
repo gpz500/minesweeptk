@@ -1,3 +1,8 @@
+2012 July 13 - Version 0.7
+================================================================================
+* New feature: added double click on an uncovered cell; it will uncover every
+  non-flagged adiacent cell
+
 2012 March 19 - Version 0.6
 ================================================================================
 * New feature: added the Japanese localization (many thanks to Roan Soldaini)
