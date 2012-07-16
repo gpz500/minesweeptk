@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Minesweeptk 0.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-07-16 11:28+0200\n"
-"PO-Revision-Date: 2012-07-16 11:30+0100\n"
+"PO-Revision-Date: 2012-07-16 11:45+0100\n"
 "Last-Translator: Alessandro Morgantini <gpz500@technologist.com>\n"
 "Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
@@ -118,7 +118,6 @@ msgid "%s Help"
 msgstr "Aiuto di %s"
 
 #: Minesweeptk.py:775
-#, fuzzy
 msgid ""
 "Hello, this is a very simple minesweeper game.\n"
 "\n"
