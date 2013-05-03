@@ -782,7 +782,7 @@ class HelpDialog( Toplevel ):
             "click (or Control+click) on an covered cell you cycle between\n"
             "'unmarked' --> 'flagged' --> 'question mark' stati.\n"
             "Double clicking on an uncovered cell, uncovers all the\n"
-            "non-flagged adiacent cells.\n\n"
+            "non-flagged adjacent cells.\n\n"
             "Explore the File menu to find some useful command!\n\n"
             "Enjoy!") ).grid( row = 0, column = 0 )
         
