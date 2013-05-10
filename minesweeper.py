@@ -1,6 +1,6 @@
 """Minesweeper game.
 
-This module implements two classes to implement a minesweeper game.
+This module implements two classes to make a minesweeper game.
 The classes are:
     - Cell, for a single cell
     - Game, for a two dimensional array of cells
@@ -10,11 +10,11 @@ and 0 <= j < ncols.
 """
 
 
-__author__ = "Alessandro Morgantini <gpz500@technologist.com>"
-__version__ = "$Revision$"
-__date__ = "$Date$"
-__copyright__ = "Copyright (c) 2012 Alessandro Morgantini"
-__license__ = "Python"
+__author__    = "Alessandro Morgantini <gpz500@technologist.com>"
+__version__   = "$Revision$"
+__date__      = "$Date$"
+__copyright__ = "Copyright (c) 2012-2013 Alessandro Morgantini"
+__license__   = "Python"
 
 
 # Release version
