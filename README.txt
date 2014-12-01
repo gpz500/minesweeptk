@@ -35,7 +35,7 @@ compile GNU gettext binary files (*.mo) from input files (*.po) run the command
 Install (Mac OS X)
 ===================
 
-Just drag'n'drop Minesweeptk application bundle in your Application folder, and
+Just drag'n'drop Minesweeptk application bundle in your Applications folder, and
 then double click it.
 
 Install (Windows)
@@ -62,7 +62,7 @@ To build the Minesweeper application bundle for Mac OS X, from the source tree
 
     $ python setup.py py2app
     
-Note: you need py2exe from http://svn.pythonmac.org/py2app/trunk/doc/index.html.
+Note: you need py2app from https://pythonhosted.org/py2app/.
     
 Credits
 =======

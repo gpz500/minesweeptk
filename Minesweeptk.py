@@ -71,8 +71,13 @@ def InitI18n():
             if cp:
                 os.environ[ 'LANG' ] += "." + cp
     
-    # Set the default locale for LC_CTYPE
-    locale.setlocale( locale.LC_CTYPE, '' )
+    # Set the default locale for LC_ALL
+    try:
+        locale.setlocale( locale.LC_ALL, '' )
+    except locale.Error as e:
+        print "locale.Error exception: ", e
+        print "Setting POSIX locale"
+        locale.setlocale( locale.LC_ALL, 'POSIX' )
     
     # Initialize gettext engine to look for localised messages in 'locale'
     # subdirectory of current working directory
@@ -921,7 +926,7 @@ class RootWindow( Tk ):
                 "written by Alessandro Morgantini <gpz500@technologist.com>\n"
                 "Homepage: http://www.morgantini.org/\n"
                 "\n"
-                "Copyright (C) 2012 Alessandro Morgantini\n"
+                "Copyright (C) 2012-2014 Alessandro Morgantini\n"
                 "Released under the terms of GPLv3\n"
                 "(http://www.gnu.org/licenses/gpl.html)") % ( APP_NAME, minesweeper.VERSION )
         )
