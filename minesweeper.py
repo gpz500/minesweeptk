@@ -13,12 +13,12 @@ and 0 <= j < ncols.
 __author__    = "Alessandro Morgantini <gpz500@technologist.com>"
 __version__   = "$Revision$"
 __date__      = "$Date$"
-__copyright__ = "Copyright (c) 2012-2013 Alessandro Morgantini"
+__copyright__ = "Copyright (c) 2012-2014 Alessandro Morgantini"
 __license__   = "Python"
 
 
 # Release version
-VERSION = "0.7"
+VERSION = "0.8"
 
 
 class MinesweeperError( Exception ):

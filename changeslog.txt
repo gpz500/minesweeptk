@@ -1,3 +1,7 @@
+2014 December 1 - Version 0.8
+================================================================================
+* Bugfix: added a protection against weird locale IDs
+
 2012 July 13 - Version 0.7
 ================================================================================
 * New feature: added double click on an uncovered cell; it will uncover every
