@@ -73,8 +73,8 @@ def InitI18n():
     try:
         locale.setlocale( locale.LC_ALL, '' )
     except locale.Error as e:
-        print "locale.Error exception: ", e
-        print "Setting POSIX locale"
+        print( "locale.Error exception: ", e )
+        print( "Setting POSIX locale" )
         locale.setlocale( locale.LC_ALL, 'POSIX' )
     
     # Initialize gettext engine to look for localised messages in 'locale'
