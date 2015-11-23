@@ -1,5 +1,14 @@
+Minesweeptk: a cross-platform Minesweeper game clone, implemented in Pyhon and Tcl/Tk
+=====================================================================================
+
+Minesweeptk is an implementation of the famous [Minesweeper game][1] written in
+Python and using the Tcl/Tk graphical tool kit. It works in every system where
+there are Python 2.x or Python 3.x (Python 3.x version in a separated branch)
+with Tcl/Tk installed.
+Tested on Windows, Linux and Mac OS X.
+
 minesweeper Python 2.x module
-=============================
+-----------------------------
 
 minesweeper is a module to implement the well known Minsweeper Windows game. It
 has two classes:
@@ -10,7 +19,7 @@ has two classes:
 Plase read the .py files to obtain more info.
 
 Install (sources)
-=================
+-----------------
 
 Just to play, you don't have to install anything. It is sufficient open a
 terminal and run the followings commands from this folder (Minesweeptk-X.Y):
@@ -33,19 +42,19 @@ compile GNU gettext binary files (*.mo) from input files (*.po) run the command
 ./locale/*/LC_MESSAGES/Minesweeptk.mo
     
 Install (Mac OS X)
-===================
+------------------
 
 Just drag'n'drop Minesweeptk application bundle in your Applications folder, and
 then double click it.
 
 Install (Windows)
-=================
+-----------------
 
 There is no automatic setup program, just a .zip archive: double click the
 Minesweeptk.exe file in the extracted folder. 
 
 Build for Windows
-=================
+-----------------
 
 To build the Windows executable Minesweeptk.exe and its distribution archive
 from the source tree (Minesweeptk-X.Y), run the following command:
@@ -55,7 +64,7 @@ from the source tree (Minesweeptk-X.Y), run the following command:
 Note: you need py2exe from http://www.py2exe.org/.
 
 Build for Mac OS X
-===================
+------------------
 
 To build the Minesweeper application bundle for Mac OS X, from the source tree
 (Minesweeptk-X.Y), run the following command:
@@ -65,16 +74,18 @@ To build the Minesweeper application bundle for Mac OS X, from the source tree
 Note: you need py2app from https://pythonhosted.org/py2app/.
     
 Credits
-=======
+-------
 
 Thanks to Roan Soldaini for the Japanese translation.
 
 Contacts
-========
+--------
 
 Please refer any bugs and/or suggests to
-    Alessandro Morgantini <gpz500@technologist.com>
-    
+    Alessandro Morgantini <gpz500@technologist.com>,
 or submit a comment to this blog post:
-    http://gpz500.wordpress.com/2012/02/07/e-ora-di-sminare-il-campo/
+    <http://gpz500.wordpress.com/2012/02/07/e-ora-di-sminare-il-campo/>.
+    
+[1]: https://en.wikipedia.org/wiki/Minesweeper_%28video_game%29
+
     
