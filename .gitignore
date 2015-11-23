@@ -1,1 +1,8 @@
 *.pyc
+*~
+locale/
+build/
+MANIFEST.in
+MANIFEST
+dist/
+
