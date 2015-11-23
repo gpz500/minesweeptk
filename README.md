@@ -1,28 +1,28 @@
 Minesweeptk: a cross-platform Minesweeper game clone, implemented in Pyhon and Tcl/Tk
 =====================================================================================
 
-Minesweeptk is an implementation of the famous [Minesweeper game][1] written in
-Python and using the Tcl/Tk graphical tool kit. It works in every system where
-there are Python 2.x or Python 3.x (Python 3.x version in a separated branch)
-with Tcl/Tk installed.
+Minesweeptk is an implementation of the well known [Minesweeper game][1] written
+in Python and using the Tcl/Tk graphical tool kit. It works in every system
+where there are Python 2.x or Python 3.x (Python 3.x version in a separate
+branch) with Tcl/Tk installed.
 Tested on Windows, Linux and Mac OS X.
 
-minesweeper Python 2.x module
------------------------------
+minesweeper Python module
+-------------------------
 
-minesweeper is a module to implement the well known Minsweeper Windows game. It
-has two classes:
+minesweeper.py is a module to implement the Minsweeper Windows game.
+It defines two classes:
 
 - Cell, which implements a single cell on the table
 - Game, which implements a game as a matrix of Cell instances
 
-Plase read the .py files to obtain more info.
+Please read the *.py files to obtain more info.
 
 Install (sources)
 -----------------
 
-Just to play, you don't have to install anything. It is sufficient open a
-terminal and run the followings commands from this folder (Minesweeptk-X.Y):
+Just to play, you don't have to install anything. It is sufficient opening a
+terminal and running the followings commands from this folder (Minesweeptk-X.Y):
 
     $ python minesweeper.py         <-- text based game
         or
