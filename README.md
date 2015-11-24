@@ -46,7 +46,7 @@ Build for Windows
 To build the Windows executable Minesweeptk.exe and its distribution archive
 from the source tree (Minesweeptk-X.Y), run the following command:
 
-    C:\Minesweeptk-X.Y> python setup.py py2exe
+    C:\Minesweeptk-X.Y>python setup.py py2exe
     
 Note: you need py2exe from http://www.py2exe.org/.
 
