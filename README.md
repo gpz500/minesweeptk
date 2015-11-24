@@ -18,41 +18,6 @@ It defines two classes:
 
 Please read the *.py files to obtain more info.
 
-Install (sources)
------------------
-
-Just to play, you don't have to install anything. It is sufficient opening a
-terminal and running the followings commands from this folder (Minesweeptk-X.Y):
-
-    $ python minesweeper.py         <-- text based game
-        or
-    $ python Minesweeptk.py         <-- Tcl/Tk based GUI game
-
-In order to install minesweeper module on your system, so you can use
-it in your own applications, run this command as superuser:
-
-    # python setup.py install
-    
-I'm in the effort of localize to several languages Minesweeptk.py. In order to
-compile GNU gettext binary files (*.mo) from input files (*.po) run the command
-
-    $ make
-    
-(it requires GNU gettext installed). The resulting files will be in
-./locale/*/LC_MESSAGES/Minesweeptk.mo
-    
-Install (Mac OS X)
-------------------
-
-Just drag'n'drop Minesweeptk application bundle in your Applications folder, and
-then double click it.
-
-Install (Windows)
------------------
-
-There is no automatic setup program, just a .zip archive: double click the
-Minesweeptk.exe file in the extracted folder. 
-
 Build for Windows
 -----------------
 
@@ -73,6 +38,41 @@ To build the Minesweeper application bundle for Mac OS X, from the source tree
     
 Note: you need py2app from https://pythonhosted.org/py2app/.
     
+Install (sources)
+-----------------
+
+Just to play, you don't have to install anything. It is sufficient opening a
+terminal and running the followings commands from this folder (Minesweeptk-X.Y):
+
+    $ python minesweeper.py         <-- text based game
+        or
+    $ python Minesweeptk.py         <-- Tcl/Tk based GUI game
+
+In order to install minesweeper module on your system, so you can use
+it in your own applications, run this command as superuser:
+
+    # python setup.py install
+    
+I'm in the effort of localizing to several languages Minesweeptk.py. In order to
+compile GNU gettext binary files (*.mo) from input files (*.po) run the command
+
+    $ make
+    
+(it requires GNU gettext installed). The resulting files will be in
+./locale/*/LC_MESSAGES/Minesweeptk.mo
+    
+Install (Mac OS X)
+------------------
+
+Just drag'n'drop Minesweeptk application bundle in your Applications folder, and
+then double click it.
+
+Install (Windows)
+-----------------
+
+There is no automatic setup program, just a .zip archive: double click the
+Minesweeptk.exe file in the extracted folder. 
+
 Credits
 -------
 
