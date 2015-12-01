@@ -477,9 +477,9 @@ class MinesweeperTable( Frame ):
         # Ask for Exit, Replay, Play a new game
         dialog = Dialog.Dialog(
             self,
-            title = _( "You loosed!" ),
+            title = _( "You lost!" ),
             icon = 'error',
-            text = _( "You loosed...\nWhat do you want to do?" ),
+            text = _( "You lost...\nWhat do you want to do?" ),
             bitmap = 'warning',
             default = 0,
             strings = ( _( 'Exit' ),
