@@ -5,7 +5,7 @@ from minesweeper import VERSION
 AUTHOR = 'Alessandro Morgantini'
 AUTHOR_EMAIL = 'gpz500@technologist.com'
 URL = 'http://www.morgantini.org/'
-DOC_FILES = [ 'LICENSE', 'changeslog.txt', 'README.txt' ]
+DOC_FILES = [ 'LICENSE', 'changeslog.txt', 'README.md' ]
 GIF_FILES = glob.glob( '*.gif' )
 PY_FILES = [ 'minesweepertest.py', 'Minesweeptk.py' ]
 ICO_FILES = [ 'bomb.ico', 'bomb.icns' ]
