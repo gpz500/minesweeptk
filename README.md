@@ -85,7 +85,19 @@ Install (Windows)
 -----------------
 
 There is no automatic setup program, just a .zip archive: double click the
-Minesweeptk.exe file in the extracted folder. 
+Minesweeptk.exe file in the extracted folder.
+
+Screenshots
+-----------
+
+On Windows:  
+![On Windows](screenshots/Windows%20screenshot.png)
+
+On Linux:  
+![On Linux](screenshots/Ubuntu%20screenshot.png)
+
+On Macintosh:   
+![On Macintosh](screenshots/Mac%20OS%20X%20screenshot.png)
 
 Credits
 -------
