@@ -60,7 +60,7 @@ def InitI18n():
             import subprocess
             pp = subprocess.Popen( [ 'defaults', 'read', '-g', 'AppleLocale' ],
                 stdout = subprocess.PIPE )
-            os.environ[ 'LANG' ] = pp.communicate()[ 0 ].strip()
+            os.environ[ 'LANG' ] = pp.communicate()[ 0 ].strip().decode("utf-8")
         
         else:
             # On other OS get defaults
