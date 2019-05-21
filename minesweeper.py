@@ -207,25 +207,34 @@ class Game( list ):
     def Free( self, i, j ):
         """Free the cell (i, j) from covered, but not flagged, close cells."""
         
-        cell = self[ i ][ j ]
-        foundMine = False
-        closeCells = self.GetNeighborsList( cell )
-        closeFlags = 0
-        for c in closeCells:
+        explode = False
+        cell = self[i][j]
+        neighbors = self.GetNeighborsList( cell )
+        flags = []
+        coveredOrQMarks = []
+        for c in neighbors:
             if c.GetStatus() == Cell.FLAG:
-                closeFlags += 1
+                flags.append( c )
+            elif c.GetStatus() == Cell.COVERED or c.GetStatus() == Cell.Q_MARK:
+                coveredOrQMarks.append( c )
         
-        # If there are a number of flags different to number of mines, exit now
-        if closeFlags != cell.GetNeighborMinesNum():
-            return foundMine
+        # If there are mines to find, check if they are equal - in number - to the covered cells.
+        # If so, flag these cells
+        minesToFindNum = cell.GetNeighborMinesNum() - len(flags)
+        if minesToFindNum != 0:
+            if len(coveredOrQMarks) == minesToFindNum:
+                for c in coveredOrQMarks:
+                    ii, jj = c.GetCoordinates()
+                    self.Flag( ii, jj )
+            return explode
             
         
-        for toUncover in closeCells:
-            if toUncover.GetStatus() != Cell.FLAG and toUncover.GetStatus() != Cell.REVEALED:
-                ii, jj = toUncover.GetCoordinates()
-                foundMine = foundMine or self.Uncover( ii, jj )
+        for c in coveredOrQMarks:
+            if c.GetStatus() != Cell.REVEALED:
+                ii, jj = c.GetCoordinates()
+                explode = explode or self.Uncover( ii, jj )
             
-        return foundMine
+        return explode
         
     def AutomaticUncover( self, cell ):
         """Uncover a chain of cells by neighboroad relation."""
