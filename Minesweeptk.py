@@ -439,9 +439,10 @@ class MinesweeperTable( Frame ):
             # Nothing to do
             return
 
-        # Uncover all uncoverable close cells
+        # Uncover all uncoverable close cells or flag all flaggable cells
         bomb = self.game.Free( i, j )
         self.UpdateAllCells()
+        self.UpdateStatusMessage()
       
         if bomb:
             # If there is a bomd, you loose
