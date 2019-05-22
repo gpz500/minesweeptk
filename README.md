@@ -2,9 +2,8 @@ Minesweeptk: a cross-platform Minesweeper game clone, implemented in Pyhon and T
 =====================================================================================
 
 Minesweeptk is an implementation of the well known [Minesweeper game][1] written
-in Python and using the Tcl/Tk graphical tool kit. It works in every system
-where there are Python 2.x or Python 3.x (Python 3.x version is in a separate
-branch) with Tcl/Tk installed.
+in Python and using the Tcl/Tk graphical tool kit. It works on every system
+where there is Python 3.x with Tcl/Tk installed.
 
 Tested on Windows, Linux and Mac OS X.
 
@@ -13,7 +12,7 @@ Localization effort
 
 I'm in the effort of localizing Minesweeptk.py to several languages and, to do
 it, I have used the Python port of GNU gettext library
-(<https://docs.python.org/2.7/library/gettext.html>).
+(<https://docs.python.org/3/library/gettext.html>).
 Only English, Italian and Japanese are available so far.
 
 In order to compile GNU gettext binary files (\*.mo) from input files (\*.po),
@@ -46,9 +45,10 @@ Build for Windows
 To build the Windows executable Minesweeptk.exe and its distribution archive
 from the source tree (Minesweeptk-X.Y), run the following command:
 
-    C:\Minesweeptk-X.Y>python setup.py py2exe
+    C:\Minesweeptk-X.Y>python3 setup.py py2exe
     
-Note: you need py2exe from http://www.py2exe.org/.
+Note: you need py2exe from http://www.py2exe.org/. Current version of py2exe
+(0.9.2.2) seems to work only with Python 3.3 and Python 3.4.
 
 Build for Mac OS X
 ------------------
@@ -56,7 +56,7 @@ Build for Mac OS X
 To build the Minesweeptk application bundle for Mac OS X, from the source tree
 (Minesweeptk-X.Y), run the following command:
 
-    $ python setup.py py2app
+    $ python3 setup.py py2app
     
 Note: you need py2app from https://pythonhosted.org/py2app/.
     
@@ -66,9 +66,9 @@ Install (sources)
 Just to play, you don't have to install anything. It is sufficient opening a
 terminal and running the followings commands from this folder (Minesweeptk-X.Y):
 
-    $ python minesweeper.py         <-- text based game
+    $ python3 minesweeper.py         <-- text based game
         or
-    $ python Minesweeptk.py         <-- Tcl/Tk based GUI game
+    $ python3 Minesweeptk.py         <-- Tcl/Tk based GUI game
 
 In order to install minesweeper module on your system, so you can use
 it in your own applications, run this command as superuser:
@@ -110,7 +110,7 @@ Contacts
 Please refer any bugs and/or suggests to
     Alessandro Morgantini <gpz500@technologist.com>,
 or submit a comment to this blog post:
-    <http://gpz500.wordpress.com/2012/02/07/e-ora-di-sminare-il-campo/>.
+    <https://gpz500.wordpress.com/2012/02/07/e-ora-di-sminare-il-campo/>.
     
 [1]: https://en.wikipedia.org/wiki/Minesweeper_%28video_game%29
 [2]: https://github.com/gpz500/minesweeptk

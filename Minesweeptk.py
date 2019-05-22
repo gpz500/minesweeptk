@@ -7,7 +7,7 @@ It uses the module minesweeper.py which gives two classes:
 __author__ = "Alessandro Morgantini <gpz500@technologist.com>"
 __version__ = "$Revision$"
 __date__ = "$Date$"
-__copyright__ = "Copyright (c) 2012 Alessandro Morgantini"
+__copyright__ = "Copyright (c) 2012-2019 Alessandro Morgantini"
 __license__ = "Python"
 
 import os
@@ -788,7 +788,7 @@ class HelpDialog( Toplevel ):
             "click (or Control+click) on an covered cell you cycle between\n"
             "'unmarked' --> 'flagged' --> 'question mark' stati.\n"
             "Double clicking on an uncovered cell, uncovers all the\n"
-            "non-flagged adjacent cells.\n\n"
+            "non-flagged adjacent cells or flags them, depending on the case.\n\n"
             "Explore the File menu to find some useful command!\n\n"
             "Enjoy!") ).grid( row = 0, column = 0 )
         
@@ -923,11 +923,11 @@ class RootWindow( Tk ):
                 "\n"
                 "A minesweeper game in Python and Tk\n"
                 "written by Alessandro Morgantini <gpz500@technologist.com>\n"
-                "Homepage: http://www.morgantini.org/\n"
+                "Homepage: https://www.morgantini.org/\n"
                 "\n"
-                "Copyright (C) 2012-2014 Alessandro Morgantini\n"
+                "Copyright (C) 2012-2019 Alessandro Morgantini\n"
                 "Released under the terms of GPLv3\n"
-                "(http://www.gnu.org/licenses/gpl.html)") % ( APP_NAME, minesweeper.VERSION )
+                "(https://www.gnu.org/licenses/gpl.html)") % ( APP_NAME, minesweeper.VERSION )
         )
         
     def OnHelp( self ):
