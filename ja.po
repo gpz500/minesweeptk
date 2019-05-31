@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Minesweeptk 0.9\n"
+"Project-Id-Version: Minesweeptk 0.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-21 22:41+0200\n"
-"PO-Revision-Date: 2019-05-21 23:05+0200\n"
+"POT-Creation-Date: 2019-05-31 13:47+0200\n"
+"PO-Revision-Date: 2019-05-31 14:16+0200\n"
 "Last-Translator: Alessandro Morgantini <gpz500@technologist.com>\n"
 "Language-Team: Minesweeptk\n"
 "Language: ja_JP\n"
@@ -20,97 +20,97 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 2.2.3\n"
 
-#: Minesweeptk.py:393 Minesweeptk.py:447
+#: Minesweeptk.py:417
 msgid "Bomb! Game over..."
 msgstr ""
 
-#: Minesweeptk.py:397 Minesweeptk.py:451
+#: Minesweeptk.py:421
 msgid "You won!!!"
-msgstr ""
+msgstr "ＹＯＵ　ＷＯＮ！！！"
 
-#: Minesweeptk.py:479
+#: Minesweeptk.py:475
 msgid "You lost!"
 msgstr "ＹＯＵ　ＬＯＳＴ！"
 
-#: Minesweeptk.py:481
+#: Minesweeptk.py:477
 msgid ""
 "You lost...\n"
 "What do you want to do?"
 msgstr "ＹＯＵ　ＬＯＳＴ　次は何をしますか。"
 
-#: Minesweeptk.py:484 Minesweeptk.py:519
+#: Minesweeptk.py:480 Minesweeptk.py:515
 msgid "Exit"
 msgstr "終了"
 
-#: Minesweeptk.py:485 Minesweeptk.py:829
+#: Minesweeptk.py:481 Minesweeptk.py:839
 msgid "Replay this game"
 msgstr "前回のゲームはもう一度"
 
-#: Minesweeptk.py:486 Minesweeptk.py:520
+#: Minesweeptk.py:482 Minesweeptk.py:516
 msgid "Play a new game"
 msgstr "新しいゲームにする"
 
-#: Minesweeptk.py:514
+#: Minesweeptk.py:510
 msgid "You Won!"
 msgstr "ＹＯＵ　ＷＯＮ！"
 
-#: Minesweeptk.py:516
+#: Minesweeptk.py:512
 msgid ""
 "You won...\n"
 "What do you want to do?"
 msgstr "ＹＯＵ　ＷＯＮ　次は何をしますか。"
 
-#: Minesweeptk.py:542
+#: Minesweeptk.py:538
 msgid "1 remaining mine"
 msgstr "地雷は後一つです！"
 
-#: Minesweeptk.py:544
+#: Minesweeptk.py:540
 #, python-format
 msgid "%d remaining mines"
 msgstr "後%d地雷があります。"
 
-#: Minesweeptk.py:582
+#: Minesweeptk.py:591
 msgid "Options"
 msgstr "オプション"
 
-#: Minesweeptk.py:590
+#: Minesweeptk.py:599
 msgid "Choose table size and start a new game:"
 msgstr "テーブルのサイズを選び、新しいゲームを始まる。"
 
-#: Minesweeptk.py:600
+#: Minesweeptk.py:609
 msgid "9 x 9, 10 mines"
 msgstr "9 x 9, 地雷１０個"
 
-#: Minesweeptk.py:608
+#: Minesweeptk.py:617
 msgid "16 x 16, 40 mines"
 msgstr "16 x 16, 地雷４０個"
 
-#: Minesweeptk.py:616
+#: Minesweeptk.py:625
 msgid "16 x 30, 99 mines"
 msgstr "16 x 30, 地雷９９個"
 
-#: Minesweeptk.py:629
+#: Minesweeptk.py:638
 msgid "Custom"
 msgstr "自定義"
 
-#: Minesweeptk.py:639
+#: Minesweeptk.py:648
 msgid "Height (9-24):"
 msgstr "高さ(9-24):"
 
-#: Minesweeptk.py:647
+#: Minesweeptk.py:656
 msgid "Width (9-30):"
 msgstr "横幅(9-30):"
 
-#: Minesweeptk.py:655
+#: Minesweeptk.py:664
 msgid "Mines (10-668):"
 msgstr "地雷数(10-668):"
 
-#: Minesweeptk.py:772
+#: Minesweeptk.py:781
 #, python-format
 msgid "%s Help"
 msgstr "%s ヘルプ"
 
-#: Minesweeptk.py:779
+#: Minesweeptk.py:788
 msgid ""
 "Hello, this is a very simple minesweeper game.\n"
 "\n"
@@ -125,10 +125,11 @@ msgid ""
 "\n"
 "You can also mark cells with a flag or a question mark (?)\n"
 "to remember your hypothesis: every time you right\n"
-"click (or Control+click) on an covered cell you cycle between\n"
+"click (or Control+click) on a covered cell you cycle between\n"
 "'unmarked' --> 'flagged' --> 'question mark' stati.\n"
-"Double clicking on an uncovered cell, uncovers all the\n"
-"non-flagged adjacent cells or flags them, depending on the case.\n"
+"If there isn't any ambiguity, clicking on a cell with a number\n"
+"uncovers or, depending on the case, flags all the covered\n"
+"adjacent cells.\n"
 "\n"
 "Explore the File menu to find some useful command!\n"
 "\n"
@@ -147,62 +148,64 @@ msgstr ""
 "\n"
 "セルにフラグまたは疑問符（？）を付けることもできます。\n"
 "あなたの仮説を思い出すために：あなたが正しい時はいつでも\n"
-"切り替えるセルの上をクリック（またはControlキーを押しながらクリック）します\n"
+"切り替えるセルの上をクリック（またはControlキーを押しながらクリック）しま"
+"す\n"
 "‘unmarked’  - > ‘flagged’  - > ‘クエスチョンマーク’ stati。\n"
-"覆われていないセルをダブルクリックすると、すべてのセルが\n"
-"場合に応じて、フラグが立てられていない隣接セルまたはそれらにフラグを立てる。\n"
+"あいまいさがない場合は、数字の付いたセルをクリックしてください。\n"
+"ケースに応じて、カバーされていないものすべてにフラグを立てる\n"
+"隣接セル\n"
 "\n"
 "[ファイル]メニューを調べて、便利なコマンドを見つけてください。\n"
 "\n"
 "楽しい！"
 
-#: Minesweeptk.py:797
+#: Minesweeptk.py:807
 msgid "Close"
 msgstr "閉じる"
 
-#: Minesweeptk.py:827
+#: Minesweeptk.py:837
 msgid "File"
 msgstr "ファイル"
 
-#: Minesweeptk.py:828
+#: Minesweeptk.py:838
 msgid "New game"
 msgstr "新しいゲーム"
 
-#: Minesweeptk.py:831 Minesweeptk.py:832 Minesweeptk.py:845 Minesweeptk.py:905
+#: Minesweeptk.py:841 Minesweeptk.py:842 Minesweeptk.py:855 Minesweeptk.py:915
 msgid "Load"
 msgstr "ロード"
 
-#: Minesweeptk.py:833
+#: Minesweeptk.py:843
 msgid "Save"
 msgstr "保存"
 
-#: Minesweeptk.py:834
+#: Minesweeptk.py:844
 msgid "Options..."
 msgstr "オプション..."
 
-#: Minesweeptk.py:836 Minesweeptk.py:895
+#: Minesweeptk.py:846 Minesweeptk.py:905
 msgid "Quit"
 msgstr "中止"
 
-#: Minesweeptk.py:853
+#: Minesweeptk.py:863
 msgid "Help"
 msgstr "ヘルプ"
 
-#: Minesweeptk.py:854
+#: Minesweeptk.py:864
 #, python-format
 msgid "%s Help..."
 msgstr "%s ヘルプ..."
 
-#: Minesweeptk.py:855 Minesweeptk.py:921
+#: Minesweeptk.py:865 Minesweeptk.py:931
 #, python-format
 msgid "About %s"
 msgstr "%s について"
 
-#: Minesweeptk.py:896
+#: Minesweeptk.py:906
 msgid "Are you shure you want to quit?"
 msgstr "本当に終了してもよろしいですか？"
 
-#: Minesweeptk.py:922
+#: Minesweeptk.py:932
 #, python-format
 msgid ""
 "%s v%s\n"
@@ -215,7 +218,7 @@ msgid ""
 "Released under the terms of GPLv3\n"
 "(https://www.gnu.org/licenses/gpl.html)"
 msgstr ""
-"％s v％s\n"
+"%s v%s\n"
 "\n"
 "PythonとTkの掃海艇ゲーム\n"
 "Alessandro Morgantini <gpz500@technologist.com>によって書かれました。\n"

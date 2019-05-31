@@ -206,6 +206,15 @@ class CellButton( tkinter.Label ):
         tagsList = list( self.bindtags() )
         tagsList.append( self.__class__.__name__ )
         self.bindtags( tuple( tagsList ) )
+
+
+    def DoesShowANumber( self ):
+        """Return true if the cell shows a number (from 1 to 8)."""
+        if self.status >= CELL_STATUS_ONE and self.status <= CELL_STATUS_EIGHT:
+            return True
+
+        return False
+
         
     def Update( self ):
         """Update the cell status from the underlying ucell."""
@@ -352,7 +361,10 @@ class MinesweeperTable( Frame ):
         again the cell, if it was yet pressed."""
         cell = event.widget
         if cell.pressed == CellButton.LEAVED:
-            cell[ 'image' ] = images[ CELL_STATUS_PRESSED ]
+            if cell.DoesShowANumber():
+                self.PushNeighbours( cell )
+            else:
+                cell[ 'image' ] = images[ CELL_STATUS_PRESSED ]
             cell.pressed = CellButton.PRESSED
 
     def OnB1Leave( self, event ):
@@ -360,7 +372,10 @@ class MinesweeperTable( Frame ):
         the original image and sign as LEAVED."""
         cell = event.widget
         if cell.pressed == CellButton.PRESSED:
-            cell[ 'image' ] = images[ cell.GetStatus() ]
+            if cell.DoesShowANumber():
+                self.PushNeighbours( cell, False )
+            else:
+                cell[ 'image' ] = images[ cell.GetStatus() ]
             cell.pressed = CellButton.LEAVED
 
     def OnButton1( self, event ):
@@ -373,6 +388,9 @@ class MinesweeperTable( Frame ):
         if status == CELL_STATUS_COVERED or status == CELL_STATUS_QMARK:
             cell[ 'image' ] = images[ CELL_STATUS_PRESSED ]
             cell.pressed = CellButton.PRESSED
+        elif cell.DoesShowANumber():
+            cell.pressed = CellButton.PRESSED
+            self.PushNeighbours( cell )
                 
     def OnButtonRelease1( self, event ):
         """The mouse button 1 has released on the cell: the cell
@@ -381,12 +399,18 @@ class MinesweeperTable( Frame ):
         i, j = cell.ucell.GetCoordinates()
         
         if cell.pressed == CellButton.PRESSED:
-            bomb = self.game.Uncover( i, j )
+            if cell.DoesShowANumber():
+                self.PushNeighbours( cell, False)
+                bomb = self.game.Free(i, j)
+                self.UpdateAllCells()
+                self.UpdateStatusMessage()
+            else:
+                bomb = self.game.Uncover( i, j )
             
             if self.game[ i ][ j ].GetNeighborMinesNum() == 0:
                 self.UpdateAllCells()
             else:
-                event.widget.Update()
+                cell.Update()
             
             if bomb:
                 # If there is a bomd, you loose
@@ -426,35 +450,7 @@ class MinesweeperTable( Frame ):
             
         self.master.RefreshTitle()
         
-    def OnDoubleButton1( self, event ):
-        """Handler of double click event."""
-        
-        # Get coordinates of cell & current status
-        status = event.widget.GetStatus()
-        i, j = event.widget.ucell.GetCoordinates()
-        
-        if status < CELL_STATUS_ONE or status >= CELL_STATUS_BOMB:
-            # Nothing to do
-            return
 
-        # Uncover all uncoverable close cells or flag all flaggable cells
-        bomb = self.game.Free( i, j )
-        self.UpdateAllCells()
-        self.UpdateStatusMessage()
-      
-        if bomb:
-            # If there is a bomd, you loose
-            print( _( "Bomb! Game over..." ) )
-            self.EndLoosing()
-        elif self.game.GetToDiscover() == 0:
-            # If there's no more bombs to discover, you win
-            print( _( "You won!!!" ) )
-            self.EndWinning()
-        else:
-            # Neither defeat nor victory: update the window's title
-            self.master.RefreshTitle()
-        
-            
     def UpdateAllCells( self ):
         """Update all cells on the table from the underlying minesweeper.Game instance."""
         for row in self.cells:
@@ -556,7 +552,6 @@ class MinesweeperTable( Frame ):
         self.bind_class( CellButton.__name__, '<Button-3>', self.OnButton3 )
         self.bind_class( CellButton.__name__, '<Control-Button-1>', self.OnButton3 )
         self.bind_class( CellButton.__name__, '<Button-2>', self.OnButton3 )
-        self.bind_class( CellButton.__name__, '<Double-Button-1>', self.OnDoubleButton1 )
 
         
     def UnbindAllEvents( self ):
@@ -568,6 +563,20 @@ class MinesweeperTable( Frame ):
         self.unbind_class( CellButton.__name__, '<Button-3>' )
         self.unbind_class( CellButton.__name__, '<Control-Button-1>' )
         self.unbind_class( CellButton.__name__, '<Button-2>' )
+
+    def PushNeighbours( self, centerCell, push = True ):
+        """Push/unpush all the covered cells in the neighborhood"""
+        i, j = centerCell.ucell.GetCoordinates()
+        for ii in range( i - 1, i + 2):
+            for jj in range( j - 1, j + 2):
+                if ii >= 0 and ii < len( self.game ) and jj >= 0 and jj < len( self.game[ 0 ]):
+                    cell = self.cells[ ii ][ jj ]
+                    status = cell.GetStatus()
+                    if status == CELL_STATUS_COVERED or status == CELL_STATUS_QMARK:
+                        if push:
+                            cell[ 'image' ] = images[ CELL_STATUS_PRESSED ]
+                        else:
+                            cell[ 'image' ] = images[ status ]
 
 #-------------------------------------------------------------------------------
 # My Options Window
@@ -785,10 +794,11 @@ class HelpDialog( Toplevel ):
             "indicates the number of mines in the adjacent cells.\n\n"
             "You can also mark cells with a flag or a question mark (?)\n"
             "to remember your hypothesis: every time you right\n"
-            "click (or Control+click) on an covered cell you cycle between\n"
+            "click (or Control+click) on a covered cell you cycle between\n"
             "'unmarked' --> 'flagged' --> 'question mark' stati.\n"
-            "Double clicking on an uncovered cell, uncovers all the\n"
-            "non-flagged adjacent cells or flags them, depending on the case.\n\n"
+            "If there isn't any ambiguity, clicking on a cell with a number\n"
+            "uncovers or, depending on the case, flags all the covered\n"
+            "adjacent cells.\n\n"
             "Explore the File menu to find some useful command!\n\n"
             "Enjoy!") ).grid( row = 0, column = 0 )
         
