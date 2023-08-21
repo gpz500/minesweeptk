@@ -60,14 +60,21 @@ def InitI18n():
             import subprocess
             pp = subprocess.Popen( [ 'defaults', 'read', '-g', 'AppleLocale' ],
                 stdout = subprocess.PIPE )
-            os.environ[ 'LANG' ] = pp.communicate()[ 0 ].strip().decode("utf-8")
+            loc = pp.communicate()[ 0 ].strip().decode("utf-8")
+            cp = 'UTF-8'
+            os.environ[ 'LANG' ] = loc + '.' + cp
         
+        elif sys.platform == "win32":
+            # On Windows too you have to get preferred language from OS
+            import ctypes
+            kernel32 = ctypes.windll.kernel32
+            loc = locale.windows_locale[ kernel32.GetUserDefaultUILanguage() ]
+            cp = 'UTF-8'
+            os.environ[ 'LANG' ] = loc + '.' + cp
+
         else:
             # On other OS get defaults
-            loc, cp = locale.getdefaultlocale()
-            os.environ[ 'LANG' ] = loc
-            if cp:
-                os.environ[ 'LANG' ] += "." + cp
+            pass
     
     # Set the default locale for LC_ALL
     try:
