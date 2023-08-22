@@ -99,7 +99,6 @@ elif "py2app" in sys.argv:
         data_files = extraFiles,
         options = {
             'py2app': {
-                'argv_emulation': True,
                 'iconfile': 'bomb.icns'
             }
         },
