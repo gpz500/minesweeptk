@@ -6,8 +6,8 @@ minesweeper define two classes: Cell for a single cell and Game for a whole tabl
 __author__ = "Alessandro Morgantini <gpz500@technologist.com>"
 __version__ = "$Revision$"
 __date__ = "$Date$"
-__copyright__ = "Copyright (c) 2012 Alessandro Morgantini"
-__license__ = "Python"
+__copyright__ = "Copyright © 2012-2023 Alessandro Morgantini"
+__license__ = "GPLv2"
 
 import unittest
 import minesweeper

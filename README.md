@@ -5,7 +5,7 @@ Minesweeptk is an implementation of the well known [Minesweeper game][1] written
 in Python and using the Tcl/Tk graphical tool kit. It works on every system
 where there is Python 3.x with Tcl/Tk installed.
 
-Tested on Windows, Linux and Mac OS X.
+Tested on Windows, Linux and macOS.
 
 Localization effort
 -------------------
@@ -45,20 +45,21 @@ Build for Windows
 To build the Windows executable Minesweeptk.exe and its distribution archive
 from the source tree (Minesweeptk-X.Y), run the following command:
 
-    C:\Minesweeptk-X.Y>python3 setup.py py2exe
+    C:\Minesweeptk-X.Y>python setup.py py2exe
     
-Note: you need py2exe from http://www.py2exe.org/. Current version of py2exe
-(0.9.2.2) seems to work only with Python 3.3 and Python 3.4.
+Note: you need py2exe from https://www.py2exe.org/. Tested with Python 3.11 and
+py2exe 0.13.0.0.
 
-Build for Mac OS X
-------------------
+Build for macOS
+---------------
 
-To build the Minesweeptk application bundle for Mac OS X, from the source tree
+To build the Minesweeptk application bundle for macOS, from the source tree
 (Minesweeptk-X.Y), run the following command:
 
     $ python3 setup.py py2app
     
-Note: you need py2app from https://pythonhosted.org/py2app/.
+Note: you need py2app from https://py2app.readthedocs.io/. Tested with Python 3.11
+and py2app 0.28.6.
     
 Install (sources)
 -----------------
@@ -75,11 +76,13 @@ it in your own applications, run this command as superuser:
 
     # python setup.py install
     
-Install (Mac OS X)
+Install (macOS)
 ------------------
 
 Just drag'n'drop Minesweeptk application bundle in your Applications folder, and
 then double click it.
+Note that Minesweeptk app isn't notarized so, the first time you open
+it, you have to CTRL+click on it and then choose Open.
 
 Install (Windows)
 -----------------

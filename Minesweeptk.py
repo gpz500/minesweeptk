@@ -942,9 +942,9 @@ class RootWindow( Tk ):
                 "written by Alessandro Morgantini <gpz500@technologist.com>\n"
                 "Homepage: https://www.morgantini.org/\n"
                 "\n"
-                "Copyright (C) 2012-2019 Alessandro Morgantini\n"
-                "Released under the terms of GPLv3\n"
-                "(https://www.gnu.org/licenses/gpl.html)") % ( APP_NAME, minesweeper.VERSION )
+                "Copyright © 2012-2023 Alessandro Morgantini\n"
+                "Released under the terms of GPLv2\n"
+                "(https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)") % ( APP_NAME, minesweeper.VERSION )
         )
         
     def OnHelp( self ):

@@ -52,19 +52,26 @@ if "py2exe" in sys.argv:
 
     # py2exe
     assert sys.platform == "win32", "You must be on Windows to run this!"
-    from distutils.core import setup
     import py2exe
 
-    setup(
+    py2exe.freeze(
         windows = [ {
             "script": APP_NAME + ".py",
-            "icon_resources": [ ( 1, "bomb.ico" ) ]
+            'dest_base': APP_NAME,
+            "icon_resources": [ ( 0, "bomb.ico" ) ]
         } ],
         data_files = [
             ( "locale\\it\\LC_MESSAGES\\", [ "locale\\it\\LC_MESSAGES\\Minesweeptk.mo" ] ),
             ( "locale\\en\\LC_MESSAGES\\", [ "locale\\en\\LC_MESSAGES\\Minesweeptk.mo" ] ),
             ( "locale\\ja\\LC_MESSAGES\\", [ "locale\\ja\\LC_MESSAGES\\Minesweeptk.mo" ] )
-        ]
+        ],
+        version_info = {
+            'version': VERSION,
+            'description': 'A cross-platform Minesweeper game clone, implemented in Pyhon and Tcl/Tk.',
+            'product_name': APP_NAME,
+            'product_version': VERSION,
+            'copyright': 'Copyright © 2012-2023 Alessandro Morgantini. Released under the terms of GNU GPL Version 2.'
+        }
     )
     
     # Put in dist *.txt files
@@ -77,7 +84,7 @@ if "py2exe" in sys.argv:
 
     # Create the .zip file    
     shutil.move( 'dist', APP_NAME )
-    ArchiveDir( APP_NAME, APP_NAME + "-Win32-" + VERSION + ".zip" )
+    ArchiveDir( APP_NAME, APP_NAME + "-Win32-AMD64-" + VERSION + ".zip" )
     shutil.rmtree( APP_NAME )
 
     
@@ -112,7 +119,7 @@ elif "py2app" in sys.argv:
     # Create the .dmg file
     dirname = APP_NAME + " v" + VERSION
     shutil.move( 'dist', dirname )
-    dmgname = APP_NAME + "-MacOSX-" + VERSION
+    dmgname = APP_NAME + "-MacOSX-x86_64-" + VERSION
     cmdline = "hdiutil create " + dmgname + " -srcfolder \"" + dirname + "\""
     os.system( cmdline )
     shutil.rmtree( dirname )
