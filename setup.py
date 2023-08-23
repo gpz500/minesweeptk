@@ -119,7 +119,7 @@ elif "py2app" in sys.argv:
     # Create the .dmg file
     dirname = APP_NAME + " v" + VERSION
     shutil.move( 'dist', dirname )
-    dmgname = APP_NAME + "-MacOSX-x86_64-" + VERSION
+    dmgname = APP_NAME + "-macOS-x86_64-" + VERSION
     cmdline = "hdiutil create " + dmgname + " -srcfolder \"" + dirname + "\""
     os.system( cmdline )
     shutil.rmtree( dirname )
