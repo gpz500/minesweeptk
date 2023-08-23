@@ -111,7 +111,22 @@ elif "py2app" in sys.argv:
         },
         setup_requires = [ 'py2app' ]
     )
-    
+
+    # Copy binary files for Tcl/Tk
+    # Workaround for py2app issue: https://github.com/ronaldoussoren/py2app/issues/202
+    import tkinter
+    from pathlib import Path
+    root = tkinter.Tk()
+    root.overrideredirect(True)
+    root.withdraw()
+    tcl_dir = Path(root.tk.exprstring('$tcl_library'))
+    tk_dir = Path(root.tk.exprstring('$tk_library'))
+    root.destroy()
+
+    os.makedirs(f"dist/{APP_NAME}.app/Contents/lib")
+    shutil.copytree(tk_dir, f"dist/{APP_NAME}.app/Contents/lib/{tk_dir.parts[-1]}")
+    shutil.copytree(tcl_dir, f"dist/{APP_NAME}.app/Contents/lib/{tcl_dir.parts[-1]}")
+
     # Put in dist *.txt files
     for file in DOC_FILES:
         shutil.copy( file, 'dist' )
