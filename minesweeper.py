@@ -432,12 +432,12 @@ if __name__ == '__main__':
         PrintGame( myGame )
         command = input( "[Q|B i j|? i j|R i j] > " )
         
-        myResult = re.search( '^\s*[qQ]\s*$', command )
+        myResult = re.search( r'^\s*[qQ]\s*$', command )
         if myResult:
             # Q: quit
             exit()
             
-        myResult = re.search( '^\s*([bB\?rR])\s+([A-Za-z])\s+(\d+)\s*$', command )
+        myResult = re.search( r'^\s*([bB\?rR])\s+([A-Za-z])\s+(\d+)\s*$', command )
         if myResult:
             command = myResult.group( 1 ).upper()
             i = ord( myResult.group( 2 ).upper() ) - ord( 'A' )
